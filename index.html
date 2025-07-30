@@ -134,9 +134,9 @@
     async function loadIncludes() {
       try {
         const [header, footer, nav] = await Promise.all([
-          fetch("/header.html").then(res => res.text()),
-          fetch("/footer.html").then(res => res.text()),
-          fetch("/nav_external.html").then(res => res.text())
+          fetch("header.html").then(res => res.text()),
+          fetch("footer.html").then(res => res.text()),
+          fetch("nav_external.html").then(res => res.text())
         ]);
         document.getElementById("header-container").innerHTML = header;
         document.getElementById("footer-container").innerHTML = footer;
