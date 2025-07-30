@@ -62,7 +62,7 @@
   <!-- External NAV Bar -->
   <div id="nav"></div>
   <script>
-    fetch("/nav.html").then(res => res.text()).then(html => {
+    fetch("/nav_external.html").then(res => res.text()).then(html => {
       document.getElementById("nav").innerHTML = html;
     });
   </script>
@@ -90,7 +90,7 @@
     <div class="top-section">
       <div class="left-col">
         <img id="squareBanner" src="" width="250" alt="Ad Image" />
-        <button onclick="showRandomAd()">View Next Ad</button>
+        <button id="btnNextAd">View Next Ad</button>
         <button onclick="location.href='account1.html'">Add Your Site Here!</button>
       </div>
       <div class="right-col">
@@ -158,7 +158,6 @@
     ];
 
     let ads = [];
-    let currentIndex = 0;
 
     async function loadAds() {
       try {
@@ -176,11 +175,15 @@
       if (!ads.length) return;
       const ad = ads[Math.floor(Math.random() * ads.length)];
       document.getElementById("squareBanner").src = ad.image;
+      document.getElementById("squareBanner").alt = ad.text || "Square Ad Image";
       document.getElementById("bannerLink").href = ad.url;
       document.getElementById("bannerAd").src = ad.banner;
-      document.getElementById("textAd").textContent = ad.text;
+      document.getElementById("bannerAd").alt = ad.text || "Banner Ad Image";
+      document.getElementById("textAd").textContent = ad.text || "";
       document.getElementById("iframeAd").src = ad.url;
     }
+
+    document.getElementById("btnNextAd").addEventListener("click", showRandomAd);
 
     loadAds();
   </script>
