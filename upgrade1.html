@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upgrade Your Lighthouse Ads</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header, footer {
+      background: #003e7e;
+      color: white;
+      padding: 15px 20px;
+    }
+
+    nav#nav-container {
+      background: #0057a8;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+
+    nav#nav-container a {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    nav#nav-container a:hover {
+      text-decoration: underline;
+    }
+
+    main.container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #ccc;
+      flex: 1;
+    }
+
+    h1 {
+      color: #2a6ebb;
+      text-align: center;
+    }
+
+    p.center {
+      text-align: center;
+    }
+
+    .plan {
+      border: 2px solid #2a6ebb;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 10px;
+    }
+
+    ul {
+      padding-left: 1.2em;
+    }
+
+    .upgrade-btn {
+      display: inline-block;
+      padding: 14px 28px;
+      background: #0070ba;
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 10px;
+      margin-top: 20px;
+      font-size: 1.2em;
+      transition: background-color 0.3s ease;
+    }
+
+    .upgrade-btn:hover {
+      background: #005fa3;
+    }
+
+    .note {
+      font-size: 0.95em;
+      color: #555;
+      margin-top: 20px;
+    }
+
+    #upgradeBox {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Shared Header -->
+  <div id="header">Loading header...</div>
+
+  <!-- Internal Navigation -->
+  <nav id="nav-container">Loading navigation...</nav>
+
+  <!-- Upgrade Content -->
+  <main class="container" role="main">
+    <h1>Upgrade Your Membership</h1>
+    <p class="center">Upgraded members get more ads, more visibility, and faster approvals!</p>
+
+    <section class="plan">
+      <h2>🌟 UPGRADE PLAN</h2>
+      <p><strong>Price:</strong> $24.50 (one-time)</p>
+      <ul>
+        <li>Display up to 5 ads instead of 1</li>
+        <li>Edit ads anytime</li>
+        <li>Priority rotation in the viewer</li>
+      </ul>
+      <div id="upgradeBox">
+        <p><em>Checking your account...</em></p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Shared Footer -->
+  <div id="footer">Loading footer...</div>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const box = document.getElementById("upgradeBox");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html?next=upgrade1.html";
+        return;
+      }
+
+      const ref = doc(db, "members", user.uid);
+      const snap = await getDoc(ref);
+
+      if (!snap.exists()) {
+        box.innerHTML = `<p style="color: red;">Account not found.</p>`;
+        return;
+      }
+
+      const data = snap.data();
+      const status = data.upgrade || "FREE";
+
+      if (status === "YES" || status === "ADMIN") {
+        box.innerHTML = `<p style="color: green; font-weight: bold;">Your account is already upgraded.</p>`;
+        return;
+      }
+
+      box.innerHTML = `
+        <a
+          class="upgrade-btn"
+          href="https://www.paypal.me/swdb2018/24.50?note=LIGHTHOUSE5785"
+          target="_blank"
+          rel="noopener noreferrer"
+        >💳 Upgrade Now via PayPal</a>
+        <p class="note">
+          After payment, you’ll be redirected. If not, please click <a href="upgrade2.html">here to confirm your upgrade</a>.
+        </p>
+      `;
+    });
+
+    // Shared Includes
+    fetch("header.html").then(res => res.text()).then(html => {
+      document.getElementById("header").innerHTML = html;
+    });
+
+    fetch("footer.html").then(res => res.text()).then(html => {
+      document.getElementById("footer").innerHTML = html;
+    });
+
+    fetch("nav_internal.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("nav-container").innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById("nav-container").innerHTML = "<p style='color:white;'>Navigation failed to load.</p>";
+      });
+  </script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, follow" />
+  <title>Elevate Your Ads with Lighthouse Lifetime Ads</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5WP3ZDR25B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5WP3ZDR25B', {
+      send_page_view: true,
+      allow_ad_personalization_signals: false,
+      anonymize_ip: true
+    });
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: linear-gradient(135deg, #f6e27f 0%, #d97f2f 100%);
+      color: #4b2e05;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    #navContainer {
+      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+      user-select: none;
+    }
+
+    .wrapper {
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.85);
+      margin: auto;
+      margin-top: 100px;
+      margin-bottom: 80px;
+      padding: 50px 40px;
+      border-radius: 24px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      color: #4b2e05;
+      display: flex;
+      flex-direction: column;
+      min-height: 60vh;
+      justify-content: center;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 3.2rem;
+      margin-bottom: 25px;
+      letter-spacing: 0.07em;
+      line-height: 1.15;
+      text-shadow: 1px 1px 5px rgba(255, 182, 0, 0.5);
+    }
+
+    p {
+      font-weight: 600;
+      font-size: 1.3rem;
+      line-height: 1.8;
+      margin-bottom: 35px;
+      font-family: 'Open Sans', Arial, sans-serif;
+      text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+    }
+
+    .cta a {
+      display: inline-block;
+      padding: 22px 55px;
+      background: #d2691e;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.5rem;
+      border-radius: 50px;
+      box-shadow: 0 8px 30px rgba(210, 105, 30, 0.7);
+      text-decoration: none;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+      user-select: none;
+    }
+    .cta a:hover {
+      background: #a14e06;
+      box-shadow: 0 12px 38px rgba(161, 78, 6, 0.9);
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 25px 0;
+      text-align: center;
+      font-size: 1rem;
+      color: rgba(75,46,5,0.75);
+      letter-spacing: 0.04em;
+      user-select: none;
+      font-family: 'Open Sans', Arial, sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- EXTERNAL NAVIGATION -->
+  <div id="navContainer"></div>
+
+  <div class="wrapper">
+    <h1>Elevate Your Ads with Lighthouse Lifetime Ads</h1>
+
+    <p>Step into a world where your advertising lasts forever without monthly fees. Submit your ad once and watch it glow with continuous exposure.</p>
+
+    <p>Join thousands who trust our unique system to build their brand, generate traffic, and grow effortlessly.</p>
+
+    <div class="cta">
+      <a href="account1.html" >Claim Your Spot Now</a>
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 Lighthouse Lifetime Ads — Your beacon for lasting success
+  </footer>
+
+  <script>
+    // Load external nav_external.html into #navContainer
+    fetch('nav_external.html')
+      .then(response => {
+        if (!response.ok) throw new Error('Failed to load navigation');
+        return response.text();
+      })
+      .then(html => {
+        document.getElementById('navContainer').innerHTML = html;
+      })
+      .catch(err => {
+        console.error('Navigation load error:', err);
+        document.getElementById('navContainer').innerHTML = '<nav style="padding:10px; background:#0057a8; color:white; text-align:center;">Navigation failed to load</nav>';
+      });
+  </script>
+
+</body>
+</html>

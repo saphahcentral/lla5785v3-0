@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, follow" />
+  <title>Run Ads Nonstop with Lighthouse Lifetime Power</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5WP3ZDR25B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5WP3ZDR25B', {
+      send_page_view: true,
+      allow_ad_personalization_signals: false,
+      anonymize_ip: true
+    });
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: linear-gradient(to bottom right, #fff4e5, #ffcc80);
+      color: #4a2e00;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    #navContainer {
+      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+      user-select: none;
+    }
+
+    .wrapper {
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.97);
+      margin: auto;
+      margin-top: 100px;
+      margin-bottom: 80px;
+      padding: 50px 40px;
+      border-radius: 24px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 3.2rem;
+      margin-bottom: 25px;
+      letter-spacing: 0.06em;
+      color: #a85a00;
+      text-shadow: 1px 1px 6px rgba(255, 204, 128, 0.6);
+    }
+
+    p {
+      font-weight: 600;
+      font-size: 1.25rem;
+      line-height: 1.8;
+      margin-bottom: 35px;
+      font-family: 'Open Sans', Arial, sans-serif;
+      text-shadow: 1px 1px 4px rgba(255,255,255,0.7);
+    }
+
+    .cta a {
+      display: inline-block;
+      padding: 18px 40px;
+      background: #d26900;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.5rem;
+      border-radius: 50px;
+      box-shadow: 0 8px 30px rgba(210, 105, 0, 0.5);
+      text-decoration: none;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    .cta a:hover {
+      background: #a85a00;
+      box-shadow: 0 12px 38px rgba(168, 90, 0, 0.8);
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 25px 0;
+      text-align: center;
+      font-size: 1rem;
+      color: rgba(74, 46, 0, 0.75);
+      font-family: 'Open Sans', Arial, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <div id="header"></div>
+
+  <!-- EXTERNAL NAVIGATION -->
+  <div id="navContainer"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="wrapper">
+    <h1>Run Ads Nonstop with Lighthouse Lifetime Power</h1>
+
+    <p>Even when you're offline, Lighthouse keeps your message shining. Whether you promote a product, mission, or idea — our system works relentlessly behind the scenes.</p>
+
+    <p>Why pause your promotion when it can run forever? Set it, share it, and let Lighthouse carry it across the web.</p>
+
+    <div class="cta">
+      <a href="account1.html">Join Lighthouse Today</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div id="footer"></div>
+
+  <!-- LOAD EXTERNAL COMPONENTS -->
+  <script>
+    fetch('header.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('header').innerHTML = html);
+
+    fetch('nav_external.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('navContainer').innerHTML = html);
+
+    fetch('footer.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('footer').innerHTML = html);
+  </script>
+</body>
+</html>

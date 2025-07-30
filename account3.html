@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Account Updated</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e8fff0;
+      color: #045d26;
+      text-align: center;
+      padding: 50px;
+    }
+    .box {
+      background-color: white;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 30px;
+      border: 2px solid #045d26;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    a.button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #045d26;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div id="headerContainer"></div>
+  <div id="navContainer"></div>
+
+  <div class="box">
+    <h2>✅ Your Account Has Been Updated</h2>
+    <p>Your changes have been saved successfully.</p>
+    <a href="account1.html" class="button">Return to Account Management</a>
+  </div>
+
+  <div id="footerContainer"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    firebase.auth().onAuthStateChanged(async user => {
+      const navContainer = document.getElementById('navContainer');
+      if(user){
+        try {
+          const res = await fetch('nav_internal.html');
+          navContainer.innerHTML = await res.text();
+        } catch {
+          navContainer.innerHTML = '<p style="color:red; text-align:center;">Navigation failed to load.</p>';
+        }
+      }
+    });
+
+    fetch('header.html').then(res => res.text()).then(data => document.getElementById('headerContainer').innerHTML = data);
+    fetch('footer.html').then(res => res.text()).then(data => document.getElementById('footerContainer').innerHTML = data);
+  </script>
+</body>
+</html>

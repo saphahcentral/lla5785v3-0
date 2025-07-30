@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upgrade Successful - Lighthouse Lifetime Ads</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom, #f0faff, #d0eaff);
+      color: #003366;
+      text-align: center;
+    }
+
+    .confirmation-box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0, 80, 160, 0.3);
+      max-width: 550px;
+      margin: 100px auto;
+    }
+
+    .confirmation-box h1 {
+      color: #0066cc;
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    .confirmation-box p {
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+
+    .btn-container {
+      margin-top: 30px;
+    }
+
+    .btn-container a {
+      display: inline-block;
+      background-color: #0077cc;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      min-width: 130px;
+    }
+
+    .btn-container a:hover,
+    .btn-container a:focus {
+      background-color: #005fa3;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Shared Header -->
+  <div id="headerContainer">Loading header...</div>
+
+  <!-- Internal Nav Bar -->
+  <div id="navContainer">Loading navigation...</div>
+
+  <main class="confirmation-box" role="main">
+    <h1>🎉 Upgrade Complete!</h1>
+    <p>Thank you for upgrading your Lighthouse Lifetime Ads membership.</p>
+    <p>Your new features and ad limits are now active.</p>
+
+    <div class="btn-container">
+      <a href="index2.html">Next</a>
+    </div>
+  </main>
+
+  <!-- Shared Footer -->
+  <div id="footerContainer">Loading footer...</div>
+
+  <script>
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("headerContainer").innerHTML = html;
+      });
+
+    fetch("nav_internal.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navContainer").innerHTML = html;
+      });
+
+    fetch("footer.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("footerContainer").innerHTML = html;
+      });
+  </script>
+</body>
+</html>

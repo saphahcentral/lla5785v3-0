@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Advertisement Submission Successful</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef6ff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      color: #003e7e;
+      text-align: center;
+    }
+    header, footer {
+      flex-shrink: 0;
+    }
+    main {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 30px;
+    }
+    .thankyou-box {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #999;
+      max-width: 450px;
+      margin: auto;
+    }
+    .thankyou-box h2 {
+      margin-bottom: 20px;
+    }
+    .thankyou-box p {
+      margin-bottom: 30px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #003e7e;
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 8px;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .btn:hover {
+      background: #0059c1;
+    }
+  </style>
+</head>
+<body>
+  <header id="headerContainer"></header>
+
+  <main role="main">
+    <section class="thankyou-box">
+      <h2>Thank You for Your Advertisement Submission!</h2>
+      <p>Your ad has been received and is under review.</p>
+      <a href="advertise1.html" class="btn">Manage Your Advertisements</a>
+    </section>
+  </main>
+
+  <footer id="footerContainer"></footer>
+
+  <script>
+    async function loadPartials() {
+      try {
+        const headerResp = await fetch('header.html');
+        const headerHtml = await headerResp.text();
+        document.getElementById('headerContainer').innerHTML = headerHtml;
+      } catch {
+        document.getElementById('headerContainer').innerHTML =
+          '<p style="color:red; text-align:center;">Failed to load header.</p>';
+      }
+
+      try {
+        const footerResp = await fetch('footer.html');
+        const footerHtml = await footerResp.text();
+        document.getElementById('footerContainer').innerHTML = footerHtml;
+      } catch {
+        document.getElementById('footerContainer').innerHTML =
+          '<p style="color:red; text-align:center;">Failed to load footer.</p>';
+      }
+    }
+    loadPartials();
+  </script>
+</body>
+</html>

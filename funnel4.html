@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, follow" />
+  <title>Effortless Ad Exposure with Lighthouse Lifetime Ads</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5WP3ZDR25B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5WP3ZDR25B', {
+      send_page_view: true,
+      allow_ad_personalization_signals: false,
+      anonymize_ip: true
+    });
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: linear-gradient(135deg, #e3fce7 0%, #7acaa6 100%);
+      color: #003322;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #navContainer {
+      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+      user-select: none;
+    }
+
+    .wrapper {
+      max-width: 720px;
+      background: white;
+      margin: 40px auto 60px auto;
+      padding: 50px 40px;
+      border-radius: 24px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      color: #003322;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 3.2rem;
+      margin-bottom: 25px;
+      letter-spacing: 0.07em;
+      line-height: 1.15;
+      text-shadow: 1px 1px 6px rgba(0, 128, 96, 0.4);
+    }
+
+    p {
+      font-weight: 600;
+      font-size: 1.3rem;
+      line-height: 1.8;
+      margin-bottom: 35px;
+      font-family: 'Open Sans', Arial, sans-serif;
+      text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.7);
+    }
+
+    .btn-redirect {
+      display: inline-block;
+      padding: 20px 50px;
+      background: #00885a;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.5rem;
+      border-radius: 50px;
+      box-shadow: 0 8px 30px rgba(0, 136, 90, 0.7);
+      text-decoration: none;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .btn-redirect:hover {
+      background: #00664d;
+      box-shadow: 0 12px 38px rgba(0, 102, 77, 0.9);
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 25px 0;
+      text-align: center;
+      font-size: 1rem;
+      color: rgba(0,51,34,0.75);
+      letter-spacing: 0.04em;
+      font-family: 'Open Sans', Arial, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <div id="header"></div>
+
+  <!-- EXTERNAL NAVIGATION -->
+  <div id="navContainer"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="wrapper" role="main" aria-live="polite">
+    <h1>Effortless Ad Exposure with Lighthouse Lifetime Ads</h1>
+
+    <p>Imagine your ad working around the clock, even while you're offline. No logins. No maintenance. Just real visibility on autopilot.</p>
+
+    <p>With Lighthouse, your content is placed in a powerful rotating system that does the lifting for you — permanently.</p>
+
+    <div>
+      <button class="btn-redirect" id="redirectBtn" type="button" aria-label="Go to your ad account">
+        Submit Your Ad Now
+      </button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div id="footer"></div>
+
+  <script type="module">
+    // External includes
+    fetch('header.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('header').innerHTML = html);
+
+    fetch('nav_external.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('navContainer').innerHTML = html);
+
+    fetch('footer.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('footer').innerHTML = html);
+
+    // Manual redirect on button click
+    document.getElementById('redirectBtn').addEventListener('click', () => {
+      window.location.href = 'account1.html';
+    });
+  </script>
+</body>
+</html>

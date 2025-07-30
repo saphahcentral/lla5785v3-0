@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, follow" />
+  <title>Hands-Free Promotion with Lighthouse Lifetime Ads</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5WP3ZDR25B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5WP3ZDR25B', {
+      send_page_view: true,
+      allow_ad_personalization_signals: false,
+      anonymize_ip: true
+    });
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: linear-gradient(135deg, #d0e7ff 0%, #335c99 100%);
+      color: #003366;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header and footer placeholders */
+    #headerContainer,
+    #footerContainer {
+      width: 100%;
+      user-select: none;
+    }
+
+    /* External nav bar container */
+    #navContainer {
+      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+      user-select: none;
+      width: 100%;
+    }
+
+    /* Main content block */
+    .wrapper {
+      max-width: 700px;
+      background: white;
+      margin: 100px auto 80px auto;
+      padding: 50px 40px;
+      border-radius: 24px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      color: #003366;
+    }
+
+    h1 {
+      font-weight: 700;
+      font-size: 3.2rem;
+      margin-bottom: 25px;
+      letter-spacing: 0.07em;
+      line-height: 1.15;
+      text-shadow: 1px 1px 6px rgba(0, 51, 102, 0.6);
+    }
+
+    p {
+      font-weight: 600;
+      font-size: 1.3rem;
+      line-height: 1.8;
+      margin-bottom: 35px;
+      font-family: 'Open Sans', Arial, sans-serif;
+      text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.7);
+    }
+
+    .cta a {
+      display: inline-block;
+      padding: 22px 55px;
+      background: #004d99;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.5rem;
+      border-radius: 50px;
+      box-shadow: 0 8px 30px rgba(0, 77, 153, 0.7);
+      text-decoration: none;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+      user-select: none;
+    }
+    .cta a:hover {
+      background: #003366;
+      box-shadow: 0 12px 38px rgba(0, 51, 102, 0.9);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div id="headerContainer"></div>
+
+  <!-- EXTERNAL NAVIGATION -->
+  <div id="navContainer"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="wrapper" role="main">
+    <h1>Hands-Free Promotion with Lighthouse Lifetime Ads</h1>
+
+    <p>Discover the power of a fully automated advertising system with zero login fatigue and no surfing required.</p>
+
+    <p>Submit your ad once and keep it visible forever, with control at your fingertips and upgrades available anytime.</p>
+
+    <div class="cta">
+      <a href="account1.html">Join the Rotator Now</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div id="footerContainer"></div>
+
+  <script>
+    // Load header.html
+    fetch('header.html')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load header');
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById('headerContainer').innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById('headerContainer').innerHTML = '';
+      });
+
+    // Load nav_external.html
+    fetch('nav_external.html')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load nav');
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById('navContainer').innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById('navContainer').innerHTML = '<nav style="padding:10px; background:#0057a8; color:white; text-align:center;">Navigation failed to load</nav>';
+      });
+
+    // Load footer.html
+    fetch('footer.html')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load footer');
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById('footerContainer').innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById('footerContainer').innerHTML = '';
+      });
+  </script>
+</body>
+</html>

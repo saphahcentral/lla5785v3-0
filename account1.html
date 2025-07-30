@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Add, update or delete your Lighthouse Lifetime Ads account information securely." />
+  <title>Manage Account</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef6ff;
+      margin: 0; 
+      padding: 20px;
+      color: #003e7e;
+    }
+    .container {
+      max-width: 700px;
+      background: white;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #999;
+      text-align: center;
+    }
+    h2 {
+      margin-bottom: 20px;
+    }
+    .btn {
+      display: inline-block;
+      background-color: #003e7e;
+      color: white;
+      font-weight: bold;
+      padding: 12px 25px;
+      margin: 10px 5px;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 1em;
+    }
+    .btn:hover {
+      background-color: #0059c1;
+    }
+    form {
+      margin-top: 20px;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+    .actions {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .message {
+      margin-top: 15px;
+      font-weight: bold;
+      color: green;
+      text-align: center;
+    }
+    .error {
+      color: red;
+    }
+    #headerContainer, #footerContainer {
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="headerContainer"></div>
+  <div id="navContainer"></div>
+
+  <div class="container">
+    <h2>Manage Your Account</h2>
+    <p>This form lets you add, update or delete your account details.</p>
+    <p>If you wish to change your email address, please <a href="mailto:saphahcentral@outlook.com">contact support</a>.</p>
+
+    <form id="accountForm">
+      <label for="userName">User Name</label>
+      <input type="text" id="userName" name="userName" required />
+
+      <label for="email">Email (cannot be changed)</label>
+      <input type="email" id="email" name="email" disabled />
+
+      <label for="phone">Phone Number</label>
+      <input type="tel" id="phone" name="phone" />
+
+      <label for="bio">Bio / About You</label>
+      <textarea id="bio" name="bio" rows="4"></textarea>
+
+      <label for="action">Action</label>
+      <select id="action" name="action" required>
+        <option value="update">Update Account</option>
+        <option value="delete">Delete Account</option>
+      </select>
+
+      <div class="actions">
+        <button type="submit" class="btn">Submit</button>
+      </div>
+      <div id="formMessage" class="message"></div>
+    </form>
+    <p><a href="mailto:saphahcentral@outlook.com">Need Help? Contact Support</a></p>
+  </div>
+
+  <div id="footerContainer"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const navContainer = document.getElementById('navContainer');
+    const form = document.getElementById('accountForm');
+    const formMessage = document.getElementById('formMessage');
+
+    const loadShared = async () => {
+      document.getElementById('headerContainer').innerHTML = await (await fetch('header.html')).text();
+      document.getElementById('footerContainer').innerHTML = await (await fetch('footer.html')).text();
+    };
+    loadShared();
+
+    const loadInternalNav = async () => {
+      try {
+        const res = await fetch('nav_internal.html');
+        navContainer.innerHTML = await res.text();
+      } catch {
+        navContainer.innerHTML = '<p style="color:red;">Failed to load navigation.</p>';
+      }
+    };
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        loadInternalNav();
+        document.getElementById('email').value = user.email;
+
+        const userRef = doc(db, "members", user.uid);
+        const docSnap = await getDoc(userRef);
+
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          form.userName.value = data.userName || '';
+          form.phone.value = data.phone || '';
+          form.bio.value = data.bio || '';
+        } else {
+          formMessage.textContent = "No account data found. Please complete the form to add your account.";
+        }
+
+        form.onsubmit = async (e) => {
+          e.preventDefault();
+          formMessage.textContent = '';
+          formMessage.classList.remove('error');
+
+          const action = form.action.value;
+          if (action === 'update') {
+            try {
+              await setDoc(userRef, {
+                userName: form.userName.value,
+                phone: form.phone.value,
+                bio: form.bio.value,
+                email: user.email
+              }, { merge: true });
+              formMessage.textContent = "Account updated successfully.";
+            } catch (err) {
+              formMessage.textContent = "Failed to update account.";
+              formMessage.classList.add('error');
+            }
+          } else if (action === 'delete') {
+            if (confirm("Are you sure you want to delete your account? This cannot be undone.")) {
+              try {
+                await deleteDoc(userRef);
+                formMessage.textContent = "Account deleted. You will be logged out.";
+                setTimeout(() => auth.signOut(), 3000);
+              } catch (err) {
+                formMessage.textContent = "Failed to delete account.";
+                formMessage.classList.add('error');
+              }
+            }
+          }
+        };
+      } else {
+        document.body.innerHTML = '<p style="color:red; text-align:center;">You must be logged in. <a href="login.html">Login here</a>.</p>';
+      }
+    });
+  </script>
+</body>
+</html>

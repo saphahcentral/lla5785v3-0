@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="You have been successfully logged out from Lighthouse Lifetime Ads." />
+  <title>Logged Out - Lighthouse Lifetime Ads</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .message {
+      background: white;
+      padding: 30px;
+      max-width: 500px;
+      margin: auto;
+      border: 2px solid #003e7e;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .message h1 {
+      color: #003e7e;
+    }
+
+    .message a {
+      display: inline-block;
+      margin-top: 20px;
+      color: white;
+      background: #003e7e;
+      padding: 10px 20px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .message a:hover {
+      background: #0050c8;
+    }
+
+    #navContainer {
+      background: #0057a8;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    #navContainer a {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    #navContainer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Dynamic External Nav -->
+  <div id="navContainer">Loading navigation...</div>
+
+  <div class="message">
+    <h1>You are now logged out.</h1>
+    <p>Thank you for visiting Lighthouse Lifetime Ads.</p>
+    <a href="login.html" role="button">Login Again</a>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+
+  <script>
+    // Load external nav
+    fetch('nav_external.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('navContainer').innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById('navContainer').textContent = 'Navigation failed to load.';
+      });
+
+    // Firebase config (corrected API key)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVVkbbBB0lquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Logout user
+    auth.signOut()
+      .then(() => {
+        console.log("User successfully signed out.");
+        // Optional redirect:
+        // setTimeout(() => window.location.href = 'login.html', 5000);
+      })
+      .catch((error) => {
+        console.error("Sign out error:", error);
+      });
+  </script>
+
+</body>
+</html>

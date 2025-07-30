@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lighthouse Landing Pages Index</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+      color: #003e7e;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header, footer {
+      flex-shrink: 0;
+    }
+    main {
+      flex-grow: 1;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #004080;
+    }
+    .index-list {
+      background: white;
+      padding: 25px 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+    }
+    .index-list ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .index-list li {
+      margin-bottom: 30px;
+    }
+    .index-list a.page-link {
+      font-weight: bold;
+      font-size: 1.2em;
+      color: #003e7e;
+      text-decoration: underline;
+    }
+    .index-list a.page-link:hover {
+      color: #0056b3;
+    }
+    .page-description {
+      margin-top: 6px;
+      font-size: 0.95em;
+      color: #444;
+      max-width: 700px;
+    }
+    .footer-link {
+      text-align: center;
+      margin-top: 40px;
+    }
+    .footer-link a {
+      font-weight: bold;
+      color: #003e7e;
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header id="headerContainer"></header>
+
+  <!-- Dynamic Internal Nav -->
+  <nav id="navContainer" role="navigation" aria-label="Internal site navigation">
+    Loading navigation...
+  </nav>
+
+  <main>
+    <h1>All Lighthouse Pages</h1>
+    <div class="index-list">
+      <ul>
+        <li>
+          <a href="about.html" class="page-link">About</a>
+          <p class="page-description">Learn more about the Lighthouse Launch project and its mission.</p>
+        </li>
+        <li>
+          <a href="index.html" class="page-link">Index</a>
+          <p class="page-description">Your personalized member dashboard and internal home page.</p>
+        </li>
+        <li>
+          <a href="advertise1.html" class="page-link">Advertise</a>
+          <p class="page-description">Submit and manage your banner and text ads linked to your membership.</p>
+        </li>
+        <li>
+          <a href="testimonial.html" class="page-link">Testimonial</a>
+          <p class="page-description">Submit or update your personal testimonial about Lighthouse Launch.</p>
+        </li>
+        <li>
+          <a href="upgrade1.html" class="page-link">Upgrade</a>
+          <p class="page-description">Upgrade your account to unlock premium features and bonuses.</p>
+        </li>
+        <li>
+          <a href="account1.html" class="page-link">Account</a>
+          <p class="page-description">Edit your profile details and keep your membership information up to date.</p>
+        </li>
+        <li>
+          <a href="surfandearn.html" class="page-link">Surf & Earn</a>
+          <p class="page-description">Discover how to earn passively while surfing — no site linking required.</p>
+        </li>
+        <li>
+          <a href="promote.html" class="page-link">Promote</a>
+          <p class="page-description">Promotional material to promote LIGHTHOUSE LIFETIME ADS.</p>
+        </li>
+      </ul>
+
+      <p class="footer-link">
+        <a href="https://lla5785.neocities.org" target="_blank" rel="noopener noreferrer">Visit the Main Site</a>
+      </p>
+    </div>
+  </main>
+
+  <footer id="footerContainer"></footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        const current = encodeURIComponent(window.location.pathname);
+        window.location.href = `login.html?next=${current}`;
+      }
+    });
+
+    // Load dynamic internal nav bar
+    fetch('nav_internal.html')
+      .then(res => {
+        if (!res.ok) throw new Error('Failed to load nav_internal.html');
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById('navContainer').innerHTML = html;
+      })
+      .catch(err => {
+        document.getElementById('navContainer').textContent = 'Navigation failed to load.';
+        console.error(err);
+      });
+
+    // Load header and footer partials
+    async function loadPartials() {
+      try {
+        const headerResp = await fetch('header.html');
+        if (!headerResp.ok) throw new Error('Failed to load header.html');
+        const headerHtml = await headerResp.text();
+        document.getElementById('headerContainer').innerHTML = headerHtml;
+      } catch {
+        document.getElementById('headerContainer').innerHTML = '<p style="color:red; text-align:center;">Failed to load header.</p>';
+      }
+      try {
+        const footerResp = await fetch('footer.html');
+        if (!footerResp.ok) throw new Error('Failed to load footer.html');
+        const footerHtml = await footerResp.text();
+        document.getElementById('footerContainer').innerHTML = footerHtml;
+      } catch {
+        document.getElementById('footerContainer').innerHTML = '<p style="color:red; text-align:center;">Failed to load footer.</p>';
+      }
+    }
+    loadPartials();
+  </script>
+</body>
+</html>

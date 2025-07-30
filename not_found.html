@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Oops! The page you're looking for was lost at sea. Return to the Lighthouse Lifetime Ads homepage." />
+  <title>404 – Shipwreck Ahead</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      text-align: center;
+      padding: 60px 20px;
+      background-color: #e6f2ff;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #navContainer {
+      background: #0057a8;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+      font-family: Arial, sans-serif;
+      margin-bottom: 40px;
+    }
+    #navContainer a {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    #navContainer a:hover {
+      text-decoration: underline;
+    }
+
+    .wreck-container {
+      background-color: rgba(255, 255, 255, 0.95);
+      border-radius: 12px;
+      padding: 30px;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      flex-grow: 1;
+    }
+
+    h1 {
+      font-size: 3em;
+      color: #004466;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #333;
+    }
+
+    .wreck-img {
+      max-width: 100%;
+      height: auto;
+      margin: 20px 0;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #004080;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #0059c1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div id="headerContainer"></div>
+
+  <!-- Navigation -->
+  <div id="navContainer">Loading navigation...</div>
+
+  <div class="wreck-container">
+    <h1>⚠️ 404: Shipwreck Ahead!</h1>
+    <p>Looks like the page you're searching for has been lost at sea...</p>
+    <img
+      class="wreck-img"
+      src="https://images.pexels.com/photos/2336927/pexels-photo-2336927.jpeg"
+      alt="Shipwreck on the island"
+    />
+    <p><a class="button" href="index2.html">Return to Safe Shores</a></p>
+  </div>
+
+  <!-- Footer -->
+  <div id="footerContainer"></div>
+
+  <!-- Firebase and Nav Logic -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Load header and footer
+    async function loadHTML(id, url) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Failed to load ' + url);
+        const html = await res.text();
+        document.getElementById(id).innerHTML = html;
+      } catch (e) {
+        document.getElementById(id).innerHTML = `<p style="color:red;">Failed to load ${url}</p>`;
+        console.error(e);
+      }
+    }
+    loadHTML('headerContainer', 'header.html');
+    loadHTML('footerContainer', 'footer.html');
+
+    // Load appropriate nav based on auth state
+    auth.onAuthStateChanged(user => {
+      const navContainer = document.getElementById('navContainer');
+      if (user) {
+        fetch('nav_internal.html')
+          .then(res => {
+            if (!res.ok) throw new Error('Failed to load internal nav');
+            return res.text();
+          })
+          .then(html => { navContainer.innerHTML = html; })
+          .catch(() => { navContainer.textContent = 'Navigation failed to load.'; });
+      } else {
+        fetch('nav_external.html')
+          .then(res => {
+            if (!res.ok) throw new Error('Failed to load external nav');
+            return res.text();
+          })
+          .then(html => { navContainer.innerHTML = html; })
+          .catch(() => { navContainer.textContent = 'Navigation failed to load.'; });
+      }
+    });
+  </script>
+</body>
+</html>

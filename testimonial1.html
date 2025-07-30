@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit Testimonial - Lighthouse Lifetime Ads</title>
+  <meta name="description" content="Share your Lighthouse Lifetime Ads experience by submitting a testimonial." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      background: #f0f8ff;
+      font-family: Arial, sans-serif;
+      padding: 30px;
+      color: #333;
+    }
+
+    .container {
+      background: #ffffff;
+      max-width: 700px;
+      margin: auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #aaa;
+    }
+
+    textarea {
+      width: 100%;
+      height: 180px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      resize: vertical;
+      border: 1px solid #ccc;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      background: #2a6ebb;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .button:hover,
+    .button:focus {
+      background: #1e4e8c;
+      outline: none;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      left: -10000px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Shared Header -->
+  <div id="headerContainer">Loading header...</div>
+
+  <!-- Dynamic Internal Navigation -->
+  <div id="navContainer">Loading navigation...</div>
+
+  <main class="container" role="main">
+    <h2>Submit Your Testimonial</h2>
+    <p>You may only submit one testimonial. If you already submitted one, it will appear below and can be updated. Leave it blank to delete it completely.</p>
+    
+    <form id="testimonialForm">
+      <label for="testimonial" class="visually-hidden">Write your testimonial here</label>
+      <textarea id="testimonial" name="testimonial" placeholder="Write your testimonial here..." required></textarea>
+      <br />
+      <button type="submit" class="button">Submit Testimonial</button>
+    </form>
+  </main>
+
+  <!-- Shared Footer -->
+  <div id="footerContainer">Loading footer...</div>
+
+  <!-- Firebase Logic + UI Includes -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, query, where, getDocs, doc, updateDoc, setDoc, deleteField } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let currentUID = null;
+    let memberDocID = null;
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        window.location.href = "login.html?next=testimonial1.html";
+      } else {
+        const userEmail = user.email.toLowerCase();
+        // Find the member doc ID by matching email
+        try {
+          const membersRef = collection(db, "members");
+          const q = query(membersRef, where("email", "==", userEmail));
+          const querySnapshot = await getDocs(q);
+          if (querySnapshot.empty) {
+            alert("No member record found for your email. Please contact support.");
+            memberDocID = null;
+          } else {
+            memberDocID = querySnapshot.docs[0].id;
+            await loadExistingTestimonial();
+          }
+        } catch (error) {
+          alert("Failed to load your member data. Please try again later.");
+          console.error("Firestore error:", error);
+        }
+      }
+    });
+
+    async function loadExistingTestimonial() {
+      if (!memberDocID) return;
+      try {
+        const memberDocRef = doc(db, "members", memberDocID);
+        const memberDocSnap = await getDocs(memberDocRef);
+        const memberData = await memberDocSnap.data();
+
+        if (memberData && memberData.testimonial) {
+          document.getElementById("testimonial").value = memberData.testimonial;
+        }
+      } catch (error) {
+        console.error("Error loading testimonial:", error);
+      }
+    }
+
+    document.getElementById("testimonialForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!memberDocID) {
+        alert("Cannot submit testimonial without member record.");
+        return;
+      }
+
+      const text = document.getElementById("testimonial").value.trim();
+      const memberDocRef = doc(db, "members", memberDocID);
+
+      try {
+        if (!text) {
+          // Delete testimonial field if empty
+          await updateDoc(memberDocRef, { testimonial: deleteField() });
+          sessionStorage.setItem("testimonialStatus", "deleted");
+        } else {
+          // Update or set testimonial field
+          await updateDoc(memberDocRef, { testimonial: text });
+          sessionStorage.setItem("testimonialStatus", "updated");
+        }
+        window.location.href = "testimonial2.html";
+      } catch (error) {
+        console.error("Error submitting testimonial:", error);
+        sessionStorage.setItem("testimonialStatus", "error");
+        window.location.href = "testimonial2.html";
+      }
+    });
+
+    // Load shared header, nav, footer
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("headerContainer").innerHTML = html;
+      });
+
+    fetch("nav_internal.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navContainer").innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById("navContainer").innerHTML = "<p style='color:red;'>Navigation failed to load.</p>";
+      });
+
+    fetch("footer.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("footerContainer").innerHTML = html;
+      });
+  </script>
+</body>
+</html>

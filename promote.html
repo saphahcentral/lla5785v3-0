@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Promote Lighthouse Lifetime Ads</title>
+  <meta name="description" content="Promotional materials to help you grow your team in Lighthouse Lifetime Ads." />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4faff;
+      color: #003e7e;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #004080;
+    }
+
+    .section {
+      margin-top: 30px;
+    }
+
+    .section h2 {
+      color: #0057a8;
+      margin-bottom: 10px;
+    }
+
+    .ref-link {
+      background: #eef6ff;
+      padding: 10px;
+      font-weight: bold;
+      color: #003366;
+      border-radius: 6px;
+      overflow-wrap: break-word;
+    }
+
+    .promo-box {
+      background: #f0f8ff;
+      padding: 15px;
+      border-left: 5px solid #0074d9;
+      margin-bottom: 20px;
+      border-radius: 6px;
+    }
+
+    code {
+      background: #eef;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .loading {
+      font-style: italic;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <div id="headerContainer"></div>
+
+  <!-- NAV -->
+  <div id="navContainer">Loading navigation...</div>
+
+  <div class="container">
+    <h1>Promote Lighthouse Lifetime Ads</h1>
+    <p>Use your referral links and share these promotional materials to build your team!</p>
+
+    <div class="section">
+      <h2>Your Referral Links</h2>
+      <p class="loading" id="loadingMsg">Loading your referral ID...</p>
+      <div id="linksContainer" style="display:none;">
+        <div><strong>Main Funnel:</strong> <div class="ref-link" id="link1"></div></div>
+        <div><strong>Direct Viewer:</strong> <div class="ref-link" id="link2"></div></div>
+        <div><strong>Instant Join:</strong> <div class="ref-link" id="link3"></div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Email Swipe</h2>
+      <div class="promo-box">
+        <strong>Subject:</strong> 🔥 Earn Lifetime Ads – Totally Free to Start!<br><br>
+        <strong>Body:</strong><br>
+        Hey there!<br><br>
+        I just joined an amazing platform that gives you free, lifetime ads – and it really works!<br><br>
+        Join under me and get access to powerful tools, upgrades, and passive traffic.<br><br>
+        👉 <span id="linkEmail"></span><br><br>
+        See you inside!<br>
+        [Your Name]
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>468x60 Banner</h2>
+      <div class="promo-box">
+        <code>
+          &lt;a href="<span id='linkBanner'></span>" target="_blank"&gt;<br>
+          &nbsp;&nbsp;&lt;img src="https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png" width="468" height="60" alt="Join Lighthouse Lifetime Ads" /&gt;<br>
+          &lt;/a&gt;
+        </code>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>125x125 Banner</h2>
+      <div class="promo-box">
+        <code>
+          &lt;a href="<span id='linkBanner125'></span>" target="_blank"&gt;<br>
+          &nbsp;&nbsp;&lt;img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="125" height="125" alt="Lighthouse Lifetime Ads" /&gt;<br>
+          &lt;/a&gt;
+        </code>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Co-Op Exposure</h2>
+      <p>You can also advertise your <b>own site</b> inside Lighthouse’s <b>Co-Op system</b>. Your site will rotate in our widget-based banners shown across our traffic exchange and partner sites. All you need is a clean referral link or landing page!</p>
+    </div>
+
+    <div class="section">
+      <h2>Join Our Partner Sites</h2>
+      <p>Earn extra exposure by joining any of the promoted sites below — these sites allow banner ad placements and may feature Lighthouse in return. Add your own site to the list in the co-op area!</p>
+      <div id="adsTableContainer">Loading co-op partner ads…</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div id="footerContainer"></div>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const link1 = document.getElementById("link1");
+    const link2 = document.getElementById("link2");
+    const link3 = document.getElementById("link3");
+    const linkEmail = document.getElementById("linkEmail");
+    const linkBanner = document.getElementById("linkBanner");
+    const linkBanner125 = document.getElementById("linkBanner125");
+
+    const linksContainer = document.getElementById("linksContainer");
+    const loadingMsg = document.getElementById("loadingMsg");
+
+    onAuthStateChanged(auth, async user => {
+      if (!user) {
+        window.location.href = "login.html?next=promote.html";
+        return;
+      }
+
+      try {
+        const docRef = doc(db, "members", user.uid);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) {
+          loadingMsg.textContent = "Your profile is incomplete.";
+          return;
+        }
+
+        const data = docSnap.data();
+        const username = encodeURIComponent(data["USER NAME"] || "");
+
+        if (!username) {
+          loadingMsg.textContent = "No referral ID found.";
+          return;
+        }
+
+        const base = "https://lla5785.neocities.org/";
+        const refLink = `${base}funnel.html?ref=${username}`;
+
+        link1.textContent = `${base}funnel.html?ref=${username}`;
+        link1.href = `${base}funnel.html?ref=${username}`;
+
+        link2.textContent = `${base}viewer.html?ref=${username}`;
+        link2.href = `${base}viewer.html?ref=${username}`;
+
+        link3.textContent = `${base}register.html?ref=${username}`;
+        link3.href = `${base}register.html?ref=${username}`;
+
+        linkEmail.textContent = refLink;
+        linkBanner.textContent = refLink;
+        linkBanner125.textContent = refLink;
+
+        loadingMsg.style.display = "none";
+        linksContainer.style.display = "block";
+
+        // Load the co-op ads table
+        fetch('adsTable.html')
+          .then(res => res.text())
+          .then(html => {
+            document.getElementById('adsTableContainer').innerHTML = html;
+          })
+          .catch(() => {
+            document.getElementById('adsTableContainer').innerHTML = '<p style="color:red;">Failed to load co-op ads list.</p>';
+          });
+
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        loadingMsg.textContent = "Error loading referral ID.";
+      }
+    });
+
+    // Fetch header, nav, and footer
+    fetch("header.html").then(res => res.text()).then(html => {
+      document.getElementById("headerContainer").innerHTML = html;
+    });
+
+    fetch("nav_internal.html").then(res => res.text()).then(html => {
+      document.getElementById("navContainer").innerHTML = html;
+    });
+
+    fetch("footer.html").then(res => res.text()).then(html => {
+      document.getElementById("footerContainer").innerHTML = html;
+    });
+  </script>
+</body>
+</html>

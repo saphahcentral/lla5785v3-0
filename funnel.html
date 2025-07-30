@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, follow" />
+  <title>Redirecting to Funnel...</title>
+  <style>
+    body {
+      background: #eaeaea;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .wrapper {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      font-size: 1.2em;
+      color: #003366;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <div id="navContainer"></div>
+
+  <!-- HEADER -->
+  <div id="headerContainer"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="wrapper">
+    <p>LOADING...</p>
+  </div>
+
+  <!-- FOOTER -->
+  <div id="footerContainer"></div>
+
+  <script>
+    // Load external nav
+    fetch("nav_external.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navContainer").innerHTML = html;
+      });
+
+    // Load external header
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("headerContainer").innerHTML = html;
+      });
+
+    // Load external footer
+    fetch("footer.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("footerContainer").innerHTML = html;
+      });
+
+    // Redirect logic: Sunday = 0, Saturday = 6
+    const day = new Date().getDay();
+    const page = `funnel${day + 1}.html`;
+    setTimeout(() => {
+      window.location.href = page;
+    }, 1800);
+  </script>
+
+</body>
+</html>

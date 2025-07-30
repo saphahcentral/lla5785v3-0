@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Updating Account...</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eef6ff;
+      text-align: center;
+      padding: 50px;
+      color: #003e7e;
+    }
+    .loader {
+      border: 8px solid #f3f3f3;
+      border-top: 8px solid #003e7e;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1.5s linear infinite;
+      margin: 30px auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .message {
+      font-size: 1.3em;
+      margin-top: 20px;
+    }
+  </style>
+  <script>
+    setTimeout(() => {
+      window.location.href = "account3.html";
+    }, 4000);
+  </script>
+</head>
+<body>
+  <div id="headerContainer"></div>
+  <h2>Processing Your Update...</h2>
+  <div class="loader"></div>
+  <div class="message">Please wait while we update your information.</div>
+  <div id="footerContainer"></div>
+  <script>
+    fetch('header.html').then(res => res.text()).then(data => document.getElementById('headerContainer').innerHTML = data);
+    fetch('footer.html').then(res => res.text()).then(data => document.getElementById('footerContainer').innerHTML = data);
+  </script>
+</body>
+</html>

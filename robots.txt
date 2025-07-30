@@ -1,0 +1,46 @@
+# robots.txt for Lighthouse Lifetime Ads
+# This file tells search engines and bots what parts of your site they can crawl and index.
+
+# Allow all user agents to crawl only public pages
+User-agent: *
+Disallow: /account1.html
+Disallow: /account2.html
+Disallow: /account3.html
+Disallow: /admin.html
+Disallow: /admin_ads.html
+Disallow: /admin_backup.html
+Disallow: /admin_members.html
+Disallow: /advertise1.html
+Disallow: /advertise2.html
+Disallow: /advertise3.html
+Disallow: /funnel.html
+Disallow: /propagate.html
+Disallow: /propagate1.html
+Disallow: /testimonials1.html
+Disallow: /testimonials2.html
+Disallow: /testimonials3.html
+Disallow: /upgrade1.html
+Disallow: /upgrade2.html
+Disallow: /upgrade3.html
+Disallow: /surfandearn.html
+Disallow: /promote.html
+Disallow: /resources.html
+
+# Allow these public pages
+Allow: /about.html
+Allow: /index.html
+Allow: /login.html
+Allow: /viewer.html
+Allow: /funnel.html
+Allow: /funnel1.html
+Allow: /funnel2.html
+Allow: /funnel3.html
+Allow: /funnel4.html
+Allow: /funnel5.html
+Allow: /funnel6.html
+Allow: /funnel7.html
+
+# Sitemap location
+Sitemap: https://lla5785.neocities.org/sitemap.xml
+
+# End of file

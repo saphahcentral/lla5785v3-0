@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, follow" />
+  <title>Unlimited Reach with Lighthouse</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5WP3ZDR25B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-5WP3ZDR25B', {
+      send_page_view: true,
+      anonymize_ip: true,
+      allow_ad_personalization_signals: false
+    });
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #fffaf5, #ffffff);
+      color: #3d2200;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    #header, #footer {
+      background: #cc5500;
+      color: white;
+      text-align: center;
+      padding: 15px 20px;
+      user-select: none;
+      font-family: 'Open Sans', Arial, sans-serif;
+    }
+    #navContainer {
+      box-shadow: 0 3px 12px rgba(0,0,0,0.25);
+      user-select: none;
+    }
+    .wrapper {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 40px 30px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(204, 85, 0, 0.15);
+      flex-grow: 1;
+      font-family: Arial, sans-serif;
+      color: #4b2e05;
+    }
+    h1 {
+      text-align: center;
+      color: #cc5500;
+      font-size: 2.4em;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.15em;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      color: #4b2e05;
+    }
+    .cta {
+      margin-top: 40px;
+      text-align: center;
+    }
+    .cta a {
+      display: inline-block;
+      padding: 14px 28px;
+      background: #cc5500;
+      color: white;
+      font-weight: bold;
+      font-size: 1.1em;
+      text-decoration: none;
+      border-radius: 10px;
+      transition: background 0.3s ease;
+      box-shadow: 0 4px 12px rgba(204, 85, 0, 0.4);
+      user-select: none;
+    }
+    .cta a:hover {
+      background: #aa4400;
+    }
+    footer {
+      font-family: 'Open Sans', Arial, sans-serif;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- EXTERNAL HEADER -->
+  <div id="header"></div>
+
+  <!-- EXTERNAL NAVIGATION -->
+  <div id="navContainer"></div>
+
+  <main class="wrapper" role="main" aria-label="Main content">
+    <h1>Launch Your Legacy Ad</h1>
+
+    <p>Ready to finally stop chasing exposure and start owning it? With Lighthouse, your message lives on — reaching thousands long after other platforms bury your posts.</p>
+
+    <p>Submit your ad once. Let it run forever. Whether you're building a brand, promoting a product, or growing a movement — Lighthouse is the tool that keeps you shining.</p>
+
+    <p>And it’s completely free to start. Join today and lock in your eternal traffic source.</p>
+
+    <div class="cta">
+      <a href="account1.html" rel="noopener noreferrer" aria-label="Sign up or login to Lighthouse Lifetime Ads">Get Started Now</a>
+    </div>
+  </main>
+
+  <!-- EXTERNAL FOOTER -->
+  <div id="footer"></div>
+
+  <script>
+    // Load external header, nav, and footer
+    Promise.all([
+      fetch('header.html').then(res => res.ok ? res.text() : '<header><h1>Lighthouse Lifetime Ads</h1></header>'),
+      fetch('nav_external.html').then(res => res.ok ? res.text() : '<nav style="padding:10px; background:#cc5500; color:white; text-align:center;">Navigation unavailable</nav>'),
+      fetch('footer.html').then(res => res.ok ? res.text() : '<footer>&copy; 2025 Lighthouse Lifetime Ads</footer>')
+    ]).then(([headerHTML, navHTML, footerHTML]) => {
+      document.getElementById('header').innerHTML = headerHTML;
+      document.getElementById('navContainer').innerHTML = navHTML;
+      document.getElementById('footer').innerHTML = footerHTML;
+    }).catch(() => {
+      // Fallback content if any fetch fails
+      document.getElementById('header').innerHTML = '<header><h1>Lighthouse Lifetime Ads</h1></header>';
+      document.getElementById('navContainer').innerHTML = '<nav style="padding:10px; background:#cc5500; color:white; text-align:center;">Navigation unavailable</nav>';
+      document.getElementById('footer').innerHTML = '<footer>&copy; 2025 Lighthouse Lifetime Ads</footer>';
+    });
+  </script>
+</body>
+</html>

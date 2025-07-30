@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Login to your Lighthouse Lifetime Ads member account." />
+  <title>Member Login - Lighthouse Lifetime Ads</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="/favicon.ico" />
+  <script defer src="https://www.googletagmanager.com/gtag/js?id=G-LLA5785"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-LLA5785', { 'anonymize_ip': true });
+  </script>
+</head>
+<body>
+  <div id="headerContainer" role="banner"></div>
+
+  <main class="main-content" role="main">
+    <h2>Member Login</h2>
+
+    <form onsubmit="return false" aria-label="Login form">
+      <label for="email" class="visually-hidden">Email</label>
+      <input type="email" id="email" placeholder="Email" required autocomplete="email" />
+
+      <label for="password" class="visually-hidden">Password</label>
+      <input type="password" id="password" placeholder="Password" required autocomplete="current-password" />
+
+      <div style="margin-top:1em;">
+        <button type="button" class="button" id="loginBtn" aria-label="Login">Login</button>
+        <button type="button" class="button" id="signupBtn" aria-label="Sign Up">Sign Up</button>
+      </div>
+    </form>
+
+    <p id="message" aria-live="polite" style="margin-top:1em;"></p>
+  </main>
+
+  <div id="footerContainer" role="contentinfo"></div>
+
+  <!-- Firebase & App Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVVkbbBB0lquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const message = document.getElementById('message');
+
+    function showMessage(text) {
+      message.textContent = text;
+    }
+
+    function redirectAfterLogin() {
+      const params = new URLSearchParams(window.location.search);
+      const next = params.get('next') || 'index.html';
+      window.location.href = next;
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => redirectAfterLogin())
+        .catch(error => showMessage(error.message));
+    });
+
+    document.getElementById('signupBtn').addEventListener('click', () => {
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      createUserWithEmailAndPassword(auth, email, password)
+        .then(() => redirectAfterLogin())
+        .catch(error => {
+          if (error.code === 'auth/weak-password') {
+            showMessage('Password must be at least 6 characters.');
+          } else {
+            showMessage(error.message);
+          }
+        });
+    });
+
+    // Fetch header and footer
+    fetch('header.html').then(r => r.text()).then(t => {
+      document.getElementById('headerContainer').innerHTML = t;
+    }).catch(console.error);
+
+    fetch('footer.html').then(r => r.text()).then(t => {
+      document.getElementById('footerContainer').innerHTML = t;
+    }).catch(console.error);
+  </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Learn more about Lighthouse Lifetime Ads – a platform built to help you advertise for life. Discover our mission, values, and features that empower everyday people to earn and grow online." />
+  <title>About Us – Lighthouse Lifetime Ads</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+
+  <!-- Firebase Init -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+
+  <!-- Header -->
+  <div id="headerContainer"></div>
+
+  <!-- Nav -->
+  <div id="navContainer"></div>
+
+  <!-- Main -->
+  <div class="container">
+    <div style="text-align: center;">
+      <img src="https://cdn-images.imagevenue.com/26/d6/11/ME1AW7GT_o.gif" width="200" height="200" alt="Lighthouse Logo" />
+    </div>
+
+    <h1 style="text-align: center; text-decoration: underline;">ABOUT US</h1>
+
+    <p>Welcome to <strong>Lighthouse Lifetime Ads</strong> – your island of lifetime value in a noisy digital world! I'm Duck, a dedicated marketer and strategist passionate about empowering everyday people to promote, earn, and grow online.</p>
+
+    <p>My journey began with the drive to simplify complex systems and turn everyday web users into long-term earners. Through affiliate strategies, creative funnels, and clean systems, LLA was built to make lifetime ads simple and effective.</p>
+
+    <p>This site is more than a hub for marketing tips — it’s your toolbox. You’ll find:</p>
+
+    <ul>
+      <li><strong>Lifetime Ad Placement</strong> – banner and text-based ads with no expiry.</li>
+      <li><strong>Referral-Based Growth</strong> – track your team through simple username-based links.</li>
+      <li><strong>FREE & Paid Options</strong> – start free, upgrade later — no pressure, just progress.</li>
+      <li><strong>Self-Service Access</strong> – our upcoming <u>Viewer</u> lets you check your ad details.</li>
+      <li><strong>Edit Your Details</strong> – make quick changes to your info (coming soon).</li>
+    </ul>
+
+    <p>Our goal? To offer a lifetime space to promote your website, project, or business — without the constant pressure of monthly payments or disappearing listings.</p>
+
+    <p>When I’m not working on funnels or tweaking code, I’m researching, learning from others, and supporting my network of fellow entrepreneurs. LLA is more than just a tool — it’s a movement toward sustainability in digital promotion.</p>
+
+    <p>Thank you for being part of the journey. Let’s build something that lasts — together.</p>
+
+    <br />
+    <div style="text-align: center; font-size: x-large;"><strong>Explore. Empower. Excel.</strong></div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footerContainer"></div>
+
+  <!-- Loader Script -->
+  <script>
+    async function loadIncludes() {
+      const loadHTML = async (id, file) => {
+        const container = document.getElementById(id);
+        try {
+          const res = await fetch(file);
+          if (!res.ok) throw new Error(`Failed to load ${file}`);
+          container.innerHTML = await res.text();
+        } catch (e) {
+          container.innerHTML = `<p style="color:red;text-align:center;">Failed to load ${file}</p>`;
+          console.error(e);
+        }
+      };
+
+      await loadHTML('headerContainer', 'header.html');
+
+      firebase.auth().onAuthStateChanged(user => {
+        const navFile = user ? 'nav_internal.html' : 'nav_external.html';
+        loadHTML('navContainer', navFile);
+      });
+
+      await loadHTML('footerContainer', 'footer.html');
+    }
+
+    loadIncludes();
+  </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Surf and Earn</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Earn passive rewards while browsing with external tools. These options are independent of Lighthouse Lifetime Ads." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #003e7e;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .highlight {
+      background: #e1f5fe;
+      border-left: 5px solid #2196f3;
+      padding: 10px 15px;
+      margin: 20px 0;
+    }
+
+    .note {
+      font-style: italic;
+      color: #888;
+      margin-top: 20px;
+      font-size: 0.9em;
+    }
+
+    a {
+      color: #003e7e;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <div id="headerContainer">Loading header...</div>
+
+  <!-- Internal Navigation -->
+  <div id="navContainer">Loading navigation...</div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1>Surf & Earn — External Options</h1>
+    <p>You can earn rewards or crypto simply by browsing the web using third-party tools. These do <strong>not affect your participation in LLA5785</strong> and can be used independently of our platform.</p>
+
+    <div class="highlight">
+      <strong>Here are a few popular options:</strong>
+      <ul>
+        <li><a href="https://brave.com" target="_blank" rel="noopener noreferrer">Brave Browser</a> — Earn BAT tokens by enabling ads while browsing.</li>
+        <li><a href="https://presearch.com" target="_blank" rel="noopener noreferrer">Presearch</a> — Earn PRE tokens for searching the web.</li>
+        <li><a href="https://coingecko.com/candy" target="_blank" rel="noopener noreferrer">CoinGecko Rewards</a> — Collect candy points for daily visits.</li>
+        <li><a href="https://stormgain.com" target="_blank" rel="noopener noreferrer">StormGain</a> — Mine crypto passively in your browser (requires registration).</li>
+      </ul>
+    </div>
+
+    <p>You’re free to use these services if you wish to earn extra from your daily browsing — completely outside of LLA5785.</p>
+    <p class="note">Note: LLA5785 does not promote cryptocurrency earning programs. The above list is for informational purposes only and you use them at your own discretion.</p>
+  </div>
+
+  <!-- Footer -->
+  <div id="footerContainer">Loading footer...</div>
+
+  <!-- Firebase + Navigation + Header/Footer Scripts -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Require login
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        window.location.href = "login.html?next=surfandearn.html";
+      }
+    });
+
+    // Load header, nav, and footer
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("headerContainer").innerHTML = html;
+      });
+
+    fetch("nav_internal.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navContainer").innerHTML = html;
+      });
+
+    fetch("footer.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("footerContainer").innerHTML = html;
+      });
+  </script>
+</body>
+</html>

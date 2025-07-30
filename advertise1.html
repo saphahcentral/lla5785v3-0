@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Manage your advertisements in Lighthouse Lifetime Ads. View, add, edit, or delete your live ads with ease." />
+  <title>Manage Your Ads - Lighthouse Lifetime Ads</title>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef6ff;
+      margin: 0;
+      padding: 0;
+      color: #003e7e;
+    }
+    .wrapper {
+      max-width: 900px;
+      background: white;
+      padding: 40px 30px;
+      margin: 40px auto;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #999;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .ad-form, .ad-item {
+      border: 2px solid #003e7e;
+      border-radius: 12px;
+      background: #f0f8ff;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+    .ad-item img {
+      width: 468px;
+      height: 60px;
+      object-fit: fill; /* distort if needed */
+      border-radius: 8px;
+      margin-top: 10px;
+      display: block;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      box-sizing: border-box;
+    }
+    button {
+      background: #003e7e;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #0050c8;
+    }
+    .edit-group {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    .edit-group button {
+      flex: 1;
+    }
+    p.note {
+      color: #b00;
+      font-weight: bold;
+      margin: 0 0 8px 0;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div id="headerContainer"></div>
+
+  <!-- Nav -->
+  <div id="navContainer"></div>
+
+  <div class="wrapper">
+    <h2>Manage Your Ads</h2>
+
+    <div class="ad-form">
+      <h3>Create New Advertisement</h3>
+
+      <input id="urlInput" placeholder="Main URL for Iframe and Text Ad" />
+      <p class="note">
+        Note: Enter the MAIN URL used for the iframe and text ad (must be a valid URL).
+      </p>
+
+      <input id="bannerInput" placeholder="Banner Image URL (468x60)" />
+      <p class="note">
+        Note: Enter the Banner Image URL (recommended size 468x60 pixels). Other sizes will be stretched or distorted.
+      </p>
+
+      <input id="bannerLinkInput" placeholder="Banner Link URL" />
+      <p class="note">
+        Note: Enter the URL where users will be taken when clicking your banner.
+      </p>
+
+      <textarea id="adDescriptionInput" placeholder="Text Ad Message (optional)"></textarea>
+      <p class="note">
+        Note: Enter a short text message for your ad (optional).
+      </p>
+
+      <button onclick="submitAd()">Add Advertisement</button>
+    </div>
+
+    <div id="adsList">
+      <p>Loading your ads...</p>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footerContainer"></div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuW-sWBZJpsxGbI2Ng-h0VLNJeImhEjBA",
+      authDomain: "lla5785.firebaseapp.com",
+      projectId: "lla5785",
+      storageBucket: "lla5785.appspot.com",
+      messagingSenderId: "557965375950",
+      appId: "1:557965375950:web:1d3de3618a7d199c71eeb3"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    let currentUser = null;
+
+    auth.onAuthStateChanged(user => {
+      if (!user) return location.href = "login.html";
+      currentUser = user;
+      loadUserAds();
+    });
+
+    function isValidUrl(string) {
+      try {
+        new URL(string);
+        return true;
+      } catch (_) {
+        return false;  
+      }
+    }
+
+    async function submitAd() {
+      const url = document.getElementById("urlInput").value.trim();
+      const banner = document.getElementById("bannerInput").value.trim();
+      const bannerLink = document.getElementById("bannerLinkInput").value.trim();
+      const adDescription = document.getElementById("adDescriptionInput").value.trim();
+
+      if (!url || !banner || !bannerLink) {
+        alert("Please fill all required URL fields: Main URL, Banner Image URL, and Banner Link URL.");
+        return;
+      }
+
+      if (!isValidUrl(url)) {
+        alert("Please enter a valid Main URL.");
+        return;
+      }
+      if (!isValidUrl(banner)) {
+        alert("Please enter a valid Banner Image URL.");
+        return;
+      }
+      if (!isValidUrl(bannerLink)) {
+        alert("Please enter a valid Banner Link URL.");
+        return;
+      }
+
+      try {
+        await db.collection("ad_list").add({
+          url,
+          banner,
+          bannerLink,
+          adDescription,
+          memberID: currentUser.email,
+          active: true,
+          timestamp: new Date().toISOString()
+        });
+        alert("✅ Ad submitted successfully!");
+        clearForm();
+        loadUserAds();
+      } catch (err) {
+        alert("❌ Failed to add ad: " + err.message);
+      }
+    }
+
+    function clearForm() {
+      document.getElementById("urlInput").value = "";
+      document.getElementById("bannerInput").value = "";
+      document.getElementById("bannerLinkInput").value = "";
+      document.getElementById("adDescriptionInput").value = "";
+    }
+
+    async function loadUserAds() {
+      const container = document.getElementById("adsList");
+      container.innerHTML = "";
+      try {
+        const snapshot = await db.collection("ad_list")
+          .where("memberID", "==", currentUser.email).get();
+
+        if (snapshot.empty) {
+          container.innerHTML = '<p>You have no ads yet.</p>';
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const ad = doc.data();
+          const div = document.createElement("div");
+          div.className = "ad-item";
+          div.innerHTML = `
+            <input value="${ad.url || ''}" onchange="updateField('${doc.id}', 'url', this.value)" placeholder="Main URL" />
+            <input value="${ad.banner || ''}" onchange="updateField('${doc.id}', 'banner', this.value)" placeholder="Banner Image URL" />
+            <input value="${ad.bannerLink || ''}" onchange="updateField('${doc.id}', 'bannerLink', this.value)" placeholder="Banner Link URL" />
+            <textarea onchange="updateField('${doc.id}', 'adDescription', this.value)" placeholder="Text Ad Message">${ad.adDescription || ''}</textarea>
+            <img src="${ad.banner || ''}" alt="Banner Preview" />
+            <div class="edit-group">
+              <button onclick="deleteAd('${doc.id}')">🗑 Delete</button>
+              <button onclick="loadUserAds()">🔄 Reload</button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        container.innerHTML = '<p style="color:red">Failed to load ads.</p>';
+        console.error(err);
+      }
+    }
+
+    async function updateField(docId, field, value) {
+      try {
+        await db.collection("ad_list").doc(docId).update({ [field]: value });
+      } catch (err) {
+        alert("Update failed: " + err.message);
+      }
+    }
+
+    async function deleteAd(docId) {
+      if (!confirm("Are you sure you want to delete this ad?")) return;
+      try {
+        await db.collection("ad_list").doc(docId).delete();
+        alert("Ad deleted.");
+        loadUserAds();
+      } catch (err) {
+        alert("Delete failed: " + err.message);
+      }
+    }
+
+    // Load nav and header/footer
+    fetch("nav_internal.html")
+      .then(r => r.text())
+      .then(html => document.getElementById("navContainer").innerHTML = html)
+      .catch(() => {
+        document.getElementById("navContainer").innerHTML = '<p style="color:red">Nav failed to load.</p>';
+      });
+
+    fetch("header.html")
+      .then(r => r.text())
+      .then(html => document.getElementById("headerContainer").innerHTML = html);
+
+    fetch("footer.html")
+      .then(r => r.text())
+      .then(html => document.getElementById("footerContainer").innerHTML = html);
+  </script>
+</body>
+</html>

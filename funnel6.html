@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, follow" />
+  <title>Lighthouse Exposure Engine</title>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5WP3ZDR25B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-5WP3ZDR25B', {
+      send_page_view: true,
+      anonymize_ip: true,
+      allow_ad_personalization_signals: false
+    });
+  </script>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #f5f9ff, #ffffff);
+      color: #1e2a36;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 40px 30px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0, 87, 168, 0.15);
+    }
+    h1 {
+      text-align: center;
+      color: #0057a8;
+      font-size: 2.4em;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.15em;
+      line-height: 1.7;
+      color: #2f3e4d;
+    }
+    .cta {
+      margin-top: 40px;
+      text-align: center;
+    }
+    .cta a {
+      display: inline-block;
+      padding: 16px 32px;
+      background: #0057a8;
+      color: white;
+      font-weight: bold;
+      font-size: 1.2em;
+      text-decoration: none;
+      border-radius: 50px;
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 6px 20px rgba(0, 87, 168, 0.4);
+    }
+    .cta a:hover {
+      background: #003f7d;
+      box-shadow: 0 8px 30px rgba(0, 63, 125, 0.5);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HEADER -->
+  <div id="header"></div>
+
+  <!-- EXTERNAL NAV BAR -->
+  <div id="navContainer"></div>
+
+  <!-- MAIN CONTENT -->
+  <div class="container">
+    <h1>Effortless Ad Power</h1>
+
+    <p>Forget short-term campaigns. Lighthouse gives you <strong>permanent visibility</strong> in a system designed for longevity. Set up your ad once — and watch it circulate, even while you rest.</p>
+
+    <p>No surfing. No maintenance. No stress. Just targeted exposure that never expires.</p>
+
+    <p>Start free and scale at your own pace. When you're ready, upgrade to multiply your reach — or stay free forever. Either way, your space is yours for life.</p>
+
+    <div class="cta">
+      <a href="account1.html">Claim Your Ad Slot Now</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div id="footer"></div>
+
+  <!-- LOAD EXTERNAL PARTIALS -->
+  <script>
+    fetch('header.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('header').innerHTML = html);
+
+    fetch('nav_external.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('navContainer').innerHTML = html);
+
+    fetch('footer.html')
+      .then(res => res.text())
+      .then(html => document.getElementById('footer').innerHTML = html);
+  </script>
+</body>
+</html>

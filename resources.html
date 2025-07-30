@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resources - Lighthouse Lifetime Ads</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      color: #003366;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    main.container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #ccc;
+      flex: 1;
+    }
+    h1 {
+      text-align: center;
+      color: #2a6ebb;
+      margin-bottom: 20px;
+    }
+    ul.resources-list {
+      list-style-type: disc;
+      padding-left: 1.5em;
+      font-size: 1.1em;
+      line-height: 1.6em;
+    }
+    ul.resources-list li {
+      margin-bottom: 15px;
+    }
+    ul.resources-list a {
+      color: #0077cc;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    ul.resources-list a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- External Header -->
+  <div id="header-container">Loading header...</div>
+
+  <!-- Internal Navigation -->
+  <nav id="nav-container">Loading navigation...</nav>
+
+  <main class="container" role="main" aria-label="Resources">
+    <h1>Helpful Resources</h1>
+    <p>Here are some key external resources to support your Lighthouse Lifetime Ads experience:</p>
+    <ul class="resources-list">
+      <li>
+        <a href="https://messianicduck5785.blogspot.com/p/home.html" target="_blank" rel="noopener noreferrer">
+          Our Official Blog
+        </a> — Stay updated with the latest news, tips, and announcements.
+      </li>
+      <li>
+        <a href="https://lla5785emails.blogspot.com/p/subscribe.html" target="_blank" rel="noopener noreferrer">
+          Email Series Subscription
+        </a> — Get our exclusive email series delivered straight to your inbox.
+      </li>
+    </ul>
+  </main>
+
+  <!-- External Footer -->
+  <div id="footer-container">Loading footer...</div>
+
+  <script>
+    // Load external shared header, internal nav, and footer
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => { document.getElementById("header-container").innerHTML = html; });
+
+    fetch("nav_internal.html")
+      .then(res => res.text())
+      .then(html => { document.getElementById("nav-container").innerHTML = html; })
+      .catch(() => {
+        document.getElementById("nav-container").innerHTML = "<p style='color:#003366;'>Navigation failed to load.</p>";
+      });
+
+    fetch("footer.html")
+      .then(res => res.text())
+      .then(html => { document.getElementById("footer-container").innerHTML = html; });
+  </script>
+</body>
+</html>

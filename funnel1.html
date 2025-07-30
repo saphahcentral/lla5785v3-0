@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, follow" />
+  <title>Join Lighthouse Lifetime Ads Today</title>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5WP3ZDR25B"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5WP3ZDR25B', {
+      send_page_view: true,
+      allow_ad_personalization_signals: false,
+      anonymize_ip: true
+    });
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    #navContainer {
+      background: #1a237e;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 28px;
+      font-weight: 600;
+      font-size: 1em;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+      letter-spacing: 0.03em;
+    }
+    #navContainer a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      transition: background 0.35s ease;
+      user-select: none;
+    }
+    #navContainer a:hover {
+      background: #3f51b5;
+    }
+
+    .wrapper {
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: auto;
+      margin-top: 100px;
+      margin-bottom: 80px;
+      padding: 50px 40px;
+      border-radius: 28px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      backdrop-filter: blur(12px);
+      text-align: center;
+    }
+
+    h1 {
+      font-weight: 800;
+      font-size: 3rem;
+      margin-bottom: 30px;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.35);
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+    }
+
+    p {
+      font-weight: 500;
+      font-size: 1.25rem;
+      line-height: 1.7;
+      margin-bottom: 30px;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .cta a {
+      display: inline-block;
+      padding: 20px 50px;
+      background: #ff6f61;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.4rem;
+      border-radius: 50px;
+      box-shadow: 0 8px 25px rgba(255, 111, 97, 0.7);
+      text-decoration: none;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+      user-select: none;
+    }
+    .cta a:hover {
+      background: #e05c50;
+      box-shadow: 0 12px 30px rgba(224, 92, 80, 0.9);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div id="headerContainer"></div>
+
+  <!-- Nav Bar -->
+  <div id="navContainer"></div>
+
+  <div class="wrapper" role="main">
+    <h1>Join Lighthouse Lifetime Ads Today</h1>
+
+    <p>Unlock lifetime advertising opportunities with zero monthly fees. Promote your business, project, or passion effortlessly — forever.</p>
+
+    <p>Experience automated exposure, referral growth, and easy upgrades tailored to your goals. Lighthouse makes your promotion shine bright and steady.</p>
+
+    <div class="cta">
+      <a href="account1.html">Get Started Now</a>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footerContainer"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    // Initialize Firebase App (same config as your other pages)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Load header, nav, footer
+    async function loadFragment(id, url) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Failed to load ' + url);
+        const html = await res.text();
+        document.getElementById(id).innerHTML = html;
+      } catch {
+        document.getElementById(id).innerHTML = `<p style="color:red;text-align:center;">Failed to load ${url}</p>`;
+      }
+    }
+
+    loadFragment('headerContainer', 'header.html');
+    loadFragment('navContainer', 'nav_external.html');
+    loadFragment('footerContainer', 'footer.html');
+
+    // Redirect if not logged in to account1.html
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        window.location.href = "account1.html";
+      }
+      // else user is logged in - stay on this page
+    });
+  </script>
+</body>
+</html>

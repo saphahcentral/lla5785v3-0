@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Main Public Pages -->
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/index.html</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/about.html</loc>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/login.html</loc>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/viewer.html</loc>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Funnel Pages -->
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/funnel.html</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/funnel1.html</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/funnel2.html</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/funnel3.html</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/funnel4.html</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/funnel5.html</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/funnel6.html</loc>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://www.lighthouselifetimeads.com/funnel7.html</loc>
+    <priority>0.6</priority>
+  </url>
+
+</urlset>

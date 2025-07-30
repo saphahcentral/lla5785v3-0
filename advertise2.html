@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Processing Advertisement Submission</title>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef6ff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      color: #003e7e;
+    }
+    .processing-box {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #999;
+      max-width: 400px;
+      margin: auto;
+      text-align: center;
+    }
+    .spinner {
+      margin: 20px auto;
+      width: 40px;
+      height: 40px;
+      border: 5px solid #003e7e;
+      border-top: 5px solid #eef6ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    footer {
+      margin-top: auto;
+      padding: 20px;
+      text-align: center;
+      background-color: #f2f2f2;
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
+
+  <!-- Auto redirect after short delay -->
+  <script>
+    setTimeout(() => {
+      window.location.href = "advertise3.html";
+    }, 3000);
+  </script>
+</head>
+<body>
+  <!-- Header -->
+  <div id="headerContainer"></div>
+
+  <!-- Nav -->
+  <div id="navContainer"></div>
+
+  <div class="processing-box">
+    <h2>Processing your Advertisement Submission</h2>
+    <p>Please wait while we process your details...</p>
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Footer -->
+  <div id="footerContainer"></div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuW-sWBZJpsxGbI2Ng-h0VLNJeImhEjBA",
+      authDomain: "lla5785.firebaseapp.com",
+      projectId: "lla5785"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    firebase.auth().onAuthStateChanged(async user => {
+      // Load header
+      try {
+        const headerRes = await fetch('header.html');
+        const headerHtml = await headerRes.text();
+        document.getElementById('headerContainer').innerHTML = headerHtml;
+      } catch (e) {
+        console.error("Header load failed", e);
+      }
+
+      // Load correct nav
+      const navFile = user ? 'nav_internal.html' : 'nav_external.html';
+      try {
+        const navRes = await fetch(navFile);
+        const navHtml = await navRes.text();
+        document.getElementById('navContainer').innerHTML = navHtml;
+      } catch (e) {
+        console.error("Nav load failed", e);
+      }
+
+      // Load footer
+      try {
+        const footerRes = await fetch('footer.html');
+        const footerHtml = await footerRes.text();
+        document.getElementById('footerContainer').innerHTML = footerHtml;
+      } catch (e) {
+        console.error("Footer load failed", e);
+      }
+    });
+  </script>
+</body>
+</html>

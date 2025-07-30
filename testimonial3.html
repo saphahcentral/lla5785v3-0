@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Testimonial Submitted - Lighthouse Lifetime Ads</title>
+  <style>
+    body {
+      background: #e6fff2;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 100px 20px 40px;
+      color: #2a6ebb;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 30px;
+      background: #2a6ebb;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover,
+    .button:focus {
+      background: #1a437a;
+      outline: none;
+    }
+
+    header, footer {
+      background: #003e7e;
+      color: white;
+      padding: 15px 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    header h1, footer p {
+      margin: 0;
+      font-weight: normal;
+    }
+
+    #nav-container {
+      background: #0057a8;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+      font-family: Arial, sans-serif;
+    }
+
+    #nav-container a {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      line-height: 1.5;
+    }
+
+    #nav-container a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <!-- Firebase Auth Check -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        window.location.href = "login.html?next=testimonial3.html";
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <header>
+    <h1>Lighthouse Lifetime Ads</h1>
+  </header>
+
+  <!-- Internal Navigation Bar -->
+  <nav id="nav-container">Loading navigation...</nav>
+  <script>
+    fetch("nav_internal.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("nav-container").innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById("nav-container").textContent = "Navigation failed to load.";
+      });
+  </script>
+
+  <main role="main">
+    <h2 id="statusHeading">Thank You!</h2>
+    <p id="statusMessage">Your testimonial has been successfully saved.</p>
+    <a href="index2.html" class="button">Next</a>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Lighthouse Lifetime Ads. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Show message based on testimonialStatus stored in sessionStorage
+    const status = sessionStorage.getItem('testimonialStatus');
+    const heading = document.getElementById('statusHeading');
+    const message = document.getElementById('statusMessage');
+
+    switch(status) {
+      case 'submitted':
+        heading.textContent = "Thank You!";
+        message.textContent = "Your testimonial has been successfully submitted.";
+        break;
+      case 'updated':
+        heading.textContent = "Updated!";
+        message.textContent = "Your testimonial has been updated successfully.";
+        break;
+      case 'deleted':
+        heading.textContent = "Deleted!";
+        message.textContent = "Your testimonial has been deleted.";
+        break;
+      case 'error':
+        heading.textContent = "Oops!";
+        message.textContent = "There was an error saving your testimonial. Please try again.";
+        break;
+      default:
+        heading.textContent = "Thank You!";
+        message.textContent = "Your testimonial status is unknown.";
+    }
+
+    // Clear status after displaying
+    sessionStorage.removeItem('testimonialStatus');
+  </script>
+</body>
+</html>

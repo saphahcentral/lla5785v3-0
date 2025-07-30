@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testimonial Status - Lighthouse Lifetime Ads</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="description" content="Processing your testimonial for Lighthouse Lifetime Ads..." />
+
+  <style>
+    body {
+      background: #f5f5f5;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 100px 20px;
+      color: #333;
+      margin: 0;
+    }
+
+    .spinner {
+      border: 8px solid #ddd;
+      border-top: 8px solid #2a6ebb;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      animation: spin 1.5s linear infinite;
+      margin: 30px auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Shared Header -->
+  <div id="headerContainer">Loading header...</div>
+
+  <!-- Internal Nav -->
+  <div id="navContainer">Loading navigation...</div>
+
+  <main role="main">
+    <h2>Processing Your Testimonial...</h2>
+    <div class="spinner" aria-label="Loading spinner" role="img"></div>
+    <p>Please wait while we save your feedback.</p>
+  </main>
+
+  <!-- Shared Footer -->
+  <div id="footerContainer">Loading footer...</div>
+
+  <!-- Redirect to testimonial3.html after delay -->
+  <script>
+    setTimeout(() => {
+      window.location.href = "testimonial3.html";
+    }, 2500);
+
+    // Load includes
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("headerContainer").innerHTML = html;
+      });
+
+    fetch("nav_internal.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("navContainer").innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById("navContainer").innerHTML = "<p style='color:red;'>Navigation failed to load.</p>";
+      });
+
+    fetch("footer.html")
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById("footerContainer").innerHTML = html;
+      });
+  </script>
+</body>
+</html>
