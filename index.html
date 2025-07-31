@@ -64,6 +64,43 @@
       margin-top: 40px;
       width: 100%;
     }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    td {
+      padding: 20px;
+      vertical-align: top;
+      border: 1px solid #ccc;
+    }
+    .offer-title {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #003366;
+    }
+    .offer-box {
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 20px;
+      height: 100%;
+    }
+    .cta-button {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 14px 30px;
+      background-color: #0066cc;
+      color: white;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 0 12px #3399ff;
+      transition: background-color 0.3s ease;
+    }
+    .cta-button:hover {
+      background-color: #004a99;
+    }
   </style>
 </head>
 <body>
@@ -75,32 +112,29 @@
   <div id="nav-container">Loading nav...</div>
 
   <!-- MAIN CONTENT -->
-  <main class="content" style="margin-top: 20px;">
-    <table border="1" cellpadding="15" cellspacing="0" style="width: 100%; border-collapse: collapse; text-align: center;">
+  <main class="content">
+    <div class="highlight">The trial is over. Lighthouse Lifetime Ads is now fully live and operational!</div>
+
+    <table>
       <tr>
-        <td style="width: 50%; vertical-align: top;">
-          <p class="highlight" style="font-size: 16px; font-weight: bold;">
-            Promote your site forever with just one submission.<br />
-            Join <strong>Lighthouse Lifetime Ads</strong> and get your ads rotating across the web — automatically and permanently!
-          </p>
-          <a href="https://lla5785.neocities.org/account1.html" class="join-now-button">
-            🚀 JOIN NOW!
-          </a>
+        <td>
+          <div class="offer-box">
+            <div class="offer-title">🎉 FREE PLAN</div>
+            <p>✔ One Website<br />✔ One Banner Ad<br />✔ One Text Ad</p>
+            <p><strong>No cost. Permanent exposure.</strong></p>
+          </div>
         </td>
-
-        <td style="width: 50%; vertical-align: middle; background-color: #fffbe6; font-size: 15px;">
-          ✅ <strong>The site is now LIVE!</strong><br />
-          All upgrades and fixes are complete.<br />
-          Welcome to Lighthouse Lifetime Ads!<br /><br />
-
-          <div style="margin-top: 15px; padding: 14px; background-color: #ffffcc; border: 3px solid #ff0000; border-radius: 8px; font-weight: bold; color: #cc0000;">
-            🎁 <span style="font-size: 1.2em;">LIMITED-TIME OFFER:</span><br />
-            <span style="font-size: 1.3em;">100% DISCOUNT — Join for FREE!</span><br />
-            Offer valid until <strong>31 July 2025</strong>
+        <td>
+          <div class="offer-box">
+            <div class="offer-title">🚀 UPGRADE: $24.50 Once-Off</div>
+            <p>✔ Two Websites<br />✔ Two Banner Ads<br />✔ Two Text Ads</p>
+            <p><strong>More reach, more impact, forever.</strong></p>
           </div>
         </td>
       </tr>
     </table>
+
+    <a href="upgrade1.html" class="cta-button">ADD YOUR ADS NOW!</a>
   </main>
 
   <!-- ADS SECTION -->
