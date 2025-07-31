@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Add Your Second Ads - Lighthouse Lifetime Ads</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      margin: 0; padding: 0;
+      color: #333;
+    }
+    header, footer {
+      background: #003e7e;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    nav#nav-container {
+      background: #0057a8;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+    }
+    nav#nav-container a {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    nav#nav-container a:hover {
+      text-decoration: underline;
+    }
+    main.container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #ccc;
+    }
+    h1 {
+      text-align: center;
+      color: #2a6ebb;
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    label {
+      font-weight: bold;
+    }
+    input, textarea, select {
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      padding: 14px;
+      background: #0070ba;
+      color: white;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+    .status {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #cc0000;
+    }
+  </style>
+</head>
+<body>
+  <div id="header">Loading header...</div>
+  <nav id="nav-container">Loading navigation...</nav>
+
+  <main class="container" role="main">
+    <h1>Add Your Second Ads</h1>
+    <div id="status" class="status">Checking your account status...</div>
+    <form id="secondAdForm" style="display:none;">
+      <label for="title2">Ad Title</label>
+      <input type="text" id="title2" required maxlength="100" />
+
+      <label for="description2">Description</label>
+      <textarea id="description2" rows="5" required maxlength="500"></textarea>
+
+      <label for="category2">Category</label>
+      <select id="category2" required>
+        <option value="">Select category</option>
+        <option value="Ministry">Ministry</option>
+        <option value="Services">Services</option>
+        <option value="Products">Products</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label for="link2">Website / Contact Link</label>
+      <input type="url" id="link2" required />
+
+      <button type="submit">Submit Second Ads</button>
+    </form>
+  </main>
+
+  <div id="footer">Loading footer...</div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const statusEl = document.getElementById("status");
+    const formEl = document.getElementById("secondAdForm");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "login.html?next=upgrade1a.html";
+        return;
+      }
+
+      const ref = doc(db, "members", user.uid);
+      const snap = await getDoc(ref);
+
+      if (!snap.exists()) {
+        statusEl.textContent = "Account not found.";
+        return;
+      }
+
+      const data = snap.data();
+      const type = data.accountType || "FREE";
+
+      if (type === "FREE") {
+        // Not paid yet, redirect back to upgrade page
+        window.location.href = "upgrade1.html";
+        return;
+      }
+
+      if (type === "VIP" || type === "ADMIN") {
+        statusEl.textContent = "Your ads are managed via the console.";
+        return;
+      }
+
+      // UPGRADE users show form
+      statusEl.style.display = "none";
+      formEl.style.display = "flex";
+
+      formEl.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const newAd = {
+          uid: user.uid,
+          email: user.email,
+          title: document.getElementById("title2").value.trim(),
+          description: document.getElementById("description2").value.trim(),
+          category: document.getElementById("category2").value,
+          link: document.getElementById("link2").value.trim(),
+          timestamp: Date.now(),
+        };
+
+        try {
+          await setDoc(doc(db, "ad_list", user.uid + "_2"), newAd);
+          statusEl.textContent = "✅ Your second ad has been saved.";
+          statusEl.style.color = "green";
+          formEl.reset();
+          formEl.style.display = "none";
+          statusEl.style.display = "block";
+        } catch (err) {
+          statusEl.textContent = "❌ Error saving ad. Please try again.";
+          statusEl.style.color = "red";
+        }
+      };
+    });
+
+    // Load shared includes
+    fetch("header.html").then((res) => res.text()).then((html) => {
+      document.getElementById("header").innerHTML = html;
+    });
+
+    fetch("footer.html").then((res) => res.text()).then((html) => {
+      document.getElementById("footer").innerHTML = html;
+    });
+
+    fetch("nav_internal.html")
+      .then((res) => res.text())
+      .then((html) => {
+        document.getElementById("nav-container").innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById("nav-container").innerHTML =
+          "<p style='color:white;'>Navigation failed to load.</p>";
+      });
+  </script>
+</body>
+</html>
