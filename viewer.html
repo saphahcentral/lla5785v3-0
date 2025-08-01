@@ -10,8 +10,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       background: #f9f9f9;
       text-align: center;
     }
@@ -51,7 +50,6 @@
 </head>
 <body>
 
-  <!-- Load header, nav, and footer dynamically -->
   <div id="header"></div>
   <div id="nav"></div>
 
@@ -75,7 +73,6 @@
 
   <div id="footer"></div>
 
-  <!-- Firebase config -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBz0VX...REDACTED",
@@ -89,7 +86,6 @@
     const db = firebase.firestore();
   </script>
 
-  <!-- Load dynamic components -->
   <script>
     async function loadHTML(id, file) {
       const res = await fetch(file);
@@ -102,42 +98,61 @@
     loadHTML("footer", "footer.html");
   </script>
 
-  <!-- Ad fetching script -->
   <script>
+    // Robust random pick that returns null if array empty
+    function pickRandom(arr) {
+      if (!arr || arr.length === 0) return null;
+      const index = Math.floor(Math.random() * arr.length);
+      return arr[index];
+    }
+
     async function loadAds() {
-      const adSnapshot = await db.collection("ad_list").get();
-      const ads = adSnapshot.docs.map(doc => doc.data());
+      try {
+        const adSnapshot = await db.collection("ad_list").get();
+        const ads = adSnapshot.docs.map(doc => doc.data());
+        console.log("Ads fetched:", ads);
 
-      const bannerAds = ads.filter(ad => ad.type === "banner");
-      const textAds = ads.filter(ad => ad.type === "text");
-      const iframeAds = ads.filter(ad => ad.type === "iframe");
+        const bannerAds = ads.filter(ad => ad.type === "banner");
+        const textAds = ads.filter(ad => ad.type === "text");
+        const iframeAds = ads.filter(ad => ad.type === "iframe");
 
-      // Helper: pick one random ad from array
-      const pickRandom = arr => arr[Math.floor(Math.random() * arr.length)];
+        console.log("Banner Ads:", bannerAds);
+        console.log("Text Ads:", textAds);
+        console.log("Iframe Ads:", iframeAds);
 
-      // BANNER
-      const bannerAd = pickRandom(bannerAds);
-      if (bannerAd) {
-        document.getElementById("bannerAd").innerHTML = `
-          <a href="${bannerAd.link}" target="_blank" rel="noopener noreferrer">
-            <img src="${bannerAd.image}" width="468" height="60" alt="Banner Ad" />
-          </a>`;
-      }
+        const bannerAd = pickRandom(bannerAds);
+        if (bannerAd) {
+          document.getElementById("bannerAd").innerHTML = `
+            <a href="${bannerAd.link}" target="_blank" rel="noopener noreferrer">
+              <img src="${bannerAd.image}" width="468" height="60" alt="Banner Ad" />
+            </a>`;
+        } else {
+          console.log("No banner ad found; displaying fallback.");
+          document.getElementById("bannerAd").innerHTML = `<div>No banner ads available.</div>`;
+        }
 
-      // TEXT
-      const textAd = pickRandom(textAds);
-      if (textAd) {
-        document.getElementById("textAd").innerHTML = `
-          <a href="${textAd.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:#000;">
-            <strong>${textAd.title}</strong><br />
-            ${textAd.body}
-          </a>`;
-      }
+        const textAd = pickRandom(textAds);
+        if (textAd) {
+          document.getElementById("textAd").innerHTML = `
+            <a href="${textAd.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:#000;">
+              <strong>${textAd.title}</strong><br />
+              ${textAd.body}
+            </a>`;
+        } else {
+          console.log("No text ad found; displaying fallback.");
+          document.getElementById("textAd").innerHTML = `<div>No text ads available.</div>`;
+        }
 
-      // IFRAME
-      const iframeAd = pickRandom(iframeAds);
-      if (iframeAd) {
-        document.getElementById("iframeAd").src = iframeAd.link;
+        const iframeAd = pickRandom(iframeAds);
+        if (iframeAd) {
+          document.getElementById("iframeAd").src = iframeAd.link;
+        } else {
+          console.log("No iframe ad found; clearing iframe src.");
+          document.getElementById("iframeAd").src = "";
+        }
+
+      } catch (error) {
+        console.error("Error loading ads:", error);
       }
     }
 
