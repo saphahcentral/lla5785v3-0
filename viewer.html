@@ -2,184 +2,144 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Viewer Page</title>
+  <title>Ad Viewer</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background-color: #f9f9f9;
       text-align: center;
-    }
-    #nav-placeholder {
-      margin-bottom: 1em;
-    }
-    #top-ads {
-      margin-bottom: 1em;
-    }
-    #top-ads > div {
-      margin: 10px 0;
+      margin: 10px;
     }
     #square-banner {
-      display: inline-block;
-      margin-bottom: 1em;
-      width: 125px;
-      height: 125px;
+      margin-bottom: 15px;
     }
     #square-banner img {
       width: 125px;
       height: 125px;
-      border: 0;
+      cursor: pointer;
     }
-    iframe#ad-iframe {
-      width: 100%;
-      height: 500px;
-      border: none;
-      margin-top: 1em;
+    #banner-ad, #text-ad {
+      margin: 15px auto;
+      max-width: 728px;
+      min-height: 60px;
+      border: 1px solid #ccc;
+      padding: 5px;
+      color: #555;
     }
-    #text-ad {
-      font-size: 1rem;
-      margin: 1em 0;
-      color: #333;
+    #ad-iframe {
+      width: 728px;
+      height: 90px;
+      border: 1px solid #ccc;
+      margin: 15px auto;
+      display: block;
     }
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <div id="nav-placeholder"></div>
-
-  <!-- Inline text banner at top -->
-  <div id="inline-banner">
-    <strong>LIMITED OFFER: Promote Your Site Here!</strong>
-  </div>
-
-  <!-- Top Ads container -->
-  <div id="top-ads">
-
-    <!-- Banner ad -->
-    <div id="banner-ad"></div>
-
-    <!-- Text ad -->
-    <div id="text-ad"></div>
-
-    <!-- Square banner -->
-    <a href="index.html" id="square-banner" title="Home">
+  <!-- Square Banner linking to index.html -->
+  <div id="square-banner" title="Go to Home">
+    <a href="index.html" target="_self">
       <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" alt="Square Banner" />
     </a>
-
   </div>
 
-  <!-- Iframe ad -->
-  <iframe id="ad-iframe" src=""></iframe>
+  <!-- Banner Ad -->
+  <div id="banner-ad">Loading banner ad...</div>
 
-<script>
-  // Load navigation from nav_external.html (same folder)
-  fetch('nav_external.html')
-    .then(response => {
-      if (!response.ok) throw new Error('Navigation not found');
-      return response.text();
-    })
-    .then(html => {
-      document.getElementById('nav-placeholder').innerHTML = html;
-    })
-    .catch(err => {
-      console.error('Error loading nav:', err);
-      document.getElementById('nav-placeholder').innerHTML = '';
-    });
+  <!-- Text Ad -->
+  <div id="text-ad">Loading text ad...</div>
 
-  // Firestore config and init (replace with your actual config)
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    // other config options...
-  };
+  <!-- Iframe Ad -->
+  <iframe id="ad-iframe" src="" title="Iframe Ad"></iframe>
 
-  // Load Firebase SDK scripts dynamically (if not already included)
-  function loadScript(url) {
-    return new Promise((resolve, reject) => {
-      let script = document.createElement('script');
-      script.src = url;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error('Failed to load script ' + url));
-      document.head.appendChild(script);
-    });
-  }
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script>
+    // Your Firebase configuration here — replace with your actual config!
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
 
-  async function loadFirebase() {
-    if (!window.firebase) {
-      await loadScript('https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js');
-      await loadScript('https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js');
-    }
-  }
-
-  async function initAds() {
-    await loadFirebase();
-
-    // Initialize Firebase app
+    // Initialize Firebase
     if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.firestore();
 
-    try {
-      // Fetch all ads from 'ad_list' collection
-      const snapshot = await db.collection('ad_list').get();
-
-      const ads = [];
-      snapshot.forEach(doc => {
-        ads.push(doc.data());
-      });
-
-      // Filter ads by type
-      const bannerAds = ads.filter(ad => ad.type === 'banner' && ad.status === 'active');
-      const textAds = ads.filter(ad => ad.type === 'text' && ad.status === 'active');
-      const iframeAds = ads.filter(ad => ad.type === 'iframe' && ad.status === 'active');
-
-      // Helper: get random element from array or fallback null
-      const getRandomAd = (arr) => arr.length ? arr[Math.floor(Math.random() * arr.length)] : null;
-
-      // Pick random ads
-      const bannerAd = getRandomAd(bannerAds);
-      const textAd = getRandomAd(textAds);
-      const iframeAd = getRandomAd(iframeAds);
-
-      // Show banner ad
-      if (bannerAd && bannerAd.html) {
-        document.getElementById('banner-ad').innerHTML = bannerAd.html;
-      } else {
-        document.getElementById('banner-ad').innerHTML = '<div style="color:#888;">No banner ad available</div>';
-      }
-
-      // Show text ad
-      if (textAd && textAd.html) {
-        document.getElementById('text-ad').innerHTML = textAd.html;
-      } else {
-        document.getElementById('text-ad').innerHTML = '<div style="color:#888;">No text ad available</div>';
-      }
-
-      // Show iframe ad
-      if (iframeAd && iframeAd.url) {
-        document.getElementById('ad-iframe').src = iframeAd.url;
-      } else {
-        document.getElementById('ad-iframe').src = '';
-      }
-
-    } catch (error) {
-      console.error('Error fetching ads:', error);
-      document.getElementById('banner-ad').innerHTML = '<div style="color:red;">Error loading banner ad</div>';
-      document.getElementById('text-ad').innerHTML = '<div style="color:red;">Error loading text ad</div>';
-      document.getElementById('ad-iframe').src = '';
+    function getRandomElement(arr) {
+      if (!arr.length) return null;
+      return arr[Math.floor(Math.random() * arr.length)];
     }
-  }
 
-  // Run on page load
-  window.onload = () => {
-    initAds();
-  };
-</script>
+    async function loadAds() {
+      try {
+        const snapshot = await db.collection('ad_list').get();
+        const ads = [];
+        snapshot.forEach(doc => ads.push(doc.data()));
+
+        console.log('All ads fetched:', ads);
+
+        // Filter active ads by type
+        const bannerAds = ads.filter(ad => ad.type === 'banner' && ad.status === 'active' && ad.html);
+        const textAds = ads.filter(ad => ad.type === 'text' && ad.status === 'active' && ad.html);
+        const iframeAds = ads.filter(ad => ad.type === 'iframe' && ad.status === 'active' && ad.url);
+
+        console.log('Banner ads:', bannerAds);
+        console.log('Text ads:', textAds);
+        console.log('Iframe ads:', iframeAds);
+
+        // Pick random ad of each type
+        const bannerAd = getRandomElement(bannerAds);
+        const textAd = getRandomElement(textAds);
+        const iframeAd = getRandomElement(iframeAds);
+
+        console.log('Selected banner ad:', bannerAd);
+        console.log('Selected text ad:', textAd);
+        console.log('Selected iframe ad:', iframeAd);
+
+        // Display banner ad
+        const bannerDiv = document.getElementById('banner-ad');
+        if (bannerAd) {
+          bannerDiv.innerHTML = bannerAd.html;
+        } else {
+          bannerDiv.textContent = 'No banner ad available.';
+        }
+
+        // Display text ad
+        const textDiv = document.getElementById('text-ad');
+        if (textAd) {
+          textDiv.innerHTML = textAd.html;
+        } else {
+          textDiv.textContent = 'No text ad available.';
+        }
+
+        // Set iframe ad src
+        const iframe = document.getElementById('ad-iframe');
+        if (iframeAd) {
+          iframe.src = iframeAd.url;
+        } else {
+          iframe.src = '';
+          iframe.style.display = 'none';
+        }
+
+      } catch (error) {
+        console.error('Error loading ads:', error);
+        document.getElementById('banner-ad').textContent = 'Error loading banner ad.';
+        document.getElementById('text-ad').textContent = 'Error loading text ad.';
+        const iframe = document.getElementById('ad-iframe');
+        iframe.src = '';
+        iframe.style.display = 'none';
+      }
+    }
+
+    loadAds();
+  </script>
 
 </body>
 </html>
