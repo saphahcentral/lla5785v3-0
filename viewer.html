@@ -1,168 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Viewer with Ads and Nav</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 10px;
-    }
-    header, nav {
-      border-bottom: 1px solid #ddd;
-      padding: 10px;
-      margin-bottom: 15px;
-    }
-    #square-banner img {
-      width: 125px;
-      height: 125px;
-      cursor: pointer;
-    }
-    #banner-ad, #text-ad {
-      margin: 10px auto;
-      max-width: 728px;
-      min-height: 60px;
-      border: 1px solid #ccc;
-      padding: 10px;
-      color: #555;
-    }
-    #ad-iframe {
-      width: 728px;
-      height: 90px;
-      border: 1px solid #ccc;
-      margin: 15px auto;
-      display: block;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Viewer - SaphahCentral Ads</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 10px;
+    background-color: #f8f9fa;
+  }
+  #nav-placeholder {
+    margin-bottom: 10px;
+  }
+  #square-banner {
+    width: 125px;
+    height: 125px;
+    margin-bottom: 10px;
+    cursor: pointer;
+  }
+  #square-banner img {
+    width: 125px;
+    height: 125px;
+    display: block;
+  }
+  #notice {
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #333;
+  }
+  #ads-container {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  #banner-ad, #text-ad {
+    margin: 10px auto;
+    max-width: 728px;
+    min-height: 60px;
+  }
+  #iframe-ad {
+    border: none;
+    width: 728px;
+    height: 90px;
+    margin: 10px auto;
+  }
+</style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <header id="header">Loading header...</header>
+<div id="nav-placeholder"></div>
 
-  <!-- NAV -->
-  <nav id="nav">Loading navigation...</nav>
+<div id="notice">SCROLL DOWN TO VIEW ALL ADS BELOW</div>
 
-  <!-- Square Banner -->
-  <div id="square-banner" title="Go to Home" style="margin-bottom:15px;">
-    <a href="index.html" target="_self">
-      <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" alt="Square Banner" />
-    </a>
-  </div>
-
-  <!-- Banner Ad -->
+<div id="ads-container">
+  <a href="index.html" id="square-banner" title="Go to Home">
+    <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" alt="Square Banner" />
+  </a>
   <div id="banner-ad">Loading banner ad...</div>
-
-  <!-- Text Ad -->
   <div id="text-ad">Loading text ad...</div>
+  <iframe id="iframe-ad" src="" title="Iframe Ad"></iframe>
+</div>
 
-  <!-- Iframe Ad -->
-  <iframe id="ad-iframe" src="" title="Iframe Ad"></iframe>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script>
+  // Your Firebase configuration from account1.html
+  const firebaseConfig = {
+    apiKey: "AIzaSyBe5lhgA7OV6yd4P_VjExH7AqPuI-c-zC4",
+    authDomain: "lla5785.firebaseapp.com",
+    projectId: "lla5785",
+    storageBucket: "lla5785.appspot.com",
+    messagingSenderId: "468995858449",
+    appId: "1:468995858449:web:1efb328ace0c76007ec4dc"
+  };
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
-  <script>
-    // Firebase config - REPLACE these with your actual config
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
+  // Utility function to pick random item from an array
+  function getRandomItem(arr) {
+    if (!arr.length) return null;
+    const index = Math.floor(Math.random() * arr.length);
+    return arr[index];
+  }
 
-    // Initialize Firebase
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.firestore();
+  async function loadAds() {
+    try {
+      const snapshot = await db.collection('ad_list')
+        .where('status', '==', 'active')
+        .get();
 
-    // Load header & nav from files in same folder
-    async function loadFragment(id, url) {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const text = await response.text();
-        document.getElementById(id).innerHTML = text;
-      } catch (e) {
-        console.error(`Failed to load ${url}:`, e);
-        document.getElementById(id).textContent = `Failed to load ${id}.`;
+      const bannerAds = [];
+      const textAds = [];
+      const iframeAds = [];
+
+      snapshot.forEach(doc => {
+        const ad = doc.data();
+        if (ad.type === 'banner') bannerAds.push(ad);
+        else if (ad.type === 'text') textAds.push(ad);
+        else if (ad.type === 'iframe') iframeAds.push(ad);
+      });
+
+      // Select random ads
+      const selectedBanner = getRandomItem(bannerAds);
+      const selectedText = getRandomItem(textAds);
+      const selectedIframe = getRandomItem(iframeAds);
+
+      // Show banner ad or fallback
+      const bannerAdDiv = document.getElementById('banner-ad');
+      if (selectedBanner && selectedBanner.html) {
+        bannerAdDiv.innerHTML = selectedBanner.html;
+      } else {
+        bannerAdDiv.innerHTML = '<a href="https://saphahcentral.github.io/lla5785v3-0/" target="_blank" rel="noopener noreferrer">' +
+          '<img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="728" height="90" alt="Fallback Banner Ad"></a>';
       }
-    }
 
-    loadFragment('header', 'header.html');
-    loadFragment('nav', 'nav_external.html');
-
-    // Helper for random pick
-    function getRandomElement(arr) {
-      return arr.length ? arr[Math.floor(Math.random() * arr.length)] : null;
-    }
-
-    // Load ads from Firestore
-    async function loadAds() {
-      try {
-        const snapshot = await db.collection('ad_list').get();
-        const ads = [];
-        snapshot.forEach(doc => ads.push(doc.data()));
-
-        console.log('Ads fetched:', ads);
-
-        // Filter ads by type and active status
-        const bannerAds = ads.filter(a => a.type === 'banner' && a.status === 'active' && a.html);
-        const textAds = ads.filter(a => a.type === 'text' && a.status === 'active' && a.html);
-        const iframeAds = ads.filter(a => a.type === 'iframe' && a.status === 'active' && a.url);
-
-        console.log('Banner Ads:', bannerAds);
-        console.log('Text Ads:', textAds);
-        console.log('Iframe Ads:', iframeAds);
-
-        // Pick one random ad from each
-        const bannerAd = getRandomElement(bannerAds);
-        const textAd = getRandomElement(textAds);
-        const iframeAd = getRandomElement(iframeAds);
-
-        // Show banner ad
-        const bannerDiv = document.getElementById('banner-ad');
-        if (bannerAd) {
-          bannerDiv.innerHTML = bannerAd.html;
-        } else {
-          bannerDiv.textContent = 'No banner ad available.';
-        }
-
-        // Show text ad
-        const textDiv = document.getElementById('text-ad');
-        if (textAd) {
-          textDiv.innerHTML = textAd.html;
-        } else {
-          textDiv.textContent = 'No text ad available.';
-        }
-
-        // Show iframe ad
-        const iframe = document.getElementById('ad-iframe');
-        if (iframeAd) {
-          iframe.src = iframeAd.url;
-          iframe.style.display = 'block';
-        } else {
-          iframe.src = '';
-          iframe.style.display = 'none';
-        }
-
-      } catch (err) {
-        console.error('Error loading ads:', err);
-        document.getElementById('banner-ad').textContent = 'Error loading banner ad.';
-        document.getElementById('text-ad').textContent = 'Error loading text ad.';
-        const iframe = document.getElementById('ad-iframe');
-        iframe.src = '';
-        iframe.style.display = 'none';
+      // Show text ad or fallback
+      const textAdDiv = document.getElementById('text-ad');
+      if (selectedText && selectedText.html) {
+        textAdDiv.innerHTML = selectedText.html;
+      } else {
+        textAdDiv.innerHTML = '<p><a href="https://saphahcentral.github.io/lla5785v3-0/" target="_blank" rel="noopener noreferrer">' +
+          'Visit SaphahCentral for the best resources!</a></p>';
       }
-    }
 
+      // Show iframe ad or fallback
+      const iframeAd = document.getElementById('iframe-ad');
+      if (selectedIframe && selectedIframe.url) {
+        iframeAd.src = selectedIframe.url;
+      } else {
+        iframeAd.src = "https://saphahcentral.github.io/lla5785v3-0/";
+      }
+
+    } catch (error) {
+      console.error("Error loading ads:", error);
+      // Fallback ads in case of error
+      document.getElementById('banner-ad').innerHTML = '<a href="https://saphahcentral.github.io/lla5785v3-0/" target="_blank" rel="noopener noreferrer">' +
+        '<img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="728" height="90" alt="Fallback Banner Ad"></a>';
+
+      document.getElementById('text-ad').innerHTML = '<p><a href="https://saphahcentral.github.io/lla5785v3-0/" target="_blank" rel="noopener noreferrer">' +
+        'Visit SaphahCentral for the best resources!</a></p>';
+
+      document.getElementById('iframe-ad').src = "https://saphahcentral.github.io/lla5785v3-0/";
+    }
+  }
+
+  // Load nav_external.html dynamically
+  async function loadNav() {
+    try {
+      const response = await fetch('nav_external.html');
+      if (!response.ok) throw new Error('Network response was not ok');
+      const navHtml = await response.text();
+      document.getElementById('nav-placeholder').innerHTML = navHtml;
+    } catch (err) {
+      console.error('Failed to load nav_external.html:', err);
+      document.getElementById('nav-placeholder').innerHTML = '<p>Navigation could not be loaded.</p>';
+    }
+  }
+
+  window.onload = () => {
+    loadNav();
     loadAds();
-  </script>
+  };
+</script>
 </body>
 </html>
