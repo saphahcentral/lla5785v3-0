@@ -17,18 +17,18 @@
       padding: 1rem;
       background: white;
     }
-    .top-section {
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      margin-bottom: 20px;
+    table.ad-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
     }
-    .left-col {
+    table.ad-table td {
+      vertical-align: top;
+      padding: 10px;
+    }
+    table.ad-table td.left-col {
       width: 300px;
       text-align: center;
-    }
-    .right-col {
-      flex: 1;
     }
     button {
       display: block;
@@ -72,8 +72,8 @@
     <!-- Original Banner Block -->
     <div style="text-align: center;">
       <div class="separator" style="text-align: center;">
-        <a href="https://saphahcentral.github.io/lla5785v3-0/index.html" style="float: left; margin-right: 1em;">
-          <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="53" height="51" alt="Logo" />
+        <a href="https://lla5785.neocities.org/" style="float: left; margin-right: 1em;">
+          <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="53" height="51" alt="Logo">
         </a>
       </div>
       <span style="color: red; font-size: medium; font-weight: bold;">SCROLL DOWN TO VIEW!</span>
@@ -81,26 +81,28 @@
 
     <!-- Special Offer -->
     <div style="background-color: yellow; padding: 10px; margin: 20px 0; text-align: center;">
-      <a href="https://saphahcentral.github.io/lla5785v3-0/index.html" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none;">
+      <a href="https://lla5785.neocities.org/" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none;">
         LIMITED OFFER! Get your super discounted rotation on this page NOW!
       </a>
     </div>
 
-    <!-- Ad Layout -->
+    <!-- Ad Layout in 2-column table -->
     <h2 style="text-align: center;"><u>ADVERTISING</u></h2>
-    <div class="top-section">
-      <div class="left-col">
-        <img id="squareBanner" src="" width="250" alt="Ad Image" />
-        <button id="btnNextAd">View Next Ad</button>
-        <button onclick="location.href='account1.html'">Add Your Site Here!</button>
-      </div>
-      <div class="right-col">
-        <a id="bannerLink" href="#" target="_blank">
-          <img id="bannerAd" src="" width="100%" alt="Banner Ad" />
-        </a>
-        <p id="textAd" style="padding-top: 10px;"></p>
-      </div>
-    </div>
+    <table class="ad-table">
+      <tr>
+        <td class="left-col">
+          <img id="squareBanner" src="" width="250" alt="Ad Image" />
+          <button id="btnNextAd">View Next Ad</button>
+          <button onclick="location.href='account1.html'">Add Your Site Here!</button>
+        </td>
+        <td class="right-col">
+          <a id="bannerLink" href="#" target="_blank">
+            <img id="bannerAd" src="" width="100%" alt="Banner Ad" />
+          </a>
+          <p id="textAd" style="padding-top: 10px;"></p>
+        </td>
+      </tr>
+    </table>
 
     <iframe id="iframeAd" src=""></iframe>
   </div>
@@ -133,10 +135,10 @@
 
     const fallbackAds = [
       {
-        "image": "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
+        "image": "https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png",
         "url": "https://queenbutterfly.org.za/",
-        "banner": "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
-        "text": "Help the mental and physical disabled"
+        "banner": "https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png",
+        "text": "Help the metal and physical disabled"
       },
       {
         "image": "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
@@ -145,9 +147,9 @@
         "text": "10 emails - a lifetime of information about online marketing"
       },
       {
-        "image": "https://cdn-images.imagevenue.com/72/aa/77/ME1AXERE_o.jpg",
+        "image": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
         "url": "https://estcourthospice.blogspot.com/p/home.html",
-        "banner": "https://cdn-images.imagevenue.com/72/aa/77/ME1AXERE_o.jpg",
+        "banner": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
         "text": "Terminal illness support - donations welcome"
       },
       {
@@ -184,10 +186,9 @@
       document.getElementById("iframeAd").src = ad.url;
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("btnNextAd").addEventListener("click", showRandomAd);
-      loadAds();
-    });
+    document.getElementById("btnNextAd").addEventListener("click", showRandomAd);
+
+    loadAds();
   </script>
 </body>
 </html>
