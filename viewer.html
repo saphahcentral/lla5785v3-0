@@ -10,6 +10,7 @@
       background: #f9f9f9;
       margin: 0;
       padding: 0;
+      text-align: center;
     }
     .container {
       max-width: 1024px;
@@ -17,33 +18,47 @@
       padding: 1rem;
       background: white;
     }
-    table.ad-table {
+    .invite-banner {
+      background-color: yellow;
+      padding: 12px 10px;
+      margin: 20px 0;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .invite-banner a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    #bannerLink {
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    #bannerAd {
       width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    table.ad-table td {
-      vertical-align: top;
-      padding: 10px;
-    }
-    table.ad-table td.left-col {
-      width: 320px;
-      text-align: center;
-    }
-    table.ad-table td.right-col {
-      padding-left: 20px;
-    }
-    #squareBanner {
-      width: 250px;
+      max-width: 728px;
       height: auto;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
+      border: 2px solid #007bff;
+      background-color: #eef6ff;
+      display: block;
+      margin: 0 auto 10px;
+    }
+    #textAd {
+      font-weight: bold;
+      color: #333;
+      background: #ddf0ff;
+      border: 1px solid #007bff;
+      padding: 8px;
+      min-height: 40px;
+      margin-bottom: 20px;
+      max-width: 728px;
+      margin-left: auto;
+      margin-right: auto;
     }
     button {
       display: block;
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
+      width: 200px;
+      margin: 10px auto;
+      padding: 12px;
       background-color: #007bff;
       color: white;
       border: none;
@@ -51,28 +66,14 @@
       cursor: pointer;
       font-size: 1rem;
     }
-    #bannerAd {
-      width: 100%;
-      height: auto;
-      border: 1px solid #ddd;
-      margin-bottom: 10px;
-    }
     iframe {
       width: 1200px;
       height: 1000px;
       border: none;
       margin-top: 30px;
-    }
-    .special-offer {
-      background-color: yellow;
-      padding: 10px;
-      margin: 20px 0;
-      text-align: center;
-    }
-    .special-offer a {
-      color: #007bff;
-      font-weight: bold;
-      text-decoration: none;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
     .separator {
       text-align: center;
@@ -100,39 +101,28 @@
 
   <div class="container">
     <!-- Original Banner Block -->
-    <div style="text-align: center;">
-      <div class="separator">
-        <a href="https://saphahcentral.github.io/lla5785v3-0/" style="float: left; margin-right: 1em;">
-          <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="53" height="51" alt="Logo" />
-        </a>
-      </div>
-      <span style="color: red; font-size: medium; font-weight: bold;">SCROLL DOWN TO VIEW!</span>
+    <div class="separator">
+      <a href="https://saphahcentral.github.io/lla5785v3-0/">
+        <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="53" height="51" alt="Logo" />
+      </a>
     </div>
+    <span style="color: red; font-size: medium; font-weight: bold;">SCROLL DOWN TO VIEW!</span>
 
-    <!-- Special Offer -->
-    <div class="special-offer">
+    <!-- Invite Banner -->
+    <div class="invite-banner">
       <a href="https://saphahcentral.github.io/lla5785v3-0/" target="_blank">
         LIMITED OFFER! Get your super discounted rotation on this page NOW!
       </a>
     </div>
 
-    <!-- Ad Layout in 2-column table -->
-    <h2 style="text-align: center;"><u>ADVERTISING</u></h2>
-    <table class="ad-table">
-      <tr>
-        <td class="left-col">
-          <img id="squareBanner" src="" alt="Square Ad Image" />
-          <button id="btnNextAd">View Next Ad</button>
-          <button onclick="location.href='account1.html'">Add Your Site Here!</button>
-        </td>
-        <td class="right-col">
-          <a id="bannerLink" href="#" target="_blank">
-            <img id="bannerAd" src="" alt="Banner Ad" />
-          </a>
-          <p id="textAd" style="padding-top: 10px;"></p>
-        </td>
-      </tr>
-    </table>
+    <!-- Ads Section -->
+    <a id="bannerLink" href="#" target="_blank">
+      <img id="bannerAd" src="" alt="Banner Ad" />
+    </a>
+    <p id="textAd"></p>
+
+    <button id="btnNextAd">View Next Ad</button>
+    <button onclick="location.href='account1.html'">Add Your Site Here!</button>
 
     <iframe id="iframeAd" src=""></iframe>
   </div>
@@ -205,13 +195,20 @@
     }
 
     function showRandomAd() {
-      if (!ads.length) return;
+      if (!ads.length) {
+        console.warn("No ads to display.");
+        return;
+      }
       const ad = ads[Math.floor(Math.random() * ads.length)];
-      document.getElementById("squareBanner").src = ad.image || "";
-      document.getElementById("squareBanner").alt = ad.text || "Square Ad Image";
       document.getElementById("bannerLink").href = ad.url || "#";
-      document.getElementById("bannerAd").src = ad.banner || "";
-      document.getElementById("bannerAd").alt = ad.text || "Banner Ad Image";
+      if (ad.banner) {
+        const banner = document.getElementById("bannerAd");
+        banner.src = ad.banner;
+        banner.alt = ad.text || "Banner Ad Image";
+        banner.style.display = "block";
+      } else {
+        document.getElementById("bannerAd").style.display = "none";
+      }
       document.getElementById("textAd").textContent = ad.text || "";
       document.getElementById("iframeAd").src = ad.url || "";
     }
