@@ -43,8 +43,8 @@
       font-size: 1rem;
     }
     iframe {
-      width: 1000px;
-      height: 500px;
+      width: 1200px;
+      height: 1000px;
       border: none;
       margin-top: 20px;
     }
@@ -72,8 +72,8 @@
     <!-- Original Banner Block -->
     <div style="text-align: center;">
       <div class="separator" style="text-align: center;">
-        <a href="https://lla5785.neocities.org/" style="float: left; margin-right: 1em;">
-          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjdlr4C1wCmET69UUwZQa5biRkhKGyDJIJEEtwUzP5MEPGCjmThMnNifgcevv-GBHX8oWlWAg34chy3xiVbZkgSqZ4qjax-1-G6OgaImFTasSRifhb2hfo8qYbPIJSzIYSiPbRYz0JbO3bmdc2Ty5BUJbXzN_WUyFchHlNfyYwgIunpi8VxJTQrltqlyxA/w53-h51/Registration.png" width="53" height="51" alt="Logo">
+        <a href="https://saphahcentral.github.io/lla5785v3-0/index.html" style="float: left; margin-right: 1em;">
+          <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="53" height="51" alt="Logo" />
         </a>
       </div>
       <span style="color: red; font-size: medium; font-weight: bold;">SCROLL DOWN TO VIEW!</span>
@@ -81,7 +81,7 @@
 
     <!-- Special Offer -->
     <div style="background-color: yellow; padding: 10px; margin: 20px 0; text-align: center;">
-      <a href="https://lla5785.neocities.org/" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none;">
+      <a href="https://saphahcentral.github.io/lla5785v3-0/index.html" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none;">
         LIMITED OFFER! Get your super discounted rotation on this page NOW!
       </a>
     </div>
@@ -136,7 +136,7 @@
         "image": "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
         "url": "https://queenbutterfly.org.za/",
         "banner": "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
-        "text": "Help the metal and physical disabled"
+        "text": "Help the mental and physical disabled"
       },
       {
         "image": "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
@@ -145,9 +145,9 @@
         "text": "10 emails - a lifetime of information about online marketing"
       },
       {
-        "image": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+        "image": "https://cdn-images.imagevenue.com/72/aa/77/ME1AXERE_o.jpg",
         "url": "https://estcourthospice.blogspot.com/p/home.html",
-        "banner": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+        "banner": "https://cdn-images.imagevenue.com/72/aa/77/ME1AXERE_o.jpg",
         "text": "Terminal illness support - donations welcome"
       },
       {
@@ -184,10 +184,10 @@
       document.getElementById("iframeAd").src = ad.url;
     }
 
-    document.getElementById("btnNextAd").addEventListener("click", showRandomAd);
-
-    loadAds();
+    document.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("btnNextAd").addEventListener("click", showRandomAd);
+      loadAds();
+    });
   </script>
 </body>
-
 </html>
