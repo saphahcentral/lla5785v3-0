@@ -2,126 +2,147 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Viewer - LLA5785</title>
+  <title>Viewer Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Firebase and Firestore SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #fff;
-      color: #222;
       margin: 0;
       padding: 0;
+      background: #f9f9f9;
+      text-align: center;
     }
-    #ad-container {
+    #main {
+      padding: 20px;
+    }
+    .ads-block {
+      margin-bottom: 20px;
+    }
+    .square-banner {
+      margin-bottom: 10px;
+    }
+    .square-banner img {
+      cursor: pointer;
+    }
+    .ad-banner, .ad-text {
+      margin: 10px auto;
+      width: fit-content;
+    }
+    .iframe-container {
       display: flex;
       justify-content: center;
-      gap: 40px;
-      margin-top: 10px;
-      align-items: center;
-      flex-wrap: wrap;
+      margin: 20px 0;
     }
-    .ad-box {
-      text-align: center;
-      width: 468px;
-    }
-    .ad-box img {
-      width: 100%;
-      height: auto;
-      border: 1px solid #ccc;
-    }
-    .notice {
-      background-color: #ffffcc;
-      padding: 10px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 1.1em;
-      margin: 10px 20px;
-      border: 1px dashed #999;
-    }
-    iframe.viewer-frame {
-      display: block;
-      margin: 20px auto;
+    iframe {
       width: 1200px;
       height: 1000px;
-      border: 2px solid #ccc;
+      border: none;
+    }
+    .notice {
+      font-weight: bold;
+      font-size: 18px;
+      color: #a00;
+      margin-bottom: 20px;
     }
   </style>
-
-  <!-- Firebase App (Core) -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <!-- Firebase Firestore -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
-
 <body>
-  <!-- Header and Navbar -->
+
+  <!-- Load header, nav, and footer dynamically -->
   <div id="header"></div>
-  <div id="navbar"></div>
+  <div id="nav"></div>
 
-  <!-- Notice -->
-  <div class="notice">SCROLL DOWN TO VIEW YOUR LISTED SITE IN THE FRAME BELOW</div>
+  <div id="main">
+    <div class="notice">▼▼▼ SCROLL DOWN TO VIEW SITE ▼▼▼</div>
 
-  <!-- Ad Section -->
-  <div id="ad-container">
-    <div class="ad-box" id="square-banner">
-      <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" alt="Square Banner"/>
+    <div class="ads-block">
+      <div class="square-banner">
+        <a href="index.html">
+          <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="125" height="125" alt="Limited Offer" />
+        </a>
+      </div>
+      <div id="bannerAd" class="ad-banner"></div>
+      <div id="textAd" class="ad-text"></div>
     </div>
-    <div class="ad-box">
-      <div id="banner-ad"></div>
-      <div id="text-ad" style="margin-top:10px; font-size: 0.95em; text-align: left;"></div>
+
+    <div class="iframe-container">
+      <iframe id="iframeAd" src=""></iframe>
     </div>
   </div>
 
-  <!-- Viewer Iframe -->
-  <iframe src="https://bucketsofbanners.com/index2.php?r=MessianicDuck5785" class="viewer-frame" title="Ad Viewer Iframe"></iframe>
-
-  <!-- Footer -->
   <div id="footer"></div>
 
-  <!-- Load Header, Footer, Navbar -->
-  <script>
-    document.getElementById("header").innerHTML = '<object type="text/html" data="header.html" width="100%" height="80"></object>';
-    document.getElementById("navbar").innerHTML = '<object type="text/html" data="navbar.html" width="100%" height="60"></object>';
-    document.getElementById("footer").innerHTML = '<object type="text/html" data="footer.html" width="100%" height="100"></object>';
-  </script>
-
-  <!-- Firestore Ad Fetching Script -->
+  <!-- Firebase config -->
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyD8Ob-JzS91gKZa8OKs_VdJ3p0i95LQ3Yk",
-      authDomain: "lla5785.firebaseapp.com",
-      projectId: "lla5785",
-      storageBucket: "lla5785.appspot.com",
-      messagingSenderId: "857004951753",
-      appId: "1:857004951753:web:c389207017d7adf7c55c25"
+      apiKey: "AIzaSyBz0VX...REDACTED",
+      authDomain: "saphahcentral.firebaseapp.com",
+      projectId: "saphahcentral",
+      storageBucket: "saphahcentral.appspot.com",
+      messagingSenderId: "1030896509782",
+      appId: "1:1030896509782:web:6e97a49db0f7cf673aa16e"
     };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+  </script>
 
+  <!-- Load dynamic components -->
+  <script>
+    async function loadHTML(id, file) {
+      const res = await fetch(file);
+      const html = await res.text();
+      document.getElementById(id).innerHTML = html;
+    }
+
+    loadHTML("header", "header.html");
+    loadHTML("nav", "nav.html");
+    loadHTML("footer", "footer.html");
+  </script>
+
+  <!-- Ad fetching script -->
+  <script>
     async function loadAds() {
-      const adListRef = db.collection("ad_list");
-      const snapshot = await adListRef.limit(10).get();
-      const ads = snapshot.docs.map(doc => doc.data());
+      const adSnapshot = await db.collection("ad_list").get();
+      const ads = adSnapshot.docs.map(doc => doc.data());
 
-      if (ads.length > 0) {
-        // Random banner ad
-        const banner = ads.find(ad => ad.type === "banner");
-        if (banner) {
-          document.getElementById("banner-ad").innerHTML = `<a href="${banner.link}" target="_blank"><img src="${banner.image}" alt="Banner Ad" width="468" height="60"/></a>`;
-        }
+      const bannerAds = ads.filter(ad => ad.type === "banner");
+      const textAds = ads.filter(ad => ad.type === "text");
+      const iframeAds = ads.filter(ad => ad.type === "iframe");
 
-        // Random text ad
-        const textAd = ads.find(ad => ad.type === "text");
-        if (textAd) {
-          document.getElementById("text-ad").innerHTML = `<a href="${textAd.link}" target="_blank"><strong>${textAd.title}</strong></a><br>${textAd.description}`;
-        }
-      } else {
-        document.getElementById("banner-ad").innerHTML = "<p>No ads available.</p>";
-        document.getElementById("text-ad").innerHTML = "";
+      // Helper: pick one random ad from array
+      const pickRandom = arr => arr[Math.floor(Math.random() * arr.length)];
+
+      // BANNER
+      const bannerAd = pickRandom(bannerAds);
+      if (bannerAd) {
+        document.getElementById("bannerAd").innerHTML = `
+          <a href="${bannerAd.link}" target="_blank" rel="noopener noreferrer">
+            <img src="${bannerAd.image}" width="468" height="60" alt="Banner Ad" />
+          </a>`;
+      }
+
+      // TEXT
+      const textAd = pickRandom(textAds);
+      if (textAd) {
+        document.getElementById("textAd").innerHTML = `
+          <a href="${textAd.link}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:#000;">
+            <strong>${textAd.title}</strong><br />
+            ${textAd.body}
+          </a>`;
+      }
+
+      // IFRAME
+      const iframeAd = pickRandom(iframeAds);
+      if (iframeAd) {
+        document.getElementById("iframeAd").src = iframeAd.link;
       }
     }
 
     loadAds();
   </script>
+
 </body>
 </html>
