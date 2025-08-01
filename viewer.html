@@ -2,194 +2,126 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Lighthouse Lifetime Ads Viewer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Viewer - LLA5785</title>
   <style>
     body {
-      font-family: sans-serif;
-      background: #f9f9f9;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #222;
       margin: 0;
       padding: 0;
     }
-    .container {
-      max-width: 1024px;
-      margin: auto;
-      padding: 1rem;
-      background: white;
-    }
-    button {
-      display: block;
-      width: 100%;
+    #ad-container {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
       margin-top: 10px;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
     }
-    iframe {
+    .ad-box {
+      text-align: center;
+      width: 468px;
+    }
+    .ad-box img {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ccc;
+    }
+    .notice {
+      background-color: #ffffcc;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin: 10px 20px;
+      border: 1px dashed #999;
+    }
+    iframe.viewer-frame {
+      display: block;
+      margin: 20px auto;
       width: 1200px;
       height: 1000px;
-      border: none;
-      margin-top: 20px;
-    }
-    #bannerAd {
-      max-width: 100%;
-      height: auto;
-    }
-    table {
-      margin: auto;
-      width: 100%;
-      border-collapse: collapse;
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    td {
-      vertical-align: top;
-      padding: 10px;
+      border: 2px solid #ccc;
     }
   </style>
+
+  <!-- Firebase App (Core) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
-  <!-- External Header -->
+  <!-- Header and Navbar -->
   <div id="header"></div>
-  <script>
-    fetch("header.html").then(res => res.text()).then(html => {
-      document.getElementById("header").innerHTML = html;
-    });
-  </script>
+  <div id="navbar"></div>
 
-  <!-- External NAV Bar -->
-  <div id="nav"></div>
-  <script>
-    fetch("nav_external.html").then(res => res.text()).then(html => {
-      document.getElementById("nav").innerHTML = html;
-    });
-  </script>
+  <!-- Notice -->
+  <div class="notice">SCROLL DOWN TO VIEW YOUR LISTED SITE IN THE FRAME BELOW</div>
 
-  <div class="container">
-
-    <!-- Notice Only - removed banner image -->
-    <div style="text-align: center; margin-bottom: 20px;">
-      <span style="color: red; font-size: medium; font-weight: bold;">
-        SCROLL DOWN TO VIEW!
-      </span>
+  <!-- Ad Section -->
+  <div id="ad-container">
+    <div class="ad-box" id="square-banner">
+      <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" alt="Square Banner"/>
     </div>
-
-    <!-- Special Offer -->
-    <div style="background-color: yellow; padding: 10px; margin: 20px 0; text-align: center;">
-      <a href="https://github.com/saphahcentral/lla5785v3-0" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none;">
-        LIMITED OFFER! Get your super discounted rotation on this page NOW!
-      </a>
+    <div class="ad-box">
+      <div id="banner-ad"></div>
+      <div id="text-ad" style="margin-top:10px; font-size: 0.95em; text-align: left;"></div>
     </div>
-
-    <!-- Ad Layout -->
-    <h2 style="text-align: center;"><u>ADVERTISING</u></h2>
-
-    <table>
-      <tr>
-        <td style="width: 300px;">
-          <img id="squareBanner" src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="250" alt="Square Ad Image" />
-          <button id="btnNextAd">View Next Ad</button>
-        </td>
-        <td>
-          <a id="bannerLink" href="#" target="_blank">
-            <img id="bannerAd" src="" alt="Banner Ad" />
-          </a>
-          <p id="textAd" style="padding-top: 10px;"></p>
-        </td>
-      </tr>
-    </table>
-
-    <iframe id="iframeAd" src=""></iframe>
   </div>
 
-  <!-- External Footer -->
+  <!-- Viewer Iframe -->
+  <iframe src="https://bucketsofbanners.com/index2.php?r=MessianicDuck5785" class="viewer-frame" title="Ad Viewer Iframe"></iframe>
+
+  <!-- Footer -->
   <div id="footer"></div>
+
+  <!-- Load Header, Footer, Navbar -->
   <script>
-    fetch("footer.html").then(res => res.text()).then(html => {
-      document.getElementById("footer").innerHTML = html;
-    });
+    document.getElementById("header").innerHTML = '<object type="text/html" data="header.html" width="100%" height="80"></object>';
+    document.getElementById("navbar").innerHTML = '<object type="text/html" data="navbar.html" width="100%" height="60"></object>';
+    document.getElementById("footer").innerHTML = '<object type="text/html" data="footer.html" width="100%" height="100"></object>';
   </script>
 
-  <!-- Firebase & Ad Logic -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
+  <!-- Firestore Ad Fetching Script -->
+  <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyDh-3m7VrE0a9JXQOmfbMZIQ3flPbHFjU4",
-      authDomain: "lla5785v3-0.firebaseapp.com",
-      projectId: "lla5785v3-0",
-      storageBucket: "lla5785v3-0.appspot.com",
-      messagingSenderId: "934799419187",
-      appId: "1:934799419187:web:cf12a8f6cf80ddee942688"
+      apiKey: "AIzaSyD8Ob-JzS91gKZa8OKs_VdJ3p0i95LQ3Yk",
+      authDomain: "lla5785.firebaseapp.com",
+      projectId: "lla5785",
+      storageBucket: "lla5785.appspot.com",
+      messagingSenderId: "857004951753",
+      appId: "1:857004951753:web:c389207017d7adf7c55c25"
     };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const adListRef = collection(db, "ad_list");
-
-    const fallbackAds = [
-      {
-        "image": "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
-        "url": "https://queenbutterfly.org.za/",
-        "banner": "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
-        "text": "Help the metal and physical disabled"
-      },
-      {
-        "image": "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-        "url": "https://lla5785emails.blogspot.com/p/subscribe.html",
-        "banner": "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-        "text": "10 emails - a lifetime of information about online marketing"
-      },
-      {
-        "image": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-        "url": "https://estcourthospice.blogspot.com/p/home.html",
-        "banner": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-        "text": "Terminal illness support - donations welcome"
-      },
-      {
-        "image": "https://via.placeholder.com/468x60?text=JOB+OPP",
-        "url": "https://jobopp.com/main.cig?rr9346",
-        "banner": "https://via.placeholder.com/468x60?text=JOB+OPP",
-        "text": "Work from home with JOB OPP – opportunities await!"
-      }
-    ];
-
-    let ads = [];
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
 
     async function loadAds() {
-      try {
-        const snapshot = await getDocs(adListRef);
-        ads = snapshot.docs.map(doc => doc.data());
-        if (ads.length === 0) throw "No ads in database.";
-      } catch (e) {
-        console.warn("Falling back to internal ads:", e);
-        ads = fallbackAds;
+      const adListRef = db.collection("ad_list");
+      const snapshot = await adListRef.limit(10).get();
+      const ads = snapshot.docs.map(doc => doc.data());
+
+      if (ads.length > 0) {
+        // Random banner ad
+        const banner = ads.find(ad => ad.type === "banner");
+        if (banner) {
+          document.getElementById("banner-ad").innerHTML = `<a href="${banner.link}" target="_blank"><img src="${banner.image}" alt="Banner Ad" width="468" height="60"/></a>`;
+        }
+
+        // Random text ad
+        const textAd = ads.find(ad => ad.type === "text");
+        if (textAd) {
+          document.getElementById("text-ad").innerHTML = `<a href="${textAd.link}" target="_blank"><strong>${textAd.title}</strong></a><br>${textAd.description}`;
+        }
+      } else {
+        document.getElementById("banner-ad").innerHTML = "<p>No ads available.</p>";
+        document.getElementById("text-ad").innerHTML = "";
       }
-      showRandomAd();
     }
-
-    function showRandomAd() {
-      if (!ads.length) return;
-      const ad = ads[Math.floor(Math.random() * ads.length)];
-      document.getElementById("squareBanner").src = ad.image;
-      document.getElementById("squareBanner").alt = ad.text || "Square Ad Image";
-      document.getElementById("bannerLink").href = ad.url;
-      document.getElementById("bannerAd").src = ad.banner;
-      document.getElementById("bannerAd").alt = ad.text || "Banner Ad Image";
-      document.getElementById("textAd").textContent = ad.text || "";
-      document.getElementById("iframeAd").src = ad.url;
-    }
-
-    document.getElementById("btnNextAd").addEventListener("click", showRandomAd);
 
     loadAds();
   </script>
 </body>
-
 </html>
