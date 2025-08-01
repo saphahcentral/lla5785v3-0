@@ -10,7 +10,6 @@
       background: #f9f9f9;
       margin: 0;
       padding: 0;
-      text-align: center;
     }
     .container {
       max-width: 1024px;
@@ -18,47 +17,11 @@
       padding: 1rem;
       background: white;
     }
-    .invite-banner {
-      background-color: yellow;
-      padding: 12px 10px;
-      margin: 20px 0;
-      font-weight: bold;
-      font-size: 1.1rem;
-    }
-    .invite-banner a {
-      color: #007bff;
-      text-decoration: none;
-    }
-    #bannerLink {
-      display: inline-block;
-      margin-bottom: 10px;
-    }
-    #bannerAd {
-      width: 100%;
-      max-width: 728px;
-      height: auto;
-      border: 2px solid #007bff;
-      background-color: #eef6ff;
-      display: block;
-      margin: 0 auto 10px;
-    }
-    #textAd {
-      font-weight: bold;
-      color: #333;
-      background: #ddf0ff;
-      border: 1px solid #007bff;
-      padding: 8px;
-      min-height: 40px;
-      margin-bottom: 20px;
-      max-width: 728px;
-      margin-left: auto;
-      margin-right: auto;
-    }
     button {
       display: block;
-      width: 200px;
-      margin: 10px auto;
-      padding: 12px;
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
       background-color: #007bff;
       color: white;
       border: none;
@@ -70,14 +33,22 @@
       width: 1200px;
       height: 1000px;
       border: none;
-      margin-top: 30px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin-top: 20px;
     }
-    .separator {
+    #bannerAd {
+      max-width: 100%;
+      height: auto;
+    }
+    table {
+      margin: auto;
+      width: 100%;
+      border-collapse: collapse;
       text-align: center;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    td {
+      vertical-align: top;
+      padding: 10px;
     }
   </style>
 </head>
@@ -100,23 +71,38 @@
   </script>
 
   <div class="container">
-    <!-- NOTICE -->
-    <span style="color: red; font-size: medium; font-weight: bold;">SCROLL DOWN TO VIEW!</span>
 
-    <!-- Invite Banner -->
-    <div class="invite-banner">
-      <a href="https://saphahcentral.github.io/lla5785v3-0/" target="_blank">
+    <!-- Notice Only - removed banner image -->
+    <div style="text-align: center; margin-bottom: 20px;">
+      <span style="color: red; font-size: medium; font-weight: bold;">
+        SCROLL DOWN TO VIEW!
+      </span>
+    </div>
+
+    <!-- Special Offer -->
+    <div style="background-color: yellow; padding: 10px; margin: 20px 0; text-align: center;">
+      <a href="https://github.com/saphahcentral/lla5785v3-0" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none;">
         LIMITED OFFER! Get your super discounted rotation on this page NOW!
       </a>
     </div>
 
-    <!-- Ads Section -->
-    <a id="bannerLink" href="#" target="_blank">
-      <img id="bannerAd" src="" alt="Banner Ad" />
-    </a>
-    <p id="textAd"></p>
+    <!-- Ad Layout -->
+    <h2 style="text-align: center;"><u>ADVERTISING</u></h2>
 
-    <button id="btnNextAd">View Next Ad</button>
+    <table>
+      <tr>
+        <td style="width: 300px;">
+          <img id="squareBanner" src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="250" alt="Square Ad Image" />
+          <button id="btnNextAd">View Next Ad</button>
+        </td>
+        <td>
+          <a id="bannerLink" href="#" target="_blank">
+            <img id="bannerAd" src="" alt="Banner Ad" />
+          </a>
+          <p id="textAd" style="padding-top: 10px;"></p>
+        </td>
+      </tr>
+    </table>
 
     <iframe id="iframeAd" src=""></iframe>
   </div>
@@ -149,28 +135,28 @@
 
     const fallbackAds = [
       {
-        image: "https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png",
-        url: "https://queenbutterfly.org.za/",
-        banner: "https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png",
-        text: "Help the metal and physical disabled"
+        "image": "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
+        "url": "https://queenbutterfly.org.za/",
+        "banner": "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
+        "text": "Help the metal and physical disabled"
       },
       {
-        image: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-        url: "https://lla5785emails.blogspot.com/p/subscribe.html",
-        banner: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-        text: "10 emails - a lifetime of information about online marketing"
+        "image": "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
+        "url": "https://lla5785emails.blogspot.com/p/subscribe.html",
+        "banner": "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
+        "text": "10 emails - a lifetime of information about online marketing"
       },
       {
-        image: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-        url: "https://estcourthospice.blogspot.com/p/home.html",
-        banner: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-        text: "Terminal illness support - donations welcome"
+        "image": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+        "url": "https://estcourthospice.blogspot.com/p/home.html",
+        "banner": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+        "text": "Terminal illness support - donations welcome"
       },
       {
-        image: "https://via.placeholder.com/468x60?text=JOB+OPP",
-        url: "https://jobopp.com/main.cig?rr9346",
-        banner: "https://via.placeholder.com/468x60?text=JOB+OPP",
-        text: "Work from home with JOB OPP – opportunities await!"
+        "image": "https://via.placeholder.com/468x60?text=JOB+OPP",
+        "url": "https://jobopp.com/main.cig?rr9346",
+        "banner": "https://via.placeholder.com/468x60?text=JOB+OPP",
+        "text": "Work from home with JOB OPP – opportunities await!"
       }
     ];
 
@@ -189,22 +175,15 @@
     }
 
     function showRandomAd() {
-      if (!ads.length) {
-        console.warn("No ads to display.");
-        return;
-      }
+      if (!ads.length) return;
       const ad = ads[Math.floor(Math.random() * ads.length)];
-      document.getElementById("bannerLink").href = ad.url || "#";
-      if (ad.banner) {
-        const banner = document.getElementById("bannerAd");
-        banner.src = ad.banner;
-        banner.alt = ad.text || "Banner Ad Image";
-        banner.style.display = "block";
-      } else {
-        document.getElementById("bannerAd").style.display = "none";
-      }
+      document.getElementById("squareBanner").src = ad.image;
+      document.getElementById("squareBanner").alt = ad.text || "Square Ad Image";
+      document.getElementById("bannerLink").href = ad.url;
+      document.getElementById("bannerAd").src = ad.banner;
+      document.getElementById("bannerAd").alt = ad.text || "Banner Ad Image";
       document.getElementById("textAd").textContent = ad.text || "";
-      document.getElementById("iframeAd").src = ad.url || "";
+      document.getElementById("iframeAd").src = ad.url;
     }
 
     document.getElementById("btnNextAd").addEventListener("click", showRandomAd);
@@ -212,4 +191,5 @@
     loadAds();
   </script>
 </body>
+
 </html>
