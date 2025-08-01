@@ -3,14 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ad Viewer</title>
+  <title>Viewer with Ads and Nav</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       margin: 10px;
     }
-    #square-banner {
+    header, nav {
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
       margin-bottom: 15px;
     }
     #square-banner img {
@@ -19,11 +21,11 @@
       cursor: pointer;
     }
     #banner-ad, #text-ad {
-      margin: 15px auto;
+      margin: 10px auto;
       max-width: 728px;
       min-height: 60px;
       border: 1px solid #ccc;
-      padding: 5px;
+      padding: 10px;
       color: #555;
     }
     #ad-iframe {
@@ -37,8 +39,14 @@
 </head>
 <body>
 
-  <!-- Square Banner linking to index.html -->
-  <div id="square-banner" title="Go to Home">
+  <!-- HEADER -->
+  <header id="header">Loading header...</header>
+
+  <!-- NAV -->
+  <nav id="nav">Loading navigation...</nav>
+
+  <!-- Square Banner -->
+  <div id="square-banner" title="Go to Home" style="margin-bottom:15px;">
     <a href="index.html" target="_self">
       <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" alt="Square Banner" />
     </a>
@@ -53,10 +61,12 @@
   <!-- Iframe Ad -->
   <iframe id="ad-iframe" src="" title="Iframe Ad"></iframe>
 
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
   <script>
-    // Your Firebase configuration here — replace with your actual config!
+    // Firebase config - REPLACE these with your actual config
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_AUTH_DOMAIN",
@@ -72,38 +82,51 @@
     }
     const db = firebase.firestore();
 
-    function getRandomElement(arr) {
-      if (!arr.length) return null;
-      return arr[Math.floor(Math.random() * arr.length)];
+    // Load header & nav from files in same folder
+    async function loadFragment(id, url) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const text = await response.text();
+        document.getElementById(id).innerHTML = text;
+      } catch (e) {
+        console.error(`Failed to load ${url}:`, e);
+        document.getElementById(id).textContent = `Failed to load ${id}.`;
+      }
     }
 
+    loadFragment('header', 'header.html');
+    loadFragment('nav', 'nav_external.html');
+
+    // Helper for random pick
+    function getRandomElement(arr) {
+      return arr.length ? arr[Math.floor(Math.random() * arr.length)] : null;
+    }
+
+    // Load ads from Firestore
     async function loadAds() {
       try {
         const snapshot = await db.collection('ad_list').get();
         const ads = [];
         snapshot.forEach(doc => ads.push(doc.data()));
 
-        console.log('All ads fetched:', ads);
+        console.log('Ads fetched:', ads);
 
-        // Filter active ads by type
-        const bannerAds = ads.filter(ad => ad.type === 'banner' && ad.status === 'active' && ad.html);
-        const textAds = ads.filter(ad => ad.type === 'text' && ad.status === 'active' && ad.html);
-        const iframeAds = ads.filter(ad => ad.type === 'iframe' && ad.status === 'active' && ad.url);
+        // Filter ads by type and active status
+        const bannerAds = ads.filter(a => a.type === 'banner' && a.status === 'active' && a.html);
+        const textAds = ads.filter(a => a.type === 'text' && a.status === 'active' && a.html);
+        const iframeAds = ads.filter(a => a.type === 'iframe' && a.status === 'active' && a.url);
 
-        console.log('Banner ads:', bannerAds);
-        console.log('Text ads:', textAds);
-        console.log('Iframe ads:', iframeAds);
+        console.log('Banner Ads:', bannerAds);
+        console.log('Text Ads:', textAds);
+        console.log('Iframe Ads:', iframeAds);
 
-        // Pick random ad of each type
+        // Pick one random ad from each
         const bannerAd = getRandomElement(bannerAds);
         const textAd = getRandomElement(textAds);
         const iframeAd = getRandomElement(iframeAds);
 
-        console.log('Selected banner ad:', bannerAd);
-        console.log('Selected text ad:', textAd);
-        console.log('Selected iframe ad:', iframeAd);
-
-        // Display banner ad
+        // Show banner ad
         const bannerDiv = document.getElementById('banner-ad');
         if (bannerAd) {
           bannerDiv.innerHTML = bannerAd.html;
@@ -111,7 +134,7 @@
           bannerDiv.textContent = 'No banner ad available.';
         }
 
-        // Display text ad
+        // Show text ad
         const textDiv = document.getElementById('text-ad');
         if (textAd) {
           textDiv.innerHTML = textAd.html;
@@ -119,17 +142,18 @@
           textDiv.textContent = 'No text ad available.';
         }
 
-        // Set iframe ad src
+        // Show iframe ad
         const iframe = document.getElementById('ad-iframe');
         if (iframeAd) {
           iframe.src = iframeAd.url;
+          iframe.style.display = 'block';
         } else {
           iframe.src = '';
           iframe.style.display = 'none';
         }
 
-      } catch (error) {
-        console.error('Error loading ads:', error);
+      } catch (err) {
+        console.error('Error loading ads:', err);
         document.getElementById('banner-ad').textContent = 'Error loading banner ad.';
         document.getElementById('text-ad').textContent = 'Error loading text ad.';
         const iframe = document.getElementById('ad-iframe');
@@ -140,6 +164,5 @@
 
     loadAds();
   </script>
-
 </body>
 </html>
