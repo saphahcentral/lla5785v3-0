@@ -27,8 +27,17 @@
       padding: 10px;
     }
     table.ad-table td.left-col {
-      width: 300px;
+      width: 320px;
       text-align: center;
+    }
+    table.ad-table td.right-col {
+      padding-left: 20px;
+    }
+    #squareBanner {
+      width: 250px;
+      height: auto;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
     }
     button {
       display: block;
@@ -42,11 +51,32 @@
       cursor: pointer;
       font-size: 1rem;
     }
+    #bannerAd {
+      width: 100%;
+      height: auto;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
     iframe {
       width: 1200px;
       height: 1000px;
       border: none;
-      margin-top: 20px;
+      margin-top: 30px;
+    }
+    .special-offer {
+      background-color: yellow;
+      padding: 10px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .special-offer a {
+      color: #007bff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .separator {
+      text-align: center;
+      margin-bottom: 10px;
     }
   </style>
 </head>
@@ -71,17 +101,17 @@
   <div class="container">
     <!-- Original Banner Block -->
     <div style="text-align: center;">
-      <div class="separator" style="text-align: center;">
-        <a href="https://lla5785.neocities.org/" style="float: left; margin-right: 1em;">
-          <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="53" height="51" alt="Logo">
+      <div class="separator">
+        <a href="https://saphahcentral.github.io/lla5785v3-0/" style="float: left; margin-right: 1em;">
+          <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" width="53" height="51" alt="Logo" />
         </a>
       </div>
       <span style="color: red; font-size: medium; font-weight: bold;">SCROLL DOWN TO VIEW!</span>
     </div>
 
     <!-- Special Offer -->
-    <div style="background-color: yellow; padding: 10px; margin: 20px 0; text-align: center;">
-      <a href="https://lla5785.neocities.org/" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none;">
+    <div class="special-offer">
+      <a href="https://saphahcentral.github.io/lla5785v3-0/" target="_blank">
         LIMITED OFFER! Get your super discounted rotation on this page NOW!
       </a>
     </div>
@@ -91,13 +121,13 @@
     <table class="ad-table">
       <tr>
         <td class="left-col">
-          <img id="squareBanner" src="" width="250" alt="Ad Image" />
+          <img id="squareBanner" src="" alt="Square Ad Image" />
           <button id="btnNextAd">View Next Ad</button>
           <button onclick="location.href='account1.html'">Add Your Site Here!</button>
         </td>
         <td class="right-col">
           <a id="bannerLink" href="#" target="_blank">
-            <img id="bannerAd" src="" width="100%" alt="Banner Ad" />
+            <img id="bannerAd" src="" alt="Banner Ad" />
           </a>
           <p id="textAd" style="padding-top: 10px;"></p>
         </td>
@@ -135,28 +165,28 @@
 
     const fallbackAds = [
       {
-        "image": "https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png",
-        "url": "https://queenbutterfly.org.za/",
-        "banner": "https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png",
-        "text": "Help the metal and physical disabled"
+        image: "https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png",
+        url: "https://queenbutterfly.org.za/",
+        banner: "https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png",
+        text: "Help the metal and physical disabled"
       },
       {
-        "image": "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-        "url": "https://lla5785emails.blogspot.com/p/subscribe.html",
-        "banner": "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-        "text": "10 emails - a lifetime of information about online marketing"
+        image: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
+        url: "https://lla5785emails.blogspot.com/p/subscribe.html",
+        banner: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
+        text: "10 emails - a lifetime of information about online marketing"
       },
       {
-        "image": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-        "url": "https://estcourthospice.blogspot.com/p/home.html",
-        "banner": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-        "text": "Terminal illness support - donations welcome"
+        image: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+        url: "https://estcourthospice.blogspot.com/p/home.html",
+        banner: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+        text: "Terminal illness support - donations welcome"
       },
       {
-        "image": "https://via.placeholder.com/468x60?text=JOB+OPP",
-        "url": "https://jobopp.com/main.cig?rr9346",
-        "banner": "https://via.placeholder.com/468x60?text=JOB+OPP",
-        "text": "Work from home with JOB OPP – opportunities await!"
+        image: "https://via.placeholder.com/468x60?text=JOB+OPP",
+        url: "https://jobopp.com/main.cig?rr9346",
+        banner: "https://via.placeholder.com/468x60?text=JOB+OPP",
+        text: "Work from home with JOB OPP – opportunities await!"
       }
     ];
 
@@ -177,13 +207,13 @@
     function showRandomAd() {
       if (!ads.length) return;
       const ad = ads[Math.floor(Math.random() * ads.length)];
-      document.getElementById("squareBanner").src = ad.image;
+      document.getElementById("squareBanner").src = ad.image || "";
       document.getElementById("squareBanner").alt = ad.text || "Square Ad Image";
-      document.getElementById("bannerLink").href = ad.url;
-      document.getElementById("bannerAd").src = ad.banner;
+      document.getElementById("bannerLink").href = ad.url || "#";
+      document.getElementById("bannerAd").src = ad.banner || "";
       document.getElementById("bannerAd").alt = ad.text || "Banner Ad Image";
       document.getElementById("textAd").textContent = ad.text || "";
-      document.getElementById("iframeAd").src = ad.url;
+      document.getElementById("iframeAd").src = ad.url || "";
     }
 
     document.getElementById("btnNextAd").addEventListener("click", showRandomAd);
