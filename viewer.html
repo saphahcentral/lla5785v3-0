@@ -1,133 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Ad Viewer - Lighthouse Lifetime Ads</title>
-
-<meta http-equiv="Content-Security-Policy" content="
-  default-src 'self';
-  script-src 'self' https://www.gstatic.com https://www.googleapis.com 'unsafe-inline' 'unsafe-eval';
-  style-src 'self' 'unsafe-inline';
-  img-src 'self' data: https://scontent.fkxe1-1.fna.fbcdn.net https://cdn-images.imagevenue.com https://cdn-thumbs.imagevenue.com https://via.placeholder.com;
-  frame-src *;
-  connect-src https://firestore.googleapis.com https://www.googleapis.com;
-">
-
-<style>
-  body {
-    margin: 0; padding: 0;
-    font-family: Arial, sans-serif;
-    background: #fff;
-    color: #000;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  #header-container {
-    width: 100%;
-  }
-  .scroll-info {
-    background: #eee;
-    padding: 6px 10px;
-    font-weight: bold;
-    font-size: 0.9em;
-    color: #333;
-    text-align: center;
-    user-select: none;
-  }
-  .invite-bar {
-    background: #fff3cd;
-    padding: 8px 12px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1em;
-  }
-  .invite-bar a {
-    color: #0077cc;
-    text-decoration: underline;
-  }
-  .invite-bar a:hover,
-  .invite-bar a:focus {
-    color: #005fa3;
-    outline: none;
-  }
-  .ad-container {
-    display: flex;
-    background: wheat;
-    padding: 5px;
-    max-height: 70px;
-    gap: 10px;
-  }
-  .ad-banner {
-    flex: 1 1 50%;
-    max-width: 468px;
-    max-height: 60px;
-    overflow: hidden;
-  }
-  .ad-banner img {
-    width: 100%;
-    height: 60px;
-    object-fit: contain;
-    border-radius: 4px;
-  }
-  .ad-text {
-    flex: 1 1 50%;
-    font-weight: bold;
-    font-size: 1.1em;
-    color: blue;
-    text-decoration: underline;
-    display: flex;
-    align-items: center;
-    padding: 0 5px;
-  }
-  .ad-text a {
-    color: inherit;
-    text-decoration: inherit;
-    width: 100%;
-  }
-  .ad-text a:hover,
-  .ad-text a:focus {
-    color: #005fa3;
-    outline: none;
-  }
-  .iframe-wrapper {
-    flex: 1;
-    width: 100%;
-    height: 1000px;
-    border: none;
-  }
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-  }
-  #nav-container, #footer-container {
-    background: #003e7e;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-  }
-  #nav-container a {
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-    margin: 0 10px;
-  }
-  #nav-container a:hover,
-  #nav-container a:focus {
-    text-decoration: underline;
-    outline: none;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self' https:;
+    script-src 'self' https://www.gstatic.com https://www.googleapis.com 'unsafe-inline';
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: https:;
+    frame-src *;
+    connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com;
+  ">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Viewer - Lighthouse Lifetime Ads</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #fff;
+      color: #003366;
+    }
+    #header, #footer, #nav-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    /* Invite bar with wheat background */
+    .invite-bar {
+      background: wheat;
+      padding: 8px 16px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1.1em;
+      color: #0077cc;
+      user-select: none;
+      border-bottom: 1px solid #ccc;
+    }
+    .invite-bar a {
+      color: #0077cc;
+      text-decoration: underline;
+    }
+    .scroll-info {
+      max-width: 1000px;
+      margin: 8px auto 0 auto;
+      font-size: 0.9em;
+      color: #666;
+      padding-left: 16px;
+      white-space: nowrap;
+      overflow-x: auto;
+      user-select: none;
+      font-weight: bold;
+    }
+    /* Ad top section with banner and text side-by-side */
+    .ad-top {
+      max-width: 1000px;
+      margin: 12px auto 0 auto;
+      background: wheat;
+      padding: 5px;
+      box-sizing: border-box;
+      display: flex;
+      gap: 10px;
+      height: 70px;
+      align-items: center;
+      border: 1px solid #ccc;
+    }
+    .ad-banner, .ad-text {
+      flex: 1 1 50%;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .ad-banner img {
+      max-width: 468px;
+      max-height: 60px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .ad-text a {
+      color: #0077cc;
+      font-weight: bold;
+      text-decoration: underline;
+      font-size: 1em;
+      cursor: pointer;
+    }
+    /* Iframe below */
+    .iframe-wrapper {
+      max-width: 1000px;
+      margin: 12px auto 50px auto;
+      height: 1000px;
+      border: none;
+      box-sizing: border-box;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    /* Nav bar fixed bottom */
+    #nav-container {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #003e7e;
+      color: white;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      z-index: 9999;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.3);
+    }
+    #nav-container a {
+      color: white;
+      text-decoration: none;
+      margin: 0 12px;
+      font-size: 1.1em;
+    }
+    #nav-container a:hover, #nav-container a:focus {
+      text-decoration: underline;
+      outline: none;
+    }
+  </style>
 </head>
 <body>
 
-  <div id="header-container">Loading header...</div>
-
-  <div class="scroll-info" aria-live="polite" aria-atomic="true">
-    SCROLL TO VIEW ALL ADS!
-  </div>
+  <div id="header">Loading header...</div>
 
   <!-- Invite link bar -->
   <div class="invite-bar">
@@ -136,114 +133,134 @@
     </a>
   </div>
 
-  <div class="ad-container" aria-label="Advertisement section">
-    <div class="ad-banner" id="ad-banner"></div>
-    <div class="ad-text" id="ad-text"></div>
+  <!-- Scroll info -->
+  <div class="scroll-info" aria-label="Scroll to view all ads" tabindex="0">
+    SCROLL TO VIEW ALL ADS — USE THE NAVIGATION BAR BELOW TO BROWSE
   </div>
 
-  <div class="iframe-wrapper" role="main" aria-label="Ad content display area">
-    <iframe id="viewer-iframe" src="about:blank" title="Advertisement Display Frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  <!-- Ad top banner + text -->
+  <div class="ad-top" id="ad-top">
+    <!-- Ads will be inserted here dynamically -->
   </div>
 
+  <!-- Iframe ad -->
+  <div class="iframe-wrapper">
+    <iframe id="viewer-iframe" src="about:blank" title="Ad Viewer Iframe" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+  </div>
+
+  <!-- Nav bar bottom -->
   <nav id="nav-container">Loading navigation...</nav>
 
-  <footer id="footer-container">Loading footer...</footer>
+  <div id="footer">Loading footer...</div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
-    authDomain: "lla5785v3-0.firebaseapp.com",
-    projectId: "lla5785v3-0"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0"
+    };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  const fallbackAds = [
-    {
-      image: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
-      url: "https://queenbutterfly.org.za/",
-      text: "Help the metal and physical disabled"
-    },
-    {
-      image: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-      url: "https://lla5785emails.blogspot.com/p/subscribe.html",
-      text: "10 emails - a lifetime of information about online marketing"
-    },
-    {
-      image: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-      url: "https://estcourthospice.blogspot.com/p/home.html",
-      text: "Terminal illness support - donations welcome"
+    const fallbackAds = [
+      {
+        image: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
+        url: "https://queenbutterfly.org.za/",
+        text: "Help the metal and physical disabled"
+      },
+      {
+        image: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
+        url: "https://lla5785emails.blogspot.com/p/subscribe.html",
+        text: "10 emails - a lifetime of information about online marketing"
+      },
+      {
+        image: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+        url: "https://estcourthospice.blogspot.com/p/home.html",
+        text: "Terminal illness support - donations welcome"
+      }
+    ];
+
+    // Utility to pick unique random indices
+    function pickUniqueIndices(max, count) {
+      const indices = new Set();
+      while (indices.size < count) {
+        indices.add(Math.floor(Math.random() * max));
+      }
+      return Array.from(indices);
     }
-  ];
 
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
+    // Display the ads in the top area and iframe
+    function showAds(bannerAd, textAd, iframeAd) {
+      const adTop = document.getElementById("ad-top");
 
-  async function loadAds() {
-    try {
-      const adListSnapshot = await getDocs(collection(db, "ad_list"));
-      const ads = [];
-      adListSnapshot.forEach(doc => {
-        const ad = doc.data();
-        if (ad && ad.link && ad.title) {
-          ads.push({
-            banner: ad.banner || ad.image || "",
-            url: ad.link,
-            text: ad.title,
-            iframeUrl: ad.link
-          });
-        }
-      });
+      // Clear existing
+      adTop.innerHTML = "";
 
-      if (ads.length < 3) throw new Error("Not enough ads");
+      // Banner ad div
+      const bannerDiv = document.createElement("div");
+      bannerDiv.className = "ad-banner";
+      bannerDiv.innerHTML = `<a href="${bannerAd.url}" target="viewer-iframe" rel="noopener noreferrer">
+        <img src="${bannerAd.image}" alt="Banner Ad" loading="lazy" />
+      </a>`;
 
-      const bannerAd = ads[getRandomInt(ads.length)];
-      let textAd, iframeAd;
-      do { textAd = ads[getRandomInt(ads.length)]; } while (textAd === bannerAd);
-      do { iframeAd = ads[getRandomInt(ads.length)]; } while (iframeAd === bannerAd || iframeAd === textAd);
+      // Text ad div
+      const textDiv = document.createElement("div");
+      textDiv.className = "ad-text";
+      textDiv.innerHTML = `<a href="${textAd.url}" target="viewer-iframe" rel="noopener noreferrer">
+        ${textAd.text}
+      </a>`;
 
-      showAds(bannerAd, textAd, iframeAd);
-    } catch (err) {
-      console.warn("Firestore ad fetch failed, using fallback ads:", err);
-      showAds(fallbackAds[0], fallbackAds[1], fallbackAds[2]);
+      adTop.appendChild(bannerDiv);
+      adTop.appendChild(textDiv);
+
+      // Set iframe source to iframeAd url
+      const iframe = document.getElementById("viewer-iframe");
+      iframe.src = iframeAd.url;
+
+      // Debug logs
+      console.log("Banner Ad:", bannerAd);
+      console.log("Text Ad:", textAd);
+      console.log("Iframe Ad:", iframeAd);
     }
-  }
 
-  function showAds(bannerAd, textAd, iframeAd) {
-    document.getElementById("ad-banner").innerHTML = `
-      <a href="${bannerAd.url}" target="viewer-iframe" rel="noopener noreferrer">
-        <img src="${bannerAd.banner}" alt="Banner Ad" />
-      </a>
-    `;
-    document.getElementById("ad-text").innerHTML = `
-      <a href="${textAd.url}" target="viewer-iframe" rel="noopener noreferrer">${textAd.text}</a>
-    `;
-    document.getElementById("viewer-iframe").src = iframeAd.iframeUrl;
-  }
+    async function loadAds() {
+      try {
+        const adsSnapshot = await getDocs(collection(db, "ad_list"));
+        const ads = [];
+        adsSnapshot.forEach(doc => {
+          const ad = doc.data();
+          if (ad && ad.link && ad.title && ad.banner) {
+            ads.push({
+              image: ad.banner,
+              url: ad.link,
+              text: ad.title
+            });
+          }
+        });
 
-  async function loadInclude(id, url) {
-    try {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`Failed to load ${url}`);
-      const html = await res.text();
-      document.getElementById(id).innerHTML = html;
-    } catch (error) {
-      console.error(error);
-      document.getElementById(id).textContent = `${id} failed to load.`;
+        if (ads.length < 3) throw new Error("Not enough ads in Firestore");
+
+        // Pick 3 unique ads for banner, text, iframe
+        const [i1, i2, i3] = pickUniqueIndices(ads.length, 3);
+        showAds(ads[i1], ads[i2], ads[i3]);
+
+      } catch (e) {
+        console.warn("Firestore fetch failed or insufficient ads, using fallback.", e);
+        showAds(fallbackAds[0], fallbackAds[1], fallbackAds[2]);
+      }
     }
-  }
 
-  loadInclude("header-container", "header.html");
-  loadInclude("nav-container", "nav_external.html");
-  loadInclude("footer-container", "footer.html");
+    // Load shared includes
+    fetch("header.html").then(r => r.text()).then(html => document.getElementById("header").innerHTML = html);
+    fetch("nav_external.html").then(r => r.text()).then(html => document.getElementById("nav-container").innerHTML = html);
+    fetch("footer.html").then(r => r.text()).then(html => document.getElementById("footer").innerHTML = html);
 
-  loadAds();
-</script>
-
+    // Load ads after DOM ready
+    window.addEventListener("DOMContentLoaded", loadAds);
+  </script>
 </body>
 </html>
