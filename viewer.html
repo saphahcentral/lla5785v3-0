@@ -90,7 +90,7 @@
 
   <!-- Invite Link -->
   <div class="invite-bar">
-    <a href="https://saphahcentral.github.io/lla5785v3-0/account1.html" target="_blank">
+    <a href="https://saphahcentral.github.io/lla5785v3-0/account1.html" target="_blank" rel="noopener noreferrer">
       👉 ADD YOUR WEBSITE HERE FOR MAXIMUM LIFETIME EXPOSURE!
     </a>
   </div>
@@ -172,14 +172,14 @@
 
     function displayAds(bannerAd, textAd, iframeAd) {
       document.getElementById("banner-ad").innerHTML = `
-        <a href="${bannerAd.url}" target="_blank">
+        <a href="${bannerAd.url}" target="_blank" rel="noopener noreferrer">
           <img src="${bannerAd.image}" alt="Banner Ad">
         </a>
       `;
       document.getElementById("text-ad").innerHTML = `
-        <a href="${textAd.url}" target="_blank">${textAd.text}</a>
+        <a href="${textAd.url}" target="_blank" rel="noopener noreferrer">${textAd.text}</a>
       `;
-      document.getElementById("ad-iframe").src = iframeAd.url;
+      document.getElementById("ad-iframe").src = iframeAd.url;  // <-- Use actual ad URL here
     }
 
     function useFallback() {
