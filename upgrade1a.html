@@ -167,45 +167,4 @@
         const newAd = {
           uid: user.uid,
           email: user.email,
-          title: document.getElementById("title2").value.trim(),
-          description: document.getElementById("description2").value.trim(),
-          category: document.getElementById("category2").value,
-          link: document.getElementById("link2").value.trim(),
-          timestamp: Date.now(),
-        };
-
-        try {
-          await setDoc(doc(db, "ad_list", user.uid + "_2"), newAd);
-          statusEl.textContent = "✅ Your second ad has been saved.";
-          statusEl.style.color = "green";
-          formEl.reset();
-          formEl.style.display = "none";
-          statusEl.style.display = "block";
-        } catch (err) {
-          statusEl.textContent = "❌ Error saving ad. Please try again.";
-          statusEl.style.color = "red";
-        }
-      };
-    });
-
-    // Load shared includes
-    fetch("header.html").then((res) => res.text()).then((html) => {
-      document.getElementById("header").innerHTML = html;
-    });
-
-    fetch("footer.html").then((res) => res.text()).then((html) => {
-      document.getElementById("footer").innerHTML = html;
-    });
-
-    fetch("nav_internal.html")
-      .then((res) => res.text())
-      .then((html) => {
-        document.getElementById("nav-container").innerHTML = html;
-      })
-      .catch(() => {
-        document.getElementById("nav-container").innerHTML =
-          "<p style='color:white;'>Navigation failed to load.</p>";
-      });
-  </script>
-</body>
-</html>
+          title: document.getElementById("title2").va

@@ -17,7 +17,8 @@ a, a:visited {
 
 a:hover, a:focus {
   color: #005999;
-  outline: none; /* Add if you want to handle focus differently */
+  outline: 2px solid #0077cc; /* Blue focus ring */
+  outline-offset: 2px;
   text-decoration: none;
 }
 
@@ -47,6 +48,7 @@ a:hover, a:focus {
 .button:focus {
   background-color: #0077cc;
   color: white;
-  text-decoration: none;
-  outline: none; /* For accessibility, consider adding a visible focus style */
+  text-decoration: underline; /* Keep underline on hover/focus */
+  outline: 2px solid #0077cc; /* Blue focus ring */
+  outline-offset: 2px;
 }
