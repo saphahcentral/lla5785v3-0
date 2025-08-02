@@ -4,6 +4,15 @@
   <meta charset="UTF-8" />
   <title>Lighthouse Lifetime Ads Viewer</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Content Security Policy to allow your resources and Firebase -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://www.gstatic.com;
+    style-src 'unsafe-inline' 'self';
+    img-src 'self' https: data:;
+    connect-src 'self' https://firestore.googleapis.com;
+    frame-src *;
+    ">
   <style>
     body {
       font-family: sans-serif;
@@ -54,17 +63,29 @@
   <!-- External Header -->
   <div id="header"></div>
   <script>
-    fetch("/header.html").then(res => res.text()).then(html => {
-      document.getElementById("header").innerHTML = html;
-    });
+    fetch("/header.html")
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to load header.html");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("header").innerHTML = html;
+      })
+      .catch(err => console.warn(err));
   </script>
 
   <!-- External NAV Bar -->
   <div id="nav"></div>
   <script>
-    fetch("/nav.html").then(res => res.text()).then(html => {
-      document.getElementById("nav").innerHTML = html;
-    });
+    fetch("/nav_external.html")
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to load nav_external.html");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("nav").innerHTML = html;
+      })
+      .catch(err => console.warn(err));
   </script>
 
   <div class="container">
@@ -94,22 +115,28 @@
         <button onclick="location.href='account1.html'">Add Your Site Here!</button>
       </div>
       <div class="right-col">
-        <a id="bannerLink" href="#" target="_blank">
+        <a id="bannerLink" href="#" target="_blank" rel="noopener noreferrer">
           <img id="bannerAd" src="" width="100%" alt="Banner Ad" />
         </a>
         <p id="textAd" style="padding-top: 10px;"></p>
       </div>
     </div>
 
-    <iframe id="iframeAd" src=""></iframe>
+    <iframe id="iframeAd" src="" title="Advertisement"></iframe>
   </div>
 
   <!-- External Footer -->
   <div id="footer"></div>
   <script>
-    fetch("/footer.html").then(res => res.text()).then(html => {
-      document.getElementById("footer").innerHTML = html;
-    });
+    fetch("/footer.html")
+      .then(res => {
+        if (!res.ok) throw new Error("Failed to load footer.html");
+        return res.text();
+      })
+      .then(html => {
+        document.getElementById("footer").innerHTML = html;
+      })
+      .catch(err => console.warn(err));
   </script>
 
   <!-- Firebase & Ad Logic -->
@@ -130,13 +157,13 @@
     const db = getFirestore(app);
     const adListRef = collection(db, "ad_list");
 
-    // Updated fallback ads, last banner uses your internal default banner
+    // Your 4 internal fallback ads (inline defaults)
     const fallbackAds = [
       {
         image: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
         url: "https://queenbutterfly.org.za/",
         banner: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
-        text: "Help the metal and physical disabled"
+        text: "Help the mental and physical disabled"
       },
       {
         image: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
@@ -150,6 +177,12 @@
         banner: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
         text: "Terminal illness support - donations welcome"
       },
+      {
+        image: "https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png",
+        url: "https://saphahcentral.github.io/lla578v3-0/index.html",
+        banner: "https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png",
+        text: "Add your site here NOW. It never dies..."
+      }
     ];
 
     let ads = [];
@@ -159,9 +192,9 @@
       try {
         const snapshot = await getDocs(adListRef);
         ads = snapshot.docs.map(doc => doc.data());
-        if (ads.length === 0) throw "No ads in database.";
+        if (!ads.length) throw new Error("No ads found in Firestore");
       } catch (e) {
-        console.warn("Falling back to internal ads:", e);
+        console.warn("Using fallback ads due to:", e);
         ads = fallbackAds;
       }
       showRandomAd();
@@ -169,12 +202,15 @@
 
     function showRandomAd() {
       if (!ads.length) return;
+      // Random ad
       const ad = ads[Math.floor(Math.random() * ads.length)];
-      document.getElementById("squareBanner").src = ad.image;
-      document.getElementById("bannerLink").href = ad.url;
-      document.getElementById("bannerAd").src = ad.banner;
-      document.getElementById("textAd").textContent = ad.text;
-      document.getElementById("iframeAd").src = ad.url;
+      console.log("Showing ad:", ad);
+
+      document.getElementById("squareBanner").src = ad.image || fallbackAds[0].image;
+      document.getElementById("bannerLink").href = ad.url || "#";
+      document.getElementById("bannerAd").src = ad.banner || fallbackAds[0].banner;
+      document.getElementById("textAd").textContent = ad.text || "";
+      document.getElementById("iframeAd").src = ad.url || "";
     }
 
     loadAds();
