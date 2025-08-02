@@ -9,18 +9,44 @@
 </head>
 
 <body>
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <!-- Firebase SDK v10.12.2 -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-  <!-- Firebase Init -->
-  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
       authDomain: "lla5785v3-0.firebaseapp.com",
-      projectId: "lla5785v3-0",
+      projectId: "lla5785v3-0"
     };
-    firebase.initializeApp(firebaseConfig);
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    async function loadIncludes() {
+      const loadHTML = async (id, file) => {
+        const container = document.getElementById(id);
+        try {
+          const res = await fetch(file);
+          if (!res.ok) throw new Error(`Failed to load ${file}`);
+          container.innerHTML = await res.text();
+        } catch (e) {
+          container.innerHTML = `<p style="color:red;text-align:center;">Failed to load ${file}</p>`;
+          console.error(e);
+        }
+      };
+
+      await loadHTML('headerContainer', 'header.html');
+
+      onAuthStateChanged(auth, (user) => {
+        const navFile = user ? 'nav_internal.html' : 'nav_external.html';
+        loadHTML('navContainer', navFile);
+      });
+
+      await loadHTML('footerContainer', 'footer.html');
+    }
+
+    loadIncludes();
   </script>
 
   <!-- Header -->
@@ -63,33 +89,5 @@
 
   <!-- Footer -->
   <div id="footerContainer"></div>
-
-  <!-- Loader Script -->
-  <script>
-    async function loadIncludes() {
-      const loadHTML = async (id, file) => {
-        const container = document.getElementById(id);
-        try {
-          const res = await fetch(file);
-          if (!res.ok) throw new Error(`Failed to load ${file}`);
-          container.innerHTML = await res.text();
-        } catch (e) {
-          container.innerHTML = `<p style="color:red;text-align:center;">Failed to load ${file}</p>`;
-          console.error(e);
-        }
-      };
-
-      await loadHTML('headerContainer', 'header.html');
-
-      firebase.auth().onAuthStateChanged(user => {
-        const navFile = user ? 'nav_internal.html' : 'nav_external.html';
-        loadHTML('navContainer', navFile);
-      });
-
-      await loadHTML('footerContainer', 'footer.html');
-    }
-
-    loadIncludes();
-  </script>
 </body>
 </html>

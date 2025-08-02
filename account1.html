@@ -123,9 +123,9 @@
   <div id="footerContainer"></div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-    import { getFirestore, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
@@ -162,53 +162,4 @@
         document.getElementById('email').value = user.email;
 
         const userRef = doc(db, "members", user.uid);
-        const docSnap = await getDoc(userRef);
-
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          form.userName.value = data.userName || '';
-          form.phone.value = data.phone || '';
-          form.bio.value = data.bio || '';
-        } else {
-          formMessage.textContent = "No account data found. Please complete the form to add your account.";
-        }
-
-        form.onsubmit = async (e) => {
-          e.preventDefault();
-          formMessage.textContent = '';
-          formMessage.classList.remove('error');
-
-          const action = form.action.value;
-          if (action === 'update') {
-            try {
-              await setDoc(userRef, {
-                userName: form.userName.value,
-                phone: form.phone.value,
-                bio: form.bio.value,
-                email: user.email
-              }, { merge: true });
-              formMessage.textContent = "Account updated successfully.";
-            } catch (err) {
-              formMessage.textContent = "Failed to update account.";
-              formMessage.classList.add('error');
-            }
-          } else if (action === 'delete') {
-            if (confirm("Are you sure you want to delete your account? This cannot be undone.")) {
-              try {
-                await deleteDoc(userRef);
-                formMessage.textContent = "Account deleted. You will be logged out.";
-                setTimeout(() => auth.signOut(), 3000);
-              } catch (err) {
-                formMessage.textContent = "Failed to delete account.";
-                formMessage.classList.add('error');
-              }
-            }
-          }
-        };
-      } else {
-        document.body.innerHTML = '<p style="color:red; text-align:center;">You must be logged in. <a href="login.html">Login here</a>.</p>';
-      }
-    });
-  </script>
-</body>
-</html>
+        const docSnap = await

@@ -46,17 +46,45 @@
       width: 100%;
     }
 
-    /* Main content block */
-    .wrapper {
+    /* Table container for banner + main content */
+    .content-table {
       max-width: 700px;
+      margin: 80px auto 80px;
       background: white;
-      margin: 100px auto 80px auto;
-      padding: 50px 40px;
       border-radius: 24px;
       box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-      text-align: center;
-      font-family: 'Playfair Display', serif;
+      display: table;
+      width: 100%;
       color: #003366;
+      font-family: 'Playfair Display', serif;
+    }
+    .table-row {
+      display: table-row;
+    }
+    .table-cell {
+      display: table-cell;
+      vertical-align: middle;
+      padding: 50px 30px;
+    }
+    .banner-cell {
+      width: 300px;
+      text-align: left;
+      padding-left: 40px;
+    }
+    .banner-cell img {
+      width: 300px;
+      height: 300px;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    .content-cell {
+      padding-left: 30px;
+      text-align: center;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     h1 {
@@ -66,6 +94,7 @@
       letter-spacing: 0.07em;
       line-height: 1.15;
       text-shadow: 1px 1px 6px rgba(0, 51, 102, 0.6);
+      font-family: 'Playfair Display', serif;
     }
 
     p {
@@ -105,61 +134,66 @@
   <!-- EXTERNAL NAVIGATION -->
   <div id="navContainer"></div>
 
-  <!-- MAIN CONTENT -->
-  <div class="wrapper" role="main">
-    <h1>Hands-Free Promotion with Lighthouse Lifetime Ads</h1>
+  <!-- CONTENT TABLE -->
+  <div class="content-table" role="main">
+    <div class="table-row">
+      <div class="table-cell banner-cell">
+        <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" alt="Lighthouse Lifetime Ads Banner" />
+      </div>
+      <div class="table-cell content-cell">
+        <h1>Hands-Free Promotion with Lighthouse Lifetime Ads</h1>
 
-    <p>Discover the power of a fully automated advertising system with zero login fatigue and no surfing required.</p>
+        <p>Discover the power of a fully automated advertising system with zero login fatigue and no surfing required.</p>
 
-    <p>Submit your ad once and keep it visible forever, with control at your fingertips and upgrades available anytime.</p>
+        <p>Submit your ad once and keep it visible forever, with control at your fingertips and upgrades available anytime.</p>
 
-    <div class="cta">
-      <a href="account1.html">Join the Rotator Now</a>
+        <div class="cta">
+          <a href="account1.html">Join the Rotator Now</a>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- FOOTER -->
   <div id="footerContainer"></div>
 
-  <script>
-    // Load header.html
-    fetch('header.html')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to load header');
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById('headerContainer').innerHTML = html;
-      })
-      .catch(() => {
-        document.getElementById('headerContainer').innerHTML = '';
-      });
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // Load nav_external.html
-    fetch('nav_external.html')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to load nav');
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById('navContainer').innerHTML = html;
-      })
-      .catch(() => {
-        document.getElementById('navContainer').innerHTML = '<nav style="padding:10px; background:#0057a8; color:white; text-align:center;">Navigation failed to load</nav>';
-      });
+    // Updated Firebase config for GitHub-hosted project
+    const firebaseConfig = {
+      apiKey: "AIzaSyDuW-sWBZJpsxGbI2Ng-h0VLNJeImhEjBA",
+      authDomain: "lla5785.firebaseapp.com",
+      projectId: "lla5785",
+    };
 
-    // Load footer.html
-    fetch('footer.html')
-      .then(res => {
-        if (!res.ok) throw new Error('Failed to load footer');
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById('footerContainer').innerHTML = html;
-      })
-      .catch(() => {
-        document.getElementById('footerContainer').innerHTML = '';
-      });
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // Dynamic fetch partials loader
+    async function loadFragment(id, url) {
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Failed to load ' + url);
+        const html = await res.text();
+        document.getElementById(id).innerHTML = html;
+      } catch {
+        document.getElementById(id).innerHTML = `<p style="color:red;text-align:center;">Failed to load ${url}</p>`;
+      }
+    }
+
+    loadFragment('headerContainer', 'header.html');
+    loadFragment('navContainer', 'nav_external.html');
+    loadFragment('footerContainer', 'footer.html');
+
+    // Redirect unauthenticated users to signup page
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+        window.location.href = "account1.html";
+      }
+    });
   </script>
+
 </body>
 </html>

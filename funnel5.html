@@ -6,7 +6,7 @@
   <meta name="robots" content="noindex, follow" />
   <title>Run Ads Nonstop with Lighthouse Lifetime Power</title>
 
-  <!-- Google tag (gtag.js) -->
+  <!-- Google tag -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-5WP3ZDR25B"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -17,6 +17,50 @@
       allow_ad_personalization_signals: false,
       anonymize_ip: true
     });
+  </script>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA8-3KwUzfvl9oSNaIDzbx4iYZHUIA9Yv8",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+      storageBucket: "lla5785v3-0.appspot.com",
+      messagingSenderId: "382483108639",
+      appId: "1:382483108639:web:1fa19b7de0e4b431a7e49d"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadAd() {
+      const adContainer = document.getElementById("bannerAd");
+      const querySnapshot = await getDocs(collection(db, "ad_list"));
+      const ads = [];
+
+      querySnapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.type === "image" && data.image_url) {
+          ads.push(data);
+        }
+      });
+
+      if (ads.length > 0) {
+        const ad = ads[Math.floor(Math.random() * ads.length)];
+        adContainer.innerHTML = `
+          <table><tr><td align="left">
+            <a href="${ad.target_url}" target="_blank">
+              <img src="${ad.image_url}" alt="Ad Banner" width="300" height="300" style="border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);" />
+            </a>
+          </td></tr></table>
+        `;
+      }
+    }
+
+    window.addEventListener("DOMContentLoaded", loadAd);
   </script>
 
   <style>
@@ -41,7 +85,7 @@
       max-width: 700px;
       background: rgba(255, 255, 255, 0.97);
       margin: auto;
-      margin-top: 100px;
+      margin-top: 60px;
       margin-bottom: 80px;
       padding: 50px 40px;
       border-radius: 24px;
@@ -86,6 +130,10 @@
       box-shadow: 0 12px 38px rgba(168, 90, 0, 0.8);
     }
 
+    #bannerAd {
+      margin: 30px 20px 10px;
+    }
+
     footer {
       margin-top: auto;
       padding: 25px 0;
@@ -101,8 +149,11 @@
   <!-- HEADER -->
   <div id="header"></div>
 
-  <!-- EXTERNAL NAVIGATION -->
+  <!-- NAVIGATION -->
   <div id="navContainer"></div>
+
+  <!-- BANNER AD -->
+  <div id="bannerAd"></div>
 
   <!-- MAIN CONTENT -->
   <div class="wrapper">
@@ -122,17 +173,17 @@
 
   <!-- LOAD EXTERNAL COMPONENTS -->
   <script>
-    fetch('header.html')
-      .then(res => res.text())
-      .then(html => document.getElementById('header').innerHTML = html);
+    fetch('header.html').then(res => res.text()).then(html => {
+      document.getElementById('header').innerHTML = html;
+    });
 
-    fetch('nav_external.html')
-      .then(res => res.text())
-      .then(html => document.getElementById('navContainer').innerHTML = html);
+    fetch('nav_external.html').then(res => res.text()).then(html => {
+      document.getElementById('navContainer').innerHTML = html;
+    });
 
-    fetch('footer.html')
-      .then(res => res.text())
-      .then(html => document.getElementById('footer').innerHTML = html);
+    fetch('footer.html').then(res => res.text()).then(html => {
+      document.getElementById('footer').innerHTML = html;
+    });
   </script>
 </body>
 </html>

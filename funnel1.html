@@ -55,17 +55,40 @@
       background: #3f51b5;
     }
 
-    .wrapper {
+    /* Table container for banner + main content */
+    .content-table {
       max-width: 700px;
+      margin: 40px auto 80px;
       background: rgba(255, 255, 255, 0.12);
-      margin: auto;
-      margin-top: 100px;
-      margin-bottom: 80px;
-      padding: 50px 40px;
       border-radius: 28px;
       box-shadow: 0 15px 40px rgba(0,0,0,0.25);
       backdrop-filter: blur(12px);
-      text-align: center;
+      display: table;
+      width: 100%;
+      color: white;
+    }
+    .table-row {
+      display: table-row;
+    }
+    .table-cell {
+      display: table-cell;
+      vertical-align: middle;
+      padding: 40px 30px;
+    }
+    .banner-cell {
+      width: 300px;
+      text-align: left;
+      padding-left: 40px;
+    }
+    .banner-cell img {
+      width: 300px;
+      height: 300px;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    }
+    .content-cell {
+      padding-left: 30px;
     }
 
     h1 {
@@ -110,17 +133,25 @@
   <div id="headerContainer"></div>
 
   <!-- Nav Bar -->
-  <div id="navContainer"></div>
+  <div id="navContainer" aria-label="Primary navigation"></div>
 
-  <div class="wrapper" role="main">
-    <h1>Join Lighthouse Lifetime Ads Today</h1>
+  <!-- Content table with banner on left -->
+  <div class="content-table" role="main">
+    <div class="table-row">
+      <div class="table-cell banner-cell">
+        <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" alt="Lighthouse Lifetime Ads Banner" />
+      </div>
+      <div class="table-cell content-cell">
+        <h1>Join Lighthouse Lifetime Ads Today</h1>
 
-    <p>Unlock lifetime advertising opportunities with zero monthly fees. Promote your business, project, or passion effortlessly — forever.</p>
+        <p>Unlock lifetime advertising opportunities with zero monthly fees. Promote your business, project, or passion effortlessly — forever.</p>
 
-    <p>Experience automated exposure, referral growth, and easy upgrades tailored to your goals. Lighthouse makes your promotion shine bright and steady.</p>
+        <p>Experience automated exposure, referral growth, and easy upgrades tailored to your goals. Lighthouse makes your promotion shine bright and steady.</p>
 
-    <div class="cta">
-      <a href="account1.html">Get Started Now</a>
+        <div class="cta">
+          <a href="account1.html">Get Started Now</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -131,16 +162,17 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    // Initialize Firebase App (same config as your other pages)
+    // Updated Firebase config for GitHub-hosted project (confirm your exact config)
     const firebaseConfig = {
-      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
-      authDomain: "lla5785v3-0.firebaseapp.com",
-      projectId: "lla5785v3-0",
+      apiKey: "AIzaSyDuW-sWBZJpsxGbI2Ng-h0VLNJeImhEjBA",
+      authDomain: "lla5785.firebaseapp.com",
+      projectId: "lla5785",
     };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // Load header, nav, footer
+    // Dynamic fetch partials loader
     async function loadFragment(id, url) {
       try {
         const res = await fetch(url);
@@ -156,12 +188,11 @@
     loadFragment('navContainer', 'nav_external.html');
     loadFragment('footerContainer', 'footer.html');
 
-    // Redirect if not logged in to account1.html
+    // Redirect unauthenticated users to signup page
     onAuthStateChanged(auth, user => {
       if (!user) {
         window.location.href = "account1.html";
       }
-      // else user is logged in - stay on this page
     });
   </script>
 </body>

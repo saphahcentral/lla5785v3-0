@@ -107,7 +107,7 @@
     <p>And it’s completely free to start. Join today and lock in your eternal traffic source.</p>
 
     <div class="cta">
-      <a href="account1.html" rel="noopener noreferrer" aria-label="Sign up or login to Lighthouse Lifetime Ads">Get Started Now</a>
+      <a href="account1.html" rel="noopener noreferrer" target="_blank" aria-label="Sign up or login to Lighthouse Lifetime Ads">Get Started Now</a>
     </div>
   </main>
 
@@ -125,7 +125,6 @@
       document.getElementById('navContainer').innerHTML = navHTML;
       document.getElementById('footer').innerHTML = footerHTML;
     }).catch(() => {
-      // Fallback content if any fetch fails
       document.getElementById('header').innerHTML = '<header><h1>Lighthouse Lifetime Ads</h1></header>';
       document.getElementById('navContainer').innerHTML = '<nav style="padding:10px; background:#cc5500; color:white; text-align:center;">Navigation unavailable</nav>';
       document.getElementById('footer').innerHTML = '<footer>&copy; 2025 Lighthouse Lifetime Ads</footer>';
