@@ -1,129 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Ad Viewer - LLA5785</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <title>Lighthouse Lifetime Ads Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
       font-family: sans-serif;
-      background: #f5f5f5;
+      background: #f9f9f9;
       margin: 0;
       padding: 0;
+    }
+    .container {
+      max-width: 1024px;
+      margin: auto;
+      padding: 1rem;
+      background: white;
+    }
+    .top-section {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      margin-bottom: 20px;
+    }
+    .left-col {
+      width: 300px;
       text-align: center;
     }
-    .nav-placeholder {
-      width: 100%;
+    .right-col {
+      flex: 1;
     }
-    .square-banner {
-      margin: 10px auto;
+    button {
       display: block;
-      width: 125px;
-      height: 125px;
-    }
-    .ad-block {
-      background: #fff;
-      margin: 20px auto;
+      width: 100%;
+      margin-top: 10px;
       padding: 10px;
-      width: 90%;
-      max-width: 600px;
-      border-radius: 10px;
-      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
     }
     iframe {
       width: 100%;
       height: 150px;
       border: none;
-    }
-    .note {
-      margin-top: 15px;
-      color: #555;
-      font-style: italic;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
+  <!-- External Header -->
+  <div id="header"></div>
+  <script>
+    fetch("/header.html").then(res => res.text()).then(html => {
+      document.getElementById("header").innerHTML = html;
+    });
+  </script>
 
-  <!-- Navigation -->
-  <div class="nav-placeholder" id="nav-placeholder"></div>
+  <!-- External NAV Bar -->
+  <div id="nav"></div>
+  <script>
+    fetch("/nav.html").then(res => res.text()).then(html => {
+      document.getElementById("nav").innerHTML = html;
+    });
+  </script>
 
-  <!-- Square Banner (links to homepage) -->
-  <a href="index.html">
-    <img src="https://cdn-images.imagevenue.com/64/1b/fc/ME1AW7GR_o.png" alt="LLA5785 Banner" class="square-banner">
-  </a>
+  <div class="container">
+    <!-- Original Banner Block -->
+    <div style="text-align: center;">
+      <div class="separator" style="text-align: center;">
+        <a href="https://lla5785.neocities.org/" style="float: left; margin-right: 1em;">
+          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjdlr4C1wCmET69UUwZQa5biRkhKGyDJIJEEtwUzP5MEPGCjmThMnNifgcevv-GBHX8oWlWAg34chy3xiVbZkgSqZ4qjax-1-G6OgaImFTasSRifhb2hfo8qYbPIJSzIYSiPbRYz0JbO3bmdc2Ty5BUJbXzN_WUyFchHlNfyYwgIunpi8VxJTQrltqlyxA/w53-h51/Registration.png" width="53" height="51" alt="Logo">
+        </a>
+      </div>
+      <span style="color: red; font-size: medium; font-weight: bold;">SCROLL DOWN TO VIEW!</span>
+    </div>
 
-  <!-- Ad Blocks -->
-  <div class="ad-block" id="banner-ad"></div>
-  <div class="ad-block" id="text-ad"></div>
-  <div class="ad-block" id="iframe-ad"></div>
+    <!-- Special Offer -->
+    <div style="background-color: yellow; padding: 10px; margin: 20px 0; text-align: center;">
+      <a href="https://lla5785.neocities.org/" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none;">
+        LIMITED OFFER! Get your super discounted rotation on this page NOW!
+      </a>
+    </div>
 
-  <p class="note">SCROLL DOWN TO VIEW MORE ADS</p>
+    <!-- Ad Layout -->
+    <h2 style="text-align: center;"><u>ADVERTISING</u></h2>
+    <div class="top-section">
+      <div class="left-col">
+        <img id="squareBanner" src="" width="250" alt="Ad Image" />
+        <button onclick="showRandomAd()">View Next Ad</button>
+        <button onclick="location.href='account1.html'">Add Your Site Here!</button>
+      </div>
+      <div class="right-col">
+        <a id="bannerLink" href="#" target="_blank">
+          <img id="bannerAd" src="" width="100%" alt="Banner Ad" />
+        </a>
+        <p id="textAd" style="padding-top: 10px;"></p>
+      </div>
+    </div>
 
-  <!-- Firebase & Ad Fetch Scripts -->
+    <iframe id="iframeAd" src=""></iframe>
+  </div>
+
+  <!-- External Footer -->
+  <div id="footer"></div>
+  <script>
+    fetch("/footer.html").then(res => res.text()).then(html => {
+      document.getElementById("footer").innerHTML = html;
+    });
+  </script>
+
+  <!-- Firebase & Ad Logic -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-    // Firebase Config
     const firebaseConfig = {
-      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      apiKey: "AIzaSyDh-3m7VrE0a9JXQOmfbMZIQ3flPbHFjU4",
       authDomain: "lla5785v3-0.firebaseapp.com",
       projectId: "lla5785v3-0",
       storageBucket: "lla5785v3-0.appspot.com",
-      messagingSenderId: "730972554331",
-      appId: "1:730972554331:web:d97a5fbacebd6aa6e32b7e",
-      measurementId: "G-WZNQ24S4DM"
+      messagingSenderId: "934799419187",
+      appId: "1:934799419187:web:cf12a8f6cf80ddee942688"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const adListRef = collection(db, "ad_list");
 
-    // Helper: Random item
-    function getRandomItem(arr) {
-      return arr[Math.floor(Math.random() * arr.length)];
-    }
+    // Updated fallback ads, last banner uses your internal default banner
+    const fallbackAds = [
+      {
+        image: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
+        url: "https://queenbutterfly.org.za/",
+        banner: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
+        text: "Help the metal and physical disabled"
+      },
+      {
+        image: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
+        url: "https://lla5785emails.blogspot.com/p/subscribe.html",
+        banner: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
+        text: "10 emails - a lifetime of information about online marketing"
+      },
+      {
+        image: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+        url: "https://estcourthospice.blogspot.com/p/home.html",
+        banner: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+        text: "Terminal illness support - donations welcome"
+      },
+    ];
+
+    let ads = [];
+    let currentIndex = 0;
 
     async function loadAds() {
-      const snapshot = await getDocs(collection(db, "ad_list"));
-      const ads = snapshot.docs.map(doc => doc.data());
+      try {
+        const snapshot = await getDocs(adListRef);
+        ads = snapshot.docs.map(doc => doc.data());
+        if (ads.length === 0) throw "No ads in database.";
+      } catch (e) {
+        console.warn("Falling back to internal ads:", e);
+        ads = fallbackAds;
+      }
+      showRandomAd();
+    }
 
-      const bannerAds = ads.filter(ad => ad.type === "banner");
-      const textAds = ads.filter(ad => ad.type === "text");
-      const iframeAds = ads.filter(ad => ad.type === "iframe");
-
-      const bannerAd = getRandomItem(bannerAds);
-      const textAd = getRandomItem(textAds);
-      const iframeAd = getRandomItem(iframeAds);
-
-      // Display banner ad (468x60)
-      document.getElementById("banner-ad").innerHTML = bannerAd
-        ? `<a href="${bannerAd.link}" target="_blank"><img src="${bannerAd.image}" width="468" height="60" alt="Banner Ad"></a>`
-        : "<p>No banner ad available</p>";
-
-      // Display text ad
-      document.getElementById("text-ad").innerHTML = textAd
-        ? `<a href="${textAd.link}" target="_blank">${textAd.text}</a>`
-        : "<p>No text ad available</p>";
-
-      // Display iframe ad
-      document.getElementById("iframe-ad").innerHTML = iframeAd
-        ? `<iframe src="${iframeAd.link}"></iframe>`
-        : "<p>No iframe ad available</p>";
+    function showRandomAd() {
+      if (!ads.length) return;
+      const ad = ads[Math.floor(Math.random() * ads.length)];
+      document.getElementById("squareBanner").src = ad.image;
+      document.getElementById("bannerLink").href = ad.url;
+      document.getElementById("bannerAd").src = ad.banner;
+      document.getElementById("textAd").textContent = ad.text;
+      document.getElementById("iframeAd").src = ad.url;
     }
 
     loadAds();
   </script>
-
-  <!-- Load shared nav bar -->
-  <script>
-    fetch("nav_external.html")
-      .then(res => res.text())
-      .then(data => {
-        document.getElementById("nav-placeholder").innerHTML = data;
-      })
-      .catch(err => console.error("Nav load failed", err));
-  </script>
-
 </body>
 </html>
