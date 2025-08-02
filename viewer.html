@@ -2,117 +2,258 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Viewer</title>
-  <link rel="stylesheet" href="styles.css"/>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; frame-src * data:; img-src * data:; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googleapis.com https://www.gstatic.com/firebasejs; style-src 'self' 'unsafe-inline'; connect-src https://firestore.googleapis.com https://www.googleapis.com" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ad Viewer - Lighthouse Lifetime Ads</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #fff; }
-    .scroll-banner {
-      background: yellow; color: red; font-weight: bold;
-      white-space: nowrap; overflow: hidden;
-      border-bottom: 2px solid red; padding: 4px;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background: #fff;
+      color: #000;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
-    .scroll-banner span {
-      display: inline-block; padding-left: 100%; animation: scroll-left 20s linear infinite;
+    /* Info bar with horizontal scroll */
+    .info-bar {
+      font-weight: bold;
+      font-size: 0.9em;
+      background: #eee;
+      padding: 4px 12px;
+      white-space: nowrap;
+      overflow-x: auto;
+      border-bottom: 1px solid #ccc;
     }
-    @keyframes scroll-left {
-      from { transform: translateX(0); }
-      to { transform: translateX(-100%); }
+    /* Invite link bar */
+    .invite-bar {
+      background: #eee;
+      padding: 6px 12px;
+      border-bottom: 1px solid #ccc;
+      font-weight: bold;
+      font-size: 1em;
     }
-    .ad-top {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 6px; background: #f9f9f9; flex-wrap: wrap; gap: 5px;
+    .invite-bar a {
+      color: blue;
+      text-decoration: underline;
+      white-space: nowrap;
     }
-    .ad-banner {
-      flex: 1; max-width: 49%;
-      text-align: center;
+    /* Two column ad container */
+    .ads-container {
+      display: flex;
+      background: wheat;
+      padding: 5px;
+      gap: 10px;
+      max-height: 70px;
+      align-items: center;
+      justify-content: center;
     }
-    .ad-text {
-      flex: 1; max-width: 49%;
-      text-align: center;
+    .ad-banner, .ad-text {
+      flex: 1;
+      overflow: hidden;
+      max-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ad-banner img {
+      max-width: 468px;
+      max-height: 60px;
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      cursor: pointer;
     }
     .ad-text a {
-      display: inline-block;
-      padding: 6px 12px;
-      background: #007bff;
-      color: white;
-      text-decoration: underline;
       font-weight: bold;
+      color: blue;
+      text-decoration: underline;
+      font-size: 1.1em;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    /* iframe styling */
+    .iframe-wrapper {
+      flex-grow: 1;
+      width: 100%;
+      height: 1000px;
       border: none;
-      border-radius: 5px;
     }
     iframe {
-      width: 100%; height: 1000px; border: none; display: block;
+      width: 100%;
+      height: 100%;
+      border: none;
     }
-    .next-btn {
-      display: block; margin: 10px auto; background: blue; color: white;
-      padding: 8px 16px; border: none; border-radius: 5px; font-weight: bold;
-      cursor: pointer;
+    /* Bottom nav bar */
+    #nav-container {
+      background: #0057a8;
+      padding: 10px 20px;
+      text-align: center;
+    }
+    #nav-container a {
+      color: white;
+      font-weight: bold;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    #nav-container a:hover {
+      text-decoration: underline;
+    }
+    /* Footer */
+    #footer-container {
+      background: #003e7e;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <div class="scroll-banner">
-    <span>Advertisers! Reach a global audience with just ONE LIFETIME PAYMENT! Ads NEVER expire!</span>
+  <div id="header-container">Loading header...</div>
+
+  <div class="info-bar" aria-label="Scrolling information">
+    Scroll to view all ads!
   </div>
 
-  <div class="ad-top" id="ad-top">
-    <!-- Banner and text ads will appear here -->
+  <div class="invite-bar">
+    <a href="https://saphahcentral.github.io/lla5785v3-0/account1.html" target="_blank" rel="noopener noreferrer">
+      👉 ADD YOUR WEBSITE HERE FOR MAXIMUM LIFETIME EXPOSURE!
+    </a>
   </div>
 
-  <button class="next-btn" onclick="window.location.reload();">Next Ad</button>
+  <div class="ads-container" aria-label="Advertisement banners">
+    <div class="ad-banner" id="banner-ad">
+      <!-- Banner ad will be inserted here -->
+    </div>
+    <div class="ad-text" id="text-ad">
+      <!-- Text ad will be inserted here -->
+    </div>
+  </div>
 
-  <iframe id="ad-frame" src="about:blank"></iframe>
+  <div class="iframe-wrapper">
+    <iframe id="viewer-iframe" src="about:blank" title="Advertisement display"></iframe>
+  </div>
 
-  <script>
-    const fallbackAds = [
-      {
-        "image": "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?...",
-        "url": "https://queenbutterfly.org.za/",
-        "banner": "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?...",
-        "text": "Help the metal and physical disabled"
-      },
-      {
-        "image": "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-        "url": "https://lla5785emails.blogspot.com/p/subscribe.html",
-        "banner": "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-        "text": "10 emails - a lifetime of information about online marketing"
-      },
-      {
-        "image": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-        "url": "https://estcourthospice.blogspot.com/p/home.html",
-        "banner": "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-        "text": "Terminal illness support - donations welcome"
+  <nav id="nav-container">Loading navigation...</nav>
+
+  <div id="footer-container">Loading footer...</div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
+      authDomain: "lla5785v3-0.firebaseapp.com",
+      projectId: "lla5785v3-0",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Utility: shuffle array
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
       }
-    ];
-
-    function getRandomAds(n) {
-      const shuffled = fallbackAds.sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, n);
+      return array;
     }
 
-    function loadAds() {
-      const ads = getRandomAds(3);
-      const bannerAd = ads[0];
-      const textAd = ads[1];
-      const iframeAd = ads[2];
+    async function loadAds() {
+      try {
+        const adListSnapshot = await getDocs(collection(db, "ad_list"));
+        let ads = [];
+        adListSnapshot.forEach(doc => {
+          ads.push(doc.data());
+        });
+        if (ads.length === 0) throw new Error("No ads found");
 
-      document.getElementById("ad-top").innerHTML = `
-        <div class="ad-banner">
-          <a href="${bannerAd.url}" target="_blank">
-            <img src="${bannerAd.banner}" alt="Ad Banner" style="max-width:100%; height:auto;">
-          </a>
-        </div>
-        <div class="ad-text">
-          <a href="${textAd.url}" target="_blank">${textAd.text}</a>
-        </div>
-      `;
-      document.getElementById("ad-frame").src = iframeAd.url;
+        ads = shuffle(ads);
+
+        // Select one banner ad (with image), one text ad (text + url), and one iframe url ad
+        // Banner ad: first with a banner image property
+        const bannerAd = ads.find(ad => ad.banner && ad.url);
+        // Text ad: first with text and url, but no banner image (to avoid duplication)
+        const textAd = ads.find(ad => ad.text && ad.url && (!ad.banner || ad.banner === ""));
+        // Iframe URL: first with iframe URL or url, could be any url
+        // For iframe ad we use the URL from banner or url field for fallback
+        const iframeAd = ads.find(ad => ad.url);
+
+        // If not found, fallback to last resort (hardcoded ads)
+        if (!bannerAd || !textAd || !iframeAd) {
+          console.warn("Some ads missing, loading fallback ads");
+          loadFallbackAds();
+          return;
+        }
+
+        // Display banner ad
+        const bannerContainer = document.getElementById("banner-ad");
+        bannerContainer.innerHTML = `<a href="${bannerAd.url}" target="viewer-iframe" rel="noopener noreferrer"><img src="${bannerAd.banner}" alt="Banner Ad"></a>`;
+
+        // Display text ad
+        const textContainer = document.getElementById("text-ad");
+        textContainer.innerHTML = `<a href="${textAd.url}" target="viewer-iframe" rel="noopener noreferrer">${textAd.text}</a>`;
+
+        // Set iframe src
+        const iframe = document.getElementById("viewer-iframe");
+        iframe.src = iframeAd.url;
+
+      } catch (err) {
+        console.error("Error loading ads from Firestore:", err);
+        loadFallbackAds();
+      }
     }
 
-    loadAds();
+    function loadFallbackAds() {
+      const fallbackAds = [
+        {
+          banner: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
+          url: "https://queenbutterfly.org.za/",
+          text: "Help the metal and physical disabled"
+        },
+        {
+          banner: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
+          url: "https://lla5785emails.blogspot.com/p/subscribe.html",
+          text: "10 emails - a lifetime of information about online marketing"
+        },
+        {
+          banner: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+          url: "https://estcourthospice.blogspot.com/p/home.html",
+          text: "Terminal illness support - donations welcome"
+        }
+      ];
+
+      // Use fallback ads for banner, text, and iframe
+      const bannerAd = fallbackAds[0];
+      const textAd = fallbackAds[1];
+      const iframeAd = fallbackAds[2];
+
+      document.getElementById("banner-ad").innerHTML =
+        `<a href="${bannerAd.url}" target="viewer-iframe" rel="noopener noreferrer"><img src="${bannerAd.banner}" alt="Fallback Banner Ad"></a>`;
+
+      document.getElementById("text-ad").innerHTML =
+        `<a href="${textAd.url}" target="viewer-iframe" rel="noopener noreferrer">${textAd.text}</a>`;
+
+      document.getElementById("viewer-iframe").src = iframeAd.url;
+    }
+
+    // Load shared header, nav, footer
+    fetch("header.html").then(r => r.text()).then(html => {
+      document.getElementById("header-container").innerHTML = html;
+    });
+    fetch("nav_internal.html").then(r => r.text()).then(html => {
+      document.getElementById("nav-container").innerHTML = html;
+    }).catch(() => {
+      document.getElementById("nav-container").innerHTML = "<p style='color:white;'>Navigation failed to load.</p>";
+    });
+    fetch("footer.html").then(r => r.text()).then(html => {
+      document.getElementById("footer-container").innerHTML = html;
+    });
+
+    // Load ads after DOM ready
+    window.addEventListener("DOMContentLoaded", loadAds);
   </script>
-
 </body>
 </html>
