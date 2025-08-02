@@ -69,8 +69,10 @@
     <img id="banner-image" src="" alt="Ad Banner">
   </a>
 
-  <!-- Text Ad -->
-  <div class="text-ad" id="text-ad"></div>
+  <!-- Text Ad as link -->
+  <div class="text-ad">
+    <a id="text-ad-link" href="#" target="_blank" style="color: blue; text-decoration: underline;"></a>
+  </div>
 
   <!-- iFrame Ad -->
   <iframe id="iframe-ad" class="iframe-ad"></iframe>
@@ -117,147 +119,8 @@
     const ad = fallbackAds[Math.floor(Math.random() * fallbackAds.length)];
     document.getElementById("banner-link").href = ad.url;
     document.getElementById("banner-image").src = ad.banner;
-    document.getElementById("text-ad").textContent = ad.text;
-    document.getElementById("iframe-ad").src = ad.iframe;
-  }
-
-  window.onload = () => {
-    loadRandomAd();
-
-    fetch("header.html").then(r => r.text()).then(data => {
-      document.getElementById("header").innerHTML = data;
-    });
-    fetch("nav_external.html").then(r => r.text()).then(data => {
-      document.getElementById("nav_external").innerHTML = data;
-    });
-    fetch("footer.html").then(r => r.text()).then(data => {
-      document.getElementById("footer").innerHTML = data;
-    });
-  };
-</script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ad Viewer</title>
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googleapis.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; frame-src *; img-src * data:; connect-src *;">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
-  <style>
-    .ad-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      margin: 1rem auto;
-    }
-    .ad-container img {
-      max-width: 300px;
-      height: auto;
-      margin: 1rem 0;
-    }
-    .text-ad {
-      font-weight: bold;
-      margin: 1rem;
-    }
-    .iframe-ad {
-      width: 100%;
-      max-width: 728px;
-      height: 90px;
-      border: none;
-      margin: 1rem 0;
-    }
-    .scroll-banner {
-      background: yellow;
-      color: red;
-      font-weight: bold;
-      padding: 10px;
-      text-align: center;
-      font-size: 1.2em;
-    }
-    .invite-link {
-      background-color: wheat;
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      font-weight: bold;
-      margin-top: 1rem;
-      text-decoration: underline;
-      color: blue;
-    }
-  </style>
-</head>
-<body>
-
-<div id="header"></div>
-<div id="nav_external"></div>
-
-<!-- RED ON YELLOW SCROLL DOWN BANNER -->
-<div class="scroll-banner">SCROLL DOWN TO VIEW</div>
-
-<div class="ad-container">
-  <!-- Invite link -->
-  <a class="invite-link" href="account1.html">
-    Promote your site here – Click to add your ad!
-  </a>
-
-  <!-- Banner Ad -->
-  <a id="banner-link" href="#" target="_blank">
-    <img id="banner-image" src="" alt="Ad Banner">
-  </a>
-
-  <!-- Text Ad -->
-  <div class="text-ad" id="text-ad"></div>
-
-  <!-- iFrame Ad -->
-  <iframe id="iframe-ad" class="iframe-ad"></iframe>
-
-  <!-- Next Ad Button -->
-  <button onclick="loadRandomAd()">Next Ad</button>
-</div>
-
-<div id="footer"></div>
-
-<script>
-  const fallbackAds = [
-    {
-      image: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?...",
-      url: "https://queenbutterfly.org.za/",
-      banner: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?...",
-      text: "Help the mental and physical disabled",
-      iframe: "https://queenbutterfly.org.za/"
-    },
-    {
-      image: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-      url: "https://lla5785emails.blogspot.com/p/subscribe.html",
-      banner: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-      text: "10 emails - a lifetime of information about online marketing",
-      iframe: "https://lla5785emails.blogspot.com/p/subscribe.html"
-    },
-    {
-      image: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-      url: "https://estcourthospice.blogspot.com/p/home.html",
-      banner: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-      text: "Terminal illness support - donations welcome",
-      iframe: "https://estcourthospice.blogspot.com/p/home.html"
-    },
-    {
-      image: "https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png",
-      url: "https://saphahcentral.github.io/lla5785v3-0/index.html",
-      banner: "https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png",
-      text: "Add your site here NOW. It never dies...",
-      iframe: "https://saphahcentral.github.io/lla5785v3-0/index.html"
-    }
-  ];
-
-  function loadRandomAd() {
-    const ad = fallbackAds[Math.floor(Math.random() * fallbackAds.length)];
-    document.getElementById("banner-link").href = ad.url;
-    document.getElementById("banner-image").src = ad.banner;
-    document.getElementById("text-ad").textContent = ad.text;
+    document.getElementById("text-ad-link").href = ad.iframe;
+    document.getElementById("text-ad-link").textContent = ad.text;
     document.getElementById("iframe-ad").src = ad.iframe;
   }
 
