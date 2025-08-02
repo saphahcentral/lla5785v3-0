@@ -2,218 +2,71 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Lighthouse Lifetime Ads Viewer</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Content Security Policy to allow your resources and Firebase -->
-  <meta http-equiv="Content-Security-Policy" content="
-    default-src 'self';
-    script-src 'self' https://www.gstatic.com;
-    style-src 'unsafe-inline' 'self';
-    img-src 'self' https: data:;
-    connect-src 'self' https://firestore.googleapis.com;
-    frame-src *;
-    ">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://www.gstatic.com;">
+  <title>External Ads Viewer</title>
   <style>
-    body {
-      font-family: sans-serif;
-      background: #f9f9f9;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 1024px;
-      margin: auto;
-      padding: 1rem;
-      background: white;
-    }
-    .top-section {
-      display: flex;
-      flex-direction: row;
-      gap: 1rem;
-      margin-bottom: 20px;
-    }
-    .left-col {
-      width: 300px;
-      text-align: center;
-    }
-    .right-col {
-      flex: 1;
-    }
-    button {
-      display: block;
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    iframe {
-      width: 100%;
-      height: 150px;
-      border: none;
-      margin-top: 20px;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    #ads { display: flex; flex-direction: column; gap: 20px; }
+    .ad { border: 1px solid #ccc; padding: 10px; border-radius: 6px; }
+    .ad img { max-width: 100%; height: auto; }
+    iframe { width: 100%; height: 200px; border: none; }
   </style>
 </head>
 <body>
-  <!-- External Header -->
-  <div id="header"></div>
-  <script>
-    fetch("/header.html")
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to load header.html");
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById("header").innerHTML = html;
-      })
-      .catch(err => console.warn(err));
-  </script>
 
-  <!-- External NAV Bar -->
-  <div id="nav"></div>
-  <script>
-    fetch("/nav_external.html")
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to load nav_external.html");
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById("nav").innerHTML = html;
-      })
-      .catch(err => console.warn(err));
-  </script>
+<div id="ads">
+  <div id="banner-ad" class="ad"></div>
+  <div id="text-ad" class="ad"></div>
+  <div id="iframe-ad" class="ad"></div>
+</div>
 
-  <div class="container">
-    <!-- Original Banner Block -->
-    <div style="text-align: center;">
-      <div class="separator" style="text-align: center;">
-        <a href="https://lla5785.neocities.org/" style="float: left; margin-right: 1em;">
-          <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjdlr4C1wCmET69UUwZQa5biRkhKGyDJIJEEtwUzP5MEPGCjmThMnNifgcevv-GBHX8oWlWAg34chy3xiVbZkgSqZ4qjax-1-G6OgaImFTasSRifhb2hfo8qYbPIJSzIYSiPbRYz0JbO3bmdc2Ty5BUJbXzN_WUyFchHlNfyYwgIunpi8VxJTQrltqlyxA/w53-h51/Registration.png" width="53" height="51" alt="Logo">
-        </a>
-      </div>
-      <span style="color: red; font-size: medium; font-weight: bold;">SCROLL DOWN TO VIEW!</span>
-    </div>
-
-    <!-- Special Offer -->
-    <div style="background-color: yellow; padding: 10px; margin: 20px 0; text-align: center;">
-      <a href="https://lla5785.neocities.org/" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none;">
-        LIMITED OFFER! Get your super discounted rotation on this page NOW!
-      </a>
-    </div>
-
-    <!-- Ad Layout -->
-    <h2 style="text-align: center;"><u>ADVERTISING</u></h2>
-    <div class="top-section">
-      <div class="left-col">
-        <img id="squareBanner" src="" width="250" alt="Ad Image" />
-        <button onclick="showRandomAd()">View Next Ad</button>
-        <button onclick="location.href='account1.html'">Add Your Site Here!</button>
-      </div>
-      <div class="right-col">
-        <a id="bannerLink" href="#" target="_blank" rel="noopener noreferrer">
-          <img id="bannerAd" src="" width="100%" alt="Banner Ad" />
-        </a>
-        <p id="textAd" style="padding-top: 10px;"></p>
-      </div>
-    </div>
-
-    <iframe id="iframeAd" src="" title="Advertisement"></iframe>
-  </div>
-
-  <!-- External Footer -->
-  <div id="footer"></div>
-  <script>
-    fetch("/footer.html")
-      .then(res => {
-        if (!res.ok) throw new Error("Failed to load footer.html");
-        return res.text();
-      })
-      .then(html => {
-        document.getElementById("footer").innerHTML = html;
-      })
-      .catch(err => console.warn(err));
-  </script>
-
-  <!-- Firebase & Ad Logic -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDh-3m7VrE0a9JXQOmfbMZIQ3flPbHFjU4",
-      authDomain: "lla5785v3-0.firebaseapp.com",
-      projectId: "lla5785v3-0",
-      storageBucket: "lla5785v3-0.appspot.com",
-      messagingSenderId: "934799419187",
-      appId: "1:934799419187:web:cf12a8f6cf80ddee942688"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const adListRef = collection(db, "ad_list");
-
-    // Your 4 internal fallback ads (inline defaults)
-    const fallbackAds = [
-      {
-        image: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
-        url: "https://queenbutterfly.org.za/",
-        banner: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
-        text: "Help the mental and physical disabled"
-      },
-      {
-        image: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-        url: "https://lla5785emails.blogspot.com/p/subscribe.html",
-        banner: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
-        text: "10 emails - a lifetime of information about online marketing"
-      },
-      {
-        image: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-        url: "https://estcourthospice.blogspot.com/p/home.html",
-        banner: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
-        text: "Terminal illness support - donations welcome"
-      },
-      {
-        image: "https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png",
-        url: "https://saphahcentral.github.io/lla578v3-0/index.html",
-        banner: "https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png",
-        text: "Add your site here NOW. It never dies..."
-      }
-    ];
-
-    let ads = [];
-    let currentIndex = 0;
-
-    async function loadAds() {
-      try {
-        const snapshot = await getDocs(adListRef);
-        ads = snapshot.docs.map(doc => doc.data());
-        if (!ads.length) throw new Error("No ads found in Firestore");
-      } catch (e) {
-        console.warn("Using fallback ads due to:", e);
-        ads = fallbackAds;
-      }
-      showRandomAd();
+<script>
+  const fallbackAds = [
+    {
+      image: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
+      url: "https://queenbutterfly.org.za/",
+      banner: "https://scontent.fkxe1-1.fna.fbcdn.net/v/t39.30808-6/475751225_1043127917848227_6558230498504528156_n.jpg?stp=dst-jpg_s960x960_tt6&_nc_cat=108&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=kywAG8m6SJsQ7kNvwHpAiyl&_nc_oc=AdmI-lKe1nZcyg24bf_Dd7-wiWdRIK9cWgWuvRJB7dV7gP8eEBfHKdhU6Gfi3wFRb6I&_nc_zt=23&_nc_ht=scontent.fkxe1-1.fna&_nc_gid=ZL4GE8UPExGOSdIegSS_9Q&oh=00_AfMWN9qEZGVm7cX4tSxcm15GCatYREuv_xCwf1B6XWDceg&oe=68504D5B",
+      text: "Help the mental and physical disabled"
+    },
+    {
+      image: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
+      url: "https://lla5785emails.blogspot.com/p/subscribe.html",
+      banner: "https://cdn-images.imagevenue.com/5a/c1/97/ME1AXEOC_o.png",
+      text: "10 emails - a lifetime of information about online marketing"
+    },
+    {
+      image: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+      url: "https://estcourthospice.blogspot.com/p/home.html",
+      banner: "https://cdn-thumbs.imagevenue.com/39/f4/40/ME1AXERE_b.jpg",
+      text: "Terminal illness support - donations welcome"
+    },
+    {
+      image: "https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png",
+      url: "https://saphahcentral.github.io/lla578v3-0/index.html",
+      banner: "https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png",
+      text: "Add your site here NOW. It never dies..."
     }
+  ];
 
-    function showRandomAd() {
-      if (!ads.length) return;
-      // Random ad
-      const ad = ads[Math.floor(Math.random() * ads.length)];
-      console.log("Showing ad:", ad);
+  function showFallbackAds() {
+    const bannerContainer = document.getElementById('banner-ad');
+    const textContainer = document.getElementById('text-ad');
+    const iframeContainer = document.getElementById('iframe-ad');
 
-      document.getElementById("squareBanner").src = ad.image || fallbackAds[0].image;
-      document.getElementById("bannerLink").href = ad.url || "#";
-      document.getElementById("bannerAd").src = ad.banner || fallbackAds[0].banner;
-      document.getElementById("textAd").textContent = ad.text || "";
-      document.getElementById("iframeAd").src = ad.url || "";
-    }
+    const randomAd = () => fallbackAds[Math.floor(Math.random() * fallbackAds.length)];
 
-    loadAds();
-  </script>
+    const bannerAd = randomAd();
+    const textAd = randomAd();
+    const iframeAd = randomAd();
+
+    bannerContainer.innerHTML = `<a href="${bannerAd.url}" target="_blank"><img src="${bannerAd.banner}" alt="Banner Ad"></a>`;
+    textContainer.innerHTML = `<p><strong>${textAd.text}</strong><br><a href="${textAd.url}" target="_blank">Visit now</a></p>`;
+    iframeContainer.innerHTML = `<iframe src="${iframeAd.url}" loading="lazy"></iframe>`;
+  }
+
+  document.addEventListener("DOMContentLoaded", showFallbackAds);
+</script>
+
 </body>
 </html>
