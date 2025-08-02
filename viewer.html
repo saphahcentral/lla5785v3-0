@@ -3,23 +3,73 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src * data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://www.gstatic.com;">
-  <title>External Ads Viewer</title>
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://www.gstatic.com https://www.googleapis.com https://cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: https:;
+    frame-src *;
+    connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com;
+  ">
+  <title>Ad Viewer</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    #ads { display: flex; flex-direction: column; gap: 20px; }
-    .ad { border: 1px solid #ccc; padding: 10px; border-radius: 6px; }
-    .ad img { max-width: 100%; height: auto; }
-    iframe { width: 100%; height: 200px; border: none; }
+    body {
+      font-family: Arial, sans-serif;
+      padding: 10px;
+      margin: 0;
+    }
+    .ad-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .ad-box {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      background: #f9f9f9;
+    }
+    .ad-box img {
+      max-width: 100%;
+      height: auto;
+    }
+    iframe {
+      width: 100%;
+      height: 200px;
+      border: none;
+    }
   </style>
 </head>
 <body>
 
-<div id="ads">
-  <div id="banner-ad" class="ad"></div>
-  <div id="text-ad" class="ad"></div>
-  <div id="iframe-ad" class="ad"></div>
+<div id="nav-placeholder"></div>
+<div id="header-placeholder"></div>
+
+<h2>Live Ad Viewer</h2>
+
+<div class="ad-section">
+  <div class="ad-box" id="bannerAd"></div>
+  <div class="ad-box" id="textAd"></div>
+  <div class="ad-box" id="iframeAd"></div>
 </div>
+
+<div id="footer-placeholder"></div>
+
+<script>
+  // Load external layout components
+  fetch("https://saphahcentral.github.io/nav_external.html")
+    .then(res => res.text())
+    .then(html => document.getElementById("nav-placeholder").innerHTML = html);
+
+  fetch("https://saphahcentral.github.io/header.html")
+    .then(res => res.text())
+    .then(html => document.getElementById("header-placeholder").innerHTML = html);
+
+  fetch("https://saphahcentral.github.io/footer.html")
+    .then(res => res.text())
+    .then(html => document.getElementById("footer-placeholder").innerHTML = html);
+</script>
 
 <script>
   const fallbackAds = [
@@ -43,29 +93,36 @@
     },
     {
       image: "https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png",
-      url: "https://saphahcentral.github.io/lla578v3-0/index.html",
+      url: "https://saphahcentral.github.io/lla5785v3-0/index.html",
       banner: "https://cdn-images.imagevenue.com/44/3c/6b/ME1AW7GS_o.png",
       text: "Add your site here NOW. It never dies..."
     }
   ];
 
-  function showFallbackAds() {
-    const bannerContainer = document.getElementById('banner-ad');
-    const textContainer = document.getElementById('text-ad');
-    const iframeContainer = document.getElementById('iframe-ad');
+  function showRandomAd() {
+    const shuffled = fallbackAds.sort(() => 0.5 - Math.random());
+    const banner = shuffled[0];
+    const text = shuffled[1];
+    const iframe = shuffled[2];
 
-    const randomAd = () => fallbackAds[Math.floor(Math.random() * fallbackAds.length)];
+    document.getElementById("bannerAd").innerHTML = `
+      <a href="${banner.url}" target="_blank">
+        <img src="${banner.banner}" alt="Banner Ad" />
+      </a>
+    `;
 
-    const bannerAd = randomAd();
-    const textAd = randomAd();
-    const iframeAd = randomAd();
+    document.getElementById("textAd").innerHTML = `
+      <a href="${text.url}" target="_blank">
+        <p>${text.text}</p>
+      </a>
+    `;
 
-    bannerContainer.innerHTML = `<a href="${bannerAd.url}" target="_blank"><img src="${bannerAd.banner}" alt="Banner Ad"></a>`;
-    textContainer.innerHTML = `<p><strong>${textAd.text}</strong><br><a href="${textAd.url}" target="_blank">Visit now</a></p>`;
-    iframeContainer.innerHTML = `<iframe src="${iframeAd.url}" loading="lazy"></iframe>`;
+    document.getElementById("iframeAd").innerHTML = `
+      <iframe src="${iframe.url}"></iframe>
+    `;
   }
 
-  document.addEventListener("DOMContentLoaded", showFallbackAds);
+  showRandomAd();
 </script>
 
 </body>
