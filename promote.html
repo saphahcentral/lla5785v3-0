@@ -61,6 +61,11 @@
       font-family: monospace;
     }
 
+    .error {
+      font-style: italic;
+      color: red;
+    }
+
     .loading {
       font-style: italic;
       color: gray;
@@ -80,7 +85,7 @@
 
     <div class="section">
       <h2>Your Referral Links</h2>
-      <p class="loading" id="loadingMsg">Loading your referral ID...</p>
+      <p class="loading" id="loadingMsg">Checking referral ID...</p>
       <div id="linksContainer" style="display:none;">
         <div><strong>Main Funnel:</strong> <div class="ref-link" id="link1"></div></div>
         <div><strong>Direct Viewer:</strong> <div class="ref-link" id="link2"></div></div>
@@ -139,91 +144,8 @@
   <!-- FOOTER -->
   <div id="footerContainer"></div>
 
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
-      authDomain: "lla5785v3-0.firebaseapp.com",
-      projectId: "lla5785v3-0"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const link1 = document.getElementById("link1");
-    const link2 = document.getElementById("link2");
-    const link3 = document.getElementById("link3");
-    const linkEmail = document.getElementById("linkEmail");
-    const linkBanner = document.getElementById("linkBanner");
-    const linkBanner125 = document.getElementById("linkBanner125");
-
-    const linksContainer = document.getElementById("linksContainer");
-    const loadingMsg = document.getElementById("loadingMsg");
-
-    onAuthStateChanged(auth, async user => {
-      if (!user) {
-        window.location.href = "login.html?next=promote.html";
-        return;
-      }
-
-      try {
-        const docRef = doc(db, "members", user.uid);
-        const docSnap = await getDoc(docRef);
-
-        if (!docSnap.exists()) {
-          loadingMsg.textContent = "Your profile is incomplete.";
-          return;
-        }
-
-        const data = docSnap.data();
-        const username = encodeURIComponent(data["USER NAME"] || "");
-
-        if (!username) {
-          loadingMsg.textContent = "No referral ID found.";
-          return;
-        }
-
-        const base = "https://lla5785.neocities.org/";
-        const refLink = `${base}funnel.html?ref=${username}`;
-
-        link1.textContent = `${base}funnel.html?ref=${username}`;
-        link1.href = `${base}funnel.html?ref=${username}`;
-
-        link2.textContent = `${base}viewer.html?ref=${username}`;
-        link2.href = `${base}viewer.html?ref=${username}`;
-
-        link3.textContent = `${base}register.html?ref=${username}`;
-        link3.href = `${base}register.html?ref=${username}`;
-
-        linkEmail.textContent = refLink;
-        linkBanner.textContent = refLink;
-        linkBanner125.textContent = refLink;
-
-        loadingMsg.style.display = "none";
-        linksContainer.style.display = "block";
-
-        // Load the co-op ads table
-        fetch('adsTable.html')
-          .then(res => res.text())
-          .then(html => {
-            document.getElementById('adsTableContainer').innerHTML = html;
-          })
-          .catch(() => {
-            document.getElementById('adsTableContainer').innerHTML = '<p style="color:red;">Failed to load co-op ads list.</p>';
-          });
-
-      } catch (err) {
-        console.error("Error fetching user data:", err);
-        loadingMsg.textContent = "Error loading referral ID.";
-      }
-    });
-
-    // Fetch header, nav, and footer
+  <!-- External HTML Includes -->
+  <script>
     fetch("header.html").then(res => res.text()).then(html => {
       document.getElementById("headerContainer").innerHTML = html;
     });
@@ -235,6 +157,45 @@
     fetch("footer.html").then(res => res.text()).then(html => {
       document.getElementById("footerContainer").innerHTML = html;
     });
+
+    fetch('adsTable.html')
+      .then(res => res.text())
+      .then(html => {
+        document.getElementById('adsTableContainer').innerHTML = html;
+      })
+      .catch(() => {
+        document.getElementById('adsTableContainer').innerHTML = '<p class="error">Could not load partner ads.</p>';
+      });
+
+    // Generate referral links from query string (?ref=username)
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+
+    if (ref) {
+      const base = "https://lla5785.neocities.org/";
+
+      const mainLink = `${base}funnel.html?ref=${ref}`;
+      const viewerLink = `${base}viewer.html?ref=${ref}`;
+      const joinLink = `${base}register.html?ref=${ref}`;
+
+      document.getElementById("link1").textContent = mainLink;
+      document.getElementById("link1").href = mainLink;
+
+      document.getElementById("link2").textContent = viewerLink;
+      document.getElementById("link2").href = viewerLink;
+
+      document.getElementById("link3").textContent = joinLink;
+      document.getElementById("link3").href = joinLink;
+
+      document.getElementById("linkEmail").textContent = mainLink;
+      document.getElementById("linkBanner").textContent = mainLink;
+      document.getElementById("linkBanner125").textContent = mainLink;
+
+      document.getElementById("loadingMsg").style.display = "none";
+      document.getElementById("linksContainer").style.display = "block";
+    } else {
+      document.getElementById("loadingMsg").textContent = "No referral ID detected. Please access this page via your personal referral link.";
+    }
   </script>
 </body>
 </html>

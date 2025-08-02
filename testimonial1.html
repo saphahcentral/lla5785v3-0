@@ -93,7 +93,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, query, where, getDocs, doc, updateDoc, setDoc, deleteField } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, deleteField } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBBn8RmuXVvkbbBB0IquYr9S6hXhIgrQCQ",
@@ -105,42 +105,49 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    let currentUID = null;
     let memberDocID = null;
 
     onAuthStateChanged(auth, async user => {
       if (!user) {
         window.location.href = "login.html?next=testimonial1.html";
-      } else {
-        const userEmail = user.email.toLowerCase();
-        // Find the member doc ID by matching email
-        try {
-          const membersRef = collection(db, "members");
-          const q = query(membersRef, where("email", "==", userEmail));
-          const querySnapshot = await getDocs(q);
-          if (querySnapshot.empty) {
-            alert("No member record found for your email. Please contact support.");
-            memberDocID = null;
-          } else {
-            memberDocID = querySnapshot.docs[0].id;
-            await loadExistingTestimonial();
-          }
-        } catch (error) {
-          alert("Failed to load your member data. Please try again later.");
-          console.error("Firestore error:", error);
+        return;
+      }
+
+      const userEmail = user.email.toLowerCase();
+
+      try {
+        const membersRef = collection(db, "members");
+        const q = query(membersRef, where("email", "==", userEmail));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          alert("No member record found for your email. Please contact support.");
+          return;
         }
+
+        memberDocID = querySnapshot.docs[0].id;
+        await loadExistingTestimonial();
+
+      } catch (error) {
+        alert("Failed to load your member data. Please try again later.");
+        console.error("Firestore error:", error);
       }
     });
 
     async function loadExistingTestimonial() {
       if (!memberDocID) return;
+
       try {
         const memberDocRef = doc(db, "members", memberDocID);
-        const memberDocSnap = await getDocs(memberDocRef);
-        const memberData = await memberDocSnap.data();
+        const memberDocSnap = await getDoc(memberDocRef);
 
-        if (memberData && memberData.testimonial) {
-          document.getElementById("testimonial").value = memberData.testimonial;
+        if (memberDocSnap.exists()) {
+          const memberData = memberDocSnap.data();
+          if (memberData.testimonial) {
+            document.getElementById("testimonial").value = memberData.testimonial;
+          }
+        } else {
+          alert("Member record not found. Please contact support.");
         }
       } catch (error) {
         console.error("Error loading testimonial:", error);
@@ -149,6 +156,7 @@
 
     document.getElementById("testimonialForm").addEventListener("submit", async (e) => {
       e.preventDefault();
+
       if (!memberDocID) {
         alert("Cannot submit testimonial without member record.");
         return;
@@ -159,15 +167,14 @@
 
       try {
         if (!text) {
-          // Delete testimonial field if empty
           await updateDoc(memberDocRef, { testimonial: deleteField() });
           sessionStorage.setItem("testimonialStatus", "deleted");
         } else {
-          // Update or set testimonial field
           await updateDoc(memberDocRef, { testimonial: text });
           sessionStorage.setItem("testimonialStatus", "updated");
         }
         window.location.href = "testimonial2.html";
+
       } catch (error) {
         console.error("Error submitting testimonial:", error);
         sessionStorage.setItem("testimonialStatus", "error");
